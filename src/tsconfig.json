@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "es6",
+    "lib": [
+      "dom",
+      "es2015",
+      "es5",
+      "es6",
+      "esnext",
+      "es2015.promise",
+      "es2015.iterable",
+      "dom.iterable"
+    ],
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "experimentalDecorators": true,
+    "noImplicitAny": false,
+    "strict": true,
+    "suppressImplicitAnyIndexErrors": true
+  },
+  "paths": {
+    "~/*": [
+      "*"
+    ]
+  },
+  "exclude": [
+    "./node_modules"
+  ],
+  "compileOnSave": false
+}
