@@ -67,7 +67,7 @@ var Main = /** @class */ (function (_super) {
         return _this;
     }
     Main.prototype.catchEvent = function () {
-        common_var_1.vue_event.$on("on_error", function (errMessage) {
+        common_var_1.vueEvent.$on("on_error", function (errMessage) {
             alert(errMessage);
         });
     };
@@ -103,7 +103,7 @@ ___scope___.file("component/db_list.vue", function(exports, require, module, __f
 var _options = { _vueModuleId: 'data-v-1fec8355'}
 Object.assign(_options, {
         _scopeId: null,
-        render: function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('b-modal',{ref:"db_list",attrs:{"id":"modal1","title":"Bootstrap-Vue"}},[_c('b-form',[_c('b-form-group',{attrs:{"id":"exampleInputGroup1","label":"Email address:","label-for":"selectDb"}},[_c('b-form-select',{staticClass:"mb-3",attrs:{"id":"selectDb","options":_vm.dbList},model:{value:(_vm.selectedDb),callback:function ($$v) {_vm.selectedDb=$$v},expression:"selectedDb"}})],1)],1),_vm._v(" "),_c('div',{staticClass:"w-100",attrs:{"slot":"modal-footer"},slot:"modal-footer"},[_c('b-btn',{staticClass:"float-left",attrs:{"variant":"primary"},on:{"click":_vm.setSelectedDb}},[_vm._v("\n         Create Database\n       ")]),_vm._v(" "),_c('b-btn',{staticClass:"float-right",attrs:{"variant":"primary"},on:{"click":_vm.setSelectedDb}},[_vm._v("\n         Open\n       ")])],1)],1)],1)},
+        render: function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('b-modal',{ref:"db_list",attrs:{"id":"modal1","title":"IdbStudio"}},[_c('b-form',[_c('b-form-group',{attrs:{"id":"exampleInputGroup1"}},[_c('b-form-select',{staticClass:"mb-3",attrs:{"id":"selectDb","options":_vm.dbList},model:{value:(_vm.selectedDb),callback:function ($$v) {_vm.selectedDb=$$v},expression:"selectedDb"}})],1)],1),_vm._v(" "),_c('div',{staticClass:"w-100",attrs:{"slot":"modal-footer"},slot:"modal-footer"},[_c('b-btn',{staticClass:"float-left",attrs:{"variant":"primary"},on:{"click":_vm.setSelectedDb}},[_vm._v("\n         Create Database\n       ")]),_vm._v(" "),_c('b-btn',{staticClass:"float-right",attrs:{"variant":"primary"},on:{"click":_vm.setSelectedDb}},[_vm._v("\n         Open\n       ")])],1)],1)],1)},
         staticRenderFns: []
       })
 "use strict";
@@ -146,6 +146,7 @@ var DbList = /** @class */ (function (_super) {
             new main_service_1.MainService()
                 .getDbList()
                 .then(function (list) {
+                console.log(list);
                 _this.updateDbList(list);
                 _this.$refs.db_list.show();
             })
@@ -156,27 +157,31 @@ var DbList = /** @class */ (function (_super) {
         }, 2000);
     };
     DbList.prototype.updateDbList = function (list) {
-        var temp_list = [
+        var tempList = [
             {
                 text: "--Select Database--",
                 value: "null"
             }
         ];
         list.forEach(function (val) {
-            temp_list.push({
+            tempList.push({
                 text: val,
                 value: val
             });
         });
-        this.dbList = temp_list;
+        this.dbList = tempList;
     };
     DbList.prototype.setSelectedDb = function () {
         var _this = this;
-        new main_service_1.MainService().openDb(this.selectedDb, function () {
+        var service = new main_service_1.MainService();
+        service
+            .openDb(this.selectedDb)
+            .then(function () {
             _this.$refs.db_list.hide();
-            common_var_1.vue_event.$emit("db_selected", _this.$data._selectedDb);
-        }, function (err) {
-            alert(err._message);
+            common_var_1.vueEvent.$emit("db_selected", _this.selectedDb);
+        })
+            .catch(function (err) {
+            alert(err.message);
         });
     };
     DbList = __decorate([
@@ -219,25 +224,19 @@ var base_service_1 = require("./base_service");
 var MainService = /** @class */ (function (_super) {
     __extends(MainService, _super);
     function MainService() {
-        var _this = _super.call(this) || this;
-        _this._dbName = "Demo";
-        return _this;
+        return _super.call(this) || this;
     }
-    MainService.prototype.openDb = function (dbName, onSuccess, onErr) {
-        return base_service_1.idb_con.openDb(dbName, onSuccess, onErr);
+    MainService.prototype.openDb = function (dbName) {
+        return this.connection.openDb(dbName);
     };
-    MainService.prototype.getDbInfo = function (dbName) {
-        var _this = this;
-        return new Promise(function (resolve, reject) {
-            _this.getDbSchema(dbName, function (schema) {
-                resolve(schema);
-            });
-        });
+    MainService.prototype.getDbSchema = function (dbName) {
+        return this.connection.getDbSchema(dbName);
     };
     MainService.prototype.executeQry = function (api, option) {
+        var _this = this;
         var startTime = performance.now();
         return new Promise(function (resolve, reject) {
-            base_service_1.idb_con[api](option).then(function (qryResult) {
+            _this.connection[api](option).then(function (qryResult) {
                 var idbResult = {
                     timeTaken: (performance.now() - startTime) / 1000,
                     result: qryResult
@@ -257,23 +256,45 @@ ___scope___.file("service/base_service.js", function(exports, require, module, _
 
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.idb_con = new JsStore.Instance();
+var service_helper_1 = require("./service_helper");
 var BaseService = /** @class */ (function () {
     function BaseService() {
     }
+    Object.defineProperty(BaseService.prototype, "connection", {
+        get: function () {
+            return service_helper_1.ServiceHelper.idbCon;
+        },
+        enumerable: true,
+        configurable: true
+    });
     BaseService.prototype.getDbList = function () {
-        return JsStore.getDbList();
+        return this.connection.getDbList();
     };
     BaseService.prototype.isDbExist = function (dbName) {
-        return JsStore.isDbExist(dbName);
+        return this.connection.isDbExist(dbName);
     };
-    BaseService.prototype.getDbSchema = function (dbName, onSuccess) {
-        JsStore.getDbSchema(dbName, onSuccess);
+    BaseService.prototype.getDbSchema = function (dbName) {
+        this.connection.getDbSchema(dbName);
     };
     return BaseService;
 }());
 exports.BaseService = BaseService;
 //# sourceMappingURL=base_service.js.map
+});
+___scope___.file("service/service_helper.js", function(exports, require, module, __filename, __dirname){
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var JsStore = require("jsstore");
+var jsstoreWorker = require("jsstore/dist/jsstore.worker.js");
+var ServiceHelper = /** @class */ (function () {
+    function ServiceHelper() {
+    }
+    ServiceHelper.idbCon = new JsStore.Instance(new Worker(jsstoreWorker));
+    return ServiceHelper;
+}());
+exports.ServiceHelper = ServiceHelper;
+//# sourceMappingURL=service_helper.js.map
 });
 ___scope___.file("service/demo_service.js", function(exports, require, module, __filename, __dirname){
 
@@ -290,239 +311,109 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var base_service_1 = require("./base_service");
+var jsstore_1 = require("jsstore");
 var DemoService = /** @class */ (function (_super) {
     __extends(DemoService, _super);
     function DemoService() {
         var _this = _super.call(this) || this;
-        _this._dbName = "Demo";
+        _this.dbName = "Demo";
         return _this;
     }
     DemoService.prototype.createDemoDataBase = function () {
         var _this = this;
-        this
-            .isDbExist(this._dbName)
-            .then(function (exist) {
+        this.isDbExist(this.dbName).then(function (exist) {
             if (exist === false) {
-                base_service_1.idb_con.createDb(_this.getDbSchema());
+                _this.connection.createDb(_this.getDbSchema());
             }
-        })
-            .catch(function (err) {
+        }).catch(function (err) {
             alert(err._message);
         });
     };
     DemoService.prototype.getDbSchema = function () {
         var customers = {
-            Name: 'Customers',
-            Columns: [
-                {
-                    Name: "CustomerID",
-                    PrimaryKey: true,
-                    AutoIncrement: true
-                }, {
-                    Name: "CustomerName",
-                    NotNull: true,
-                    DataType: JsStore.Data_Type.String
-                }, {
-                    Name: "ContactName",
-                    NotNull: true,
-                    DataType: JsStore.Data_Type.String
-                }, {
-                    Name: "Address",
-                    NotNull: true,
-                    DataType: JsStore.Data_Type.String
-                }, {
-                    Name: "City",
-                    NotNull: true,
-                    DataType: JsStore.Data_Type.String
-                }, {
-                    Name: "PostalCode",
-                    DataType: JsStore.Data_Type.String
-                }, {
-                    Name: "Country",
-                    NotNull: true,
-                    DataType: JsStore.Data_Type.String
-                }
+            name: 'Customers',
+            columns: [
+                new jsstore_1.Column('customerId').options([jsstore_1.COL_OPTION.PrimaryKey, jsstore_1.COL_OPTION.AutoIncrement]),
+                new jsstore_1.Column('customerName').options([jsstore_1.COL_OPTION.NotNull]).setDataType(jsstore_1.DATA_TYPE.String),
+                new jsstore_1.Column('contactName').options([jsstore_1.COL_OPTION.NotNull]).setDataType(jsstore_1.DATA_TYPE.String),
+                new jsstore_1.Column('address').options([jsstore_1.COL_OPTION.NotNull]).setDataType(jsstore_1.DATA_TYPE.String),
+                new jsstore_1.Column('city').options([jsstore_1.COL_OPTION.NotNull]).setDataType(jsstore_1.DATA_TYPE.String),
+                new jsstore_1.Column('postalCode').setDataType(jsstore_1.DATA_TYPE.String),
+                new jsstore_1.Column('country').options([jsstore_1.COL_OPTION.NotNull]).setDataType(jsstore_1.DATA_TYPE.String)
             ]
         };
         var categories = {
-            Name: 'Categories',
-            Columns: [
-                {
-                    Name: "CategoryID",
-                    PrimaryKey: true,
-                    AutoIncrement: true
-                }, {
-                    Name: "CategoryName",
-                    NotNull: true,
-                    DataType: JsStore.Data_Type.String
-                }, {
-                    Name: "Description",
-                    NotNull: true,
-                    DataType: JsStore.Data_Type.String
-                }
+            name: 'Categories',
+            columns: [
+                new jsstore_1.Column('categoryId').options([jsstore_1.COL_OPTION.PrimaryKey, jsstore_1.COL_OPTION.AutoIncrement]),
+                new jsstore_1.Column('categoryName').options([jsstore_1.COL_OPTION.NotNull]).setDataType(jsstore_1.DATA_TYPE.String),
+                new jsstore_1.Column('description').options([jsstore_1.COL_OPTION.NotNull]).setDataType(jsstore_1.DATA_TYPE.String),
             ]
         };
         var employees = {
-            Name: 'Employees',
-            Columns: [
-                {
-                    Name: "EmployeeID",
-                    PrimaryKey: true,
-                    AutoIncrement: true
-                }, {
-                    Name: "LastName",
-                    NotNull: true,
-                    DataType: JsStore.Data_Type.String
-                }, {
-                    Name: "BirthDate",
-                    NotNull: true,
-                    DataType: JsStore.Data_Type.String
-                }, {
-                    Name: "Photo",
-                    NotNull: true,
-                    DataType: JsStore.Data_Type.String
-                }, {
-                    Name: "Notes",
-                    DataType: JsStore.Data_Type.String
-                }
+            name: 'Employees',
+            columns: [
+                new jsstore_1.Column('employeeId').options([jsstore_1.COL_OPTION.PrimaryKey, jsstore_1.COL_OPTION.AutoIncrement]),
+                new jsstore_1.Column('lastName').options([jsstore_1.COL_OPTION.NotNull]).setDataType(jsstore_1.DATA_TYPE.String),
+                new jsstore_1.Column('birthDate').options([jsstore_1.COL_OPTION.NotNull]).setDataType(jsstore_1.DATA_TYPE.DateTime),
+                new jsstore_1.Column('photo').options([jsstore_1.COL_OPTION.NotNull]).setDataType(jsstore_1.DATA_TYPE.String),
+                new jsstore_1.Column('notes').setDataType(jsstore_1.DATA_TYPE.DateTime),
             ]
         };
         var order_details = {
-            Name: 'OrderDetails',
-            Columns: [
-                {
-                    Name: "OrderDetailID",
-                    PrimaryKey: true,
-                    AutoIncrement: true
-                }, {
-                    Name: "OrderID",
-                    NotNull: true,
-                    DataType: JsStore.Data_Type.Number
-                }, {
-                    Name: "ProductID",
-                    NotNull: true,
-                    DataType: JsStore.Data_Type.Number
-                }, {
-                    Name: "Quantity",
-                    NotNull: true,
-                    DataType: JsStore.Data_Type.Number
-                }
+            name: 'OrderDetails',
+            columns: [
+                new jsstore_1.Column('orderDetailId').options([jsstore_1.COL_OPTION.PrimaryKey, jsstore_1.COL_OPTION.AutoIncrement]),
+                new jsstore_1.Column('orderId').options([jsstore_1.COL_OPTION.NotNull]).setDataType(jsstore_1.DATA_TYPE.Number),
+                new jsstore_1.Column('productId').options([jsstore_1.COL_OPTION.NotNull]).setDataType(jsstore_1.DATA_TYPE.Number),
+                new jsstore_1.Column('quantity').options([jsstore_1.COL_OPTION.NotNull]).setDataType(jsstore_1.DATA_TYPE.Number)
             ]
         };
         var orders = {
-            Name: 'Orders',
-            Columns: [
-                {
-                    Name: "OrderID",
-                    PrimaryKey: true
-                }, {
-                    Name: "CustomerID",
-                    NotNull: true,
-                    DataType: JsStore.Data_Type.Number
-                }, {
-                    Name: "EmployeeID",
-                    NotNull: true,
-                    DataType: JsStore.Data_Type.Number
-                }, {
-                    Name: "OrderDate",
-                    NotNull: true,
-                    DataType: JsStore.Data_Type.String
-                }, {
-                    Name: "ShipperID",
-                    NotNull: true,
-                    DataType: JsStore.Data_Type.Number
-                }
+            name: 'Orders',
+            columns: [
+                new jsstore_1.Column('orderId').options([jsstore_1.COL_OPTION.PrimaryKey]),
+                new jsstore_1.Column('customerId').options([jsstore_1.COL_OPTION.NotNull]).setDataType(jsstore_1.DATA_TYPE.Number),
+                new jsstore_1.Column('employeeId').options([jsstore_1.COL_OPTION.NotNull]).setDataType(jsstore_1.DATA_TYPE.Number),
+                new jsstore_1.Column('orderDate').options([jsstore_1.COL_OPTION.NotNull]).setDataType(jsstore_1.DATA_TYPE.DateTime),
+                new jsstore_1.Column('shipperId').options([jsstore_1.COL_OPTION.NotNull]).setDataType(jsstore_1.DATA_TYPE.Number)
             ]
         };
         var products = {
-            Name: 'Products',
-            Columns: [
-                {
-                    Name: "ProductID",
-                    PrimaryKey: true,
-                    AutoIncrement: true
-                }, {
-                    Name: "ProductName",
-                    NotNull: true,
-                    DataType: JsStore.Data_Type.String
-                }, {
-                    Name: "SupplierID",
-                    NotNull: true,
-                    DataType: JsStore.Data_Type.Number
-                }, {
-                    Name: "CategoryID",
-                    NotNull: true,
-                    DataType: JsStore.Data_Type.Number
-                }, {
-                    Name: "Unit",
-                    NotNull: true,
-                    DataType: JsStore.Data_Type.String
-                }, {
-                    Name: "Price",
-                    NotNull: true,
-                    DataType: JsStore.Data_Type.Number
-                }
+            name: 'Products',
+            columns: [
+                new jsstore_1.Column('productId').options([jsstore_1.COL_OPTION.PrimaryKey, jsstore_1.COL_OPTION.AutoIncrement]),
+                new jsstore_1.Column('productName').options([jsstore_1.COL_OPTION.NotNull]).setDataType(jsstore_1.DATA_TYPE.String),
+                new jsstore_1.Column('supplierId').options([jsstore_1.COL_OPTION.NotNull]).setDataType(jsstore_1.DATA_TYPE.Number),
+                new jsstore_1.Column('categoryId').options([jsstore_1.COL_OPTION.NotNull]).setDataType(jsstore_1.DATA_TYPE.Number),
+                new jsstore_1.Column('unit').options([jsstore_1.COL_OPTION.NotNull]).setDataType(jsstore_1.DATA_TYPE.String),
+                new jsstore_1.Column('price').options([jsstore_1.COL_OPTION.NotNull]).setDataType(jsstore_1.DATA_TYPE.Number)
             ]
         };
         var shippers = {
-            Name: 'Shippers',
-            Columns: [
-                {
-                    Name: "ShipperID",
-                    PrimaryKey: true,
-                    AutoIncrement: true
-                }, {
-                    Name: "ShipperName",
-                    NotNull: true,
-                    DataType: JsStore.Data_Type.String
-                }, {
-                    Name: "Phone",
-                    NotNull: true,
-                    DataType: JsStore.Data_Type.String
-                }
+            name: 'Shippers',
+            columns: [
+                new jsstore_1.Column('shipperId').options([jsstore_1.COL_OPTION.PrimaryKey, jsstore_1.COL_OPTION.AutoIncrement]),
+                new jsstore_1.Column('shipperName').options([jsstore_1.COL_OPTION.NotNull]).setDataType(jsstore_1.DATA_TYPE.String),
+                new jsstore_1.Column('phone').options([jsstore_1.COL_OPTION.NotNull]).setDataType(jsstore_1.DATA_TYPE.String),
             ]
         };
         var suppliers = {
-            Name: 'Suppliers',
-            Columns: [
-                {
-                    Name: "SupplierID",
-                    PrimaryKey: true,
-                    AutoIncrement: true
-                }, {
-                    Name: "SupplierName",
-                    NotNull: true,
-                    DataType: JsStore.Data_Type.String
-                }, {
-                    Name: "ContactName",
-                    NotNull: true,
-                    DataType: JsStore.Data_Type.String
-                }, {
-                    Name: "Address",
-                    NotNull: true,
-                    DataType: JsStore.Data_Type.String
-                }, {
-                    Name: "City",
-                    NotNull: true,
-                    DataType: JsStore.Data_Type.String
-                }, {
-                    Name: "PostalCode",
-                    NotNull: true,
-                    DataType: JsStore.Data_Type.String
-                }, {
-                    Name: "Country",
-                    NotNull: true,
-                    DataType: JsStore.Data_Type.String
-                }, {
-                    Name: "Phone",
-                    NotNull: true,
-                    DataType: JsStore.Data_Type.String
-                }
+            name: 'suppliers',
+            columns: [
+                new jsstore_1.Column('supplierId').options([jsstore_1.COL_OPTION.PrimaryKey, jsstore_1.COL_OPTION.AutoIncrement]),
+                new jsstore_1.Column('supplierName').options([jsstore_1.COL_OPTION.NotNull]).setDataType(jsstore_1.DATA_TYPE.String),
+                new jsstore_1.Column('contactName').options([jsstore_1.COL_OPTION.NotNull]).setDataType(jsstore_1.DATA_TYPE.String),
+                new jsstore_1.Column('address').options([jsstore_1.COL_OPTION.NotNull]).setDataType(jsstore_1.DATA_TYPE.String),
+                new jsstore_1.Column('city').options([jsstore_1.COL_OPTION.NotNull]).setDataType(jsstore_1.DATA_TYPE.String),
+                new jsstore_1.Column('postalCode').options([jsstore_1.COL_OPTION.NotNull]).setDataType(jsstore_1.DATA_TYPE.String),
+                new jsstore_1.Column('country').options([jsstore_1.COL_OPTION.NotNull]).setDataType(jsstore_1.DATA_TYPE.String),
+                new jsstore_1.Column('phone').options([jsstore_1.COL_OPTION.NotNull]).setDataType(jsstore_1.DATA_TYPE.String)
             ]
         };
         var dataBase = {
-            Name: this._dbName,
-            Tables: [
+            name: this.dbName,
+            tables: [
                 customers,
                 categories,
                 employees,
@@ -545,7 +436,7 @@ ___scope___.file("common_var.js", function(exports, require, module, __filename,
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var vue_1 = require("vue");
-exports.vue_event = new vue_1.default();
+exports.vueEvent = new vue_1.default();
 //# sourceMappingURL=common_var.js.map
 });
 ___scope___.file("component/menu.vue", function(exports, require, module, __filename, __dirname){
@@ -554,7 +445,7 @@ var _options = { _vueModuleId: 'data-v-c33a269d'}
 Object.assign(_options, {_scopeId: 'data-v-c33a269d'})
 Object.assign(_options, {
         _scopeId: "data-v-c33a269d",
-        render: function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"row",attrs:{"id":"divMenu"}},[_c('div',{staticClass:"col-sm-1"},[_vm._v("\n    "+_vm._s(_vm.$data._dbName)+"\n  ")]),_vm._v(" "),_c('div',{staticClass:"col-sm-1"},[_c('a',{attrs:{"href":"#"},on:{"click":_vm.createNewQry}},[_vm._v("New Query")])]),_vm._v(" "),_c('div',{staticClass:"col-sm-1"},[_c('span',{on:{"click":_vm.executeQry}},[_vm._v("Execute "),_c('i',{staticClass:"fas fa-play"})])])])},
+        render: function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"row",attrs:{"id":"divMenu"}},[_c('div',{staticClass:"col-sm-1"},[_vm._v("\n    "+_vm._s(_vm.dbName)+"\n  ")]),_vm._v(" "),_c('div',{staticClass:"col-sm-1"},[_c('a',{attrs:{"href":"#"},on:{"click":_vm.createNewQry}},[_vm._v("New Query")])]),_vm._v(" "),_c('div',{staticClass:"col-sm-1"},[_c('span',{on:{"click":_vm.executeQry}},[_vm._v("Execute "),_c('i',{staticClass:"fas fa-play"})])])])},
         staticRenderFns: []
       })
 "use strict";
@@ -582,25 +473,25 @@ var Menu = /** @class */ (function (_super) {
     __extends(Menu, _super);
     function Menu() {
         var _this = _super.call(this) || this;
-        _this._dbName = "";
+        _this.dbName = "";
         _this.catchEvent();
         return _this;
     }
     Menu.prototype.createNewQry = function () {
-        common_var_1.vue_event.$emit("open_editor");
+        common_var_1.vueEvent.$emit("open_editor");
     };
     Menu.prototype.setDbName = function (dbName) {
-        this.$data._dbName = dbName;
+        this.dbName = dbName;
     };
     Menu.prototype.catchEvent = function () {
         var _this = this;
-        common_var_1.vue_event.$on("db_selected", function (dbName) {
+        common_var_1.vueEvent.$on("db_selected", function (dbName) {
             console.log(dbName);
             _this.setDbName(dbName);
         });
     };
     Menu.prototype.executeQry = function () {
-        common_var_1.vue_event.$emit("execute_qry");
+        common_var_1.vueEvent.$emit("execute_qry");
     };
     Menu = __decorate([
         vue_property_decorator_1.Component
@@ -630,7 +521,7 @@ var _options = { _vueModuleId: 'data-v-926b6219'}
 Object.assign(_options, {_scopeId: 'data-v-926b6219'})
 Object.assign(_options, {
         _scopeId: "data-v-926b6219",
-        render: function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"db-name"},[_vm._v(_vm._s(_vm.$data._dbInfo._name))]),_vm._v(" "),_c('table',[_c('thead'),_vm._v(" "),_c('tbody',_vm._l((_vm.$data._dbInfo._tables),function(table){return _c('tr',{key:table._name},[_c('td',[_c('span',{directives:[{name:"b-toggle",rawName:"v-b-toggle",value:(table._name),expression:"table._name"}],staticClass:"table-name"},[_vm._v(_vm._s(table._name)+" "),_c('i',{staticClass:"fas fa-plus"})]),_vm._v(" "),_c('b-collapse',{staticClass:"ml-4",attrs:{"id":table._name}},_vm._l((table._columns),function(column){return _c('div',{key:column._name,staticClass:"column-name"},[_c('span',{directives:[{name:"b-toggle",rawName:"v-b-toggle",value:(column._name),expression:"column._name"}]},[_vm._v(_vm._s(column._name)+" "),_c('i',{staticClass:"fas fa-plus-square"})]),_vm._v(" "),_c('b-collapse',{staticClass:"ml-4",attrs:{"id":column._name}},[_c('div',[_vm._v("Primary Key : "),_c('span',{staticClass:"column-schema"},[_vm._v(_vm._s(column._primaryKey))])]),_vm._v(" "),_c('div',[_vm._v("Auto Increment : "),_c('span',{staticClass:"column-schema"},[_vm._v(_vm._s(column._autoIncrement))])]),_vm._v(" "),_c('div',[_vm._v("Not Null: "),_c('span',{staticClass:"column-schema"},[_vm._v(_vm._s(column._notNull))])]),_vm._v(" "),_c('div',[_vm._v("Data Type : "),_c('span',{staticClass:"column-schema"},[_vm._v(_vm._s(column._dataType))])]),_vm._v(" "),_c('div',[_vm._v("Default : "),_c('span',{staticClass:"column-schema"},[_vm._v(_vm._s(column._default))])]),_vm._v(" "),_c('div',[_vm._v("Unique : "),_c('span',{staticClass:"column-schema"},[_vm._v(_vm._s(column._unique))])]),_vm._v(" "),_c('div',[_vm._v("Multi Entry : "),_c('span',{staticClass:"column-schema"},[_vm._v(_vm._s(column._multiEntry))])]),_vm._v(" "),_c('div',[_vm._v("Enable Search : "),_c('span',{staticClass:"column-schema"},[_vm._v(_vm._s(column._enableSearch))])])])],1)}))],1)])})),_vm._v(" "),_c('tfoot')])])},
+        render: function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"db-name"},[_vm._v(_vm._s(_vm.dbInfo._name))]),_vm._v(" "),_c('table',[_c('thead'),_vm._v(" "),_c('tbody',_vm._l((_vm.dbInfo.tables),function(table){return _c('tr',{key:table.name},[_c('td',[_c('span',{directives:[{name:"b-toggle",rawName:"v-b-toggle",value:(table._name),expression:"table._name"}],staticClass:"table-name"},[_vm._v(_vm._s(table.name)+" "),_c('i',{staticClass:"fas fa-plus"})]),_vm._v(" "),_c('b-collapse',{staticClass:"ml-4",attrs:{"id":table.name}},_vm._l((table.columns),function(column){return _c('div',{key:column.name,staticClass:"column-name"},[_c('span',{directives:[{name:"b-toggle",rawName:"v-b-toggle",value:(column._name),expression:"column._name"}]},[_vm._v(_vm._s(column.name)+" "),_c('i',{staticClass:"fas fa-plus-square"})]),_vm._v(" "),_c('b-collapse',{staticClass:"ml-4",attrs:{"id":column.name}},[_c('div',[_vm._v("Primary Key : "),_c('span',{staticClass:"column-schema"},[_vm._v(_vm._s(column.primaryKey))])]),_vm._v(" "),_c('div',[_vm._v("Auto Increment : "),_c('span',{staticClass:"column-schema"},[_vm._v(_vm._s(column.autoIncrement))])]),_vm._v(" "),_c('div',[_vm._v("Not Null: "),_c('span',{staticClass:"column-schema"},[_vm._v(_vm._s(column.notNull))])]),_vm._v(" "),_c('div',[_vm._v("Data Type : "),_c('span',{staticClass:"column-schema"},[_vm._v(_vm._s(column.dataType))])]),_vm._v(" "),_c('div',[_vm._v("Default : "),_c('span',{staticClass:"column-schema"},[_vm._v(_vm._s(column.default))])]),_vm._v(" "),_c('div',[_vm._v("Unique : "),_c('span',{staticClass:"column-schema"},[_vm._v(_vm._s(column.unique))])]),_vm._v(" "),_c('div',[_vm._v("Multi Entry : "),_c('span',{staticClass:"column-schema"},[_vm._v(_vm._s(column.multiEntry))])]),_vm._v(" "),_c('div',[_vm._v("Enable Search : "),_c('span',{staticClass:"column-schema"},[_vm._v(_vm._s(column.enableSearch))])])])],1)}))],1)])})),_vm._v(" "),_c('tfoot')])])},
         staticRenderFns: []
       })
 "use strict";
@@ -659,25 +550,25 @@ var DbInfo = /** @class */ (function (_super) {
     __extends(DbInfo, _super);
     function DbInfo() {
         var _this = _super.call(this) || this;
-        _this._dbInfo = {
-            _tables: []
+        _this.dbInfo = {
+            tables: []
         };
         _this.catchEvent();
         return _this;
     }
     DbInfo.prototype.getDbInfo = function (dbName) {
         var _this = this;
-        new main_service_1.MainService().getDbInfo(dbName).then(function (result) {
+        new main_service_1.MainService().getDbSchema(dbName).then(function (result) {
             console.log(result);
             _this.updateDbInfo(result);
         });
     };
     DbInfo.prototype.updateDbInfo = function (value) {
-        this.$data._dbInfo = value;
+        this.dbInfo = value;
     };
     DbInfo.prototype.catchEvent = function () {
         var _this = this;
-        common_var_1.vue_event.$on("db_selected", function (dbName) {
+        common_var_1.vueEvent.$on("db_selected", function (dbName) {
             _this.getDbInfo(dbName);
         });
     };
@@ -751,31 +642,31 @@ var QueryExecutor = /** @class */ (function (_super) {
         this.$data.tabCount++;
     };
     QueryExecutor.prototype.executeQry = function () {
-        common_var_1.vue_event.$emit("get_qry");
+        common_var_1.vueEvent.$emit("get_qry");
     };
     QueryExecutor.prototype.showResult = function (qry) {
         var _this = this;
-        var query_checker = new query_checker_1.QueryChecker(qry);
-        if (query_checker.isQryValid()) {
+        var queryCheckerInstance = new query_checker_1.QueryChecker(qry);
+        if (queryCheckerInstance.isQryValid()) {
             new main_service_1.MainService()
-                .executeQry(query_checker._api, query_checker._option)
+                .executeQry(queryCheckerInstance.api, queryCheckerInstance.option)
                 .then(function (qryResult) {
                 _this.resultCount = qryResult.result.length;
                 _this.timeTaken = qryResult.timeTaken;
                 // console.log(result);
-                common_var_1.vue_event.$emit("on_qry_result", qryResult.result);
+                common_var_1.vueEvent.$emit("on_qry_result", qryResult.result);
             })
                 .catch(function (err) {
-                common_var_1.vue_event.$emit("on_error", err._message);
+                common_var_1.vueEvent.$emit("on_error", err.message);
             });
         }
         else {
-            common_var_1.vue_event.$emit("on_error", query_checker._errMessage);
+            common_var_1.vueEvent.$emit("on_error", queryCheckerInstance.errMessage);
         }
     };
     QueryExecutor.prototype.catchEvents = function () {
-        common_var_1.vue_event.$on("db_selected", this.createNewTab);
-        common_var_1.vue_event.$on("set_qry", this.showResult);
+        common_var_1.vueEvent.$on("db_selected", this.createNewTab);
+        common_var_1.vueEvent.$on("set_qry", this.showResult);
     };
     QueryExecutor = __decorate([
         vue_property_decorator_1.Component({
@@ -852,12 +743,12 @@ var Editor = /** @class */ (function (_super) {
     Editor.prototype.getQry = function () {
         var $ = new dom_helper_1.DomHelper();
         if (!$.isHidden($.parent($.getById(this.id)))) {
-            common_var_1.vue_event.$emit("set_qry", this.editor.getValue());
+            common_var_1.vueEvent.$emit("set_qry", this.editor.getValue());
         }
     };
     Editor.prototype.catchEvent = function () {
-        common_var_1.vue_event.$on("execute_qry", this.executeJsStoreQry);
-        common_var_1.vue_event.$on("get_qry", this.getQry);
+        common_var_1.vueEvent.$on("execute_qry", this.executeJsStoreQry);
+        common_var_1.vueEvent.$on("get_qry", this.getQry);
     };
     Editor.prototype.executeJsStoreQry = function () {
     };
@@ -939,6 +830,7 @@ var vue_1 = require("vue");
 var vue_property_decorator_1 = require("vue-property-decorator");
 var common_var_1 = require("../common_var");
 var util_1 = require("../util");
+var jsstore_1 = require("jsstore");
 var QueryResult = /** @class */ (function (_super) {
     __extends(QueryResult, _super);
     function QueryResult() {
@@ -951,7 +843,7 @@ var QueryResult = /** @class */ (function (_super) {
         console.log(result);
         var resultType = util_1.Util.getType(result);
         switch (resultType) {
-            case JsStore.Data_Type.Array:
+            case jsstore_1.DATA_TYPE.Array:
                 var rowsLength = result.length, htmlString = "<tr>", props = [];
                 for (var prop in result[0]) {
                     props.push(prop);
@@ -982,10 +874,10 @@ var QueryResult = /** @class */ (function (_super) {
                 //   .show()
                 //   .text("No of Record : " + result.length);
                 break;
-            case JsStore.Data_Type.Object:
+            case jsstore_1.DATA_TYPE.Object:
                 result = JSON.stringify(result);
-            case JsStore.Data_Type.String:
-            case JsStore.Data_Type.Number:
+            case jsstore_1.DATA_TYPE.String:
+            case jsstore_1.DATA_TYPE.Number:
                 this.resultInnerHtml = result;
                 break;
             default:
@@ -993,7 +885,7 @@ var QueryResult = /** @class */ (function (_super) {
         }
     };
     QueryResult.prototype.catchEvents = function () {
-        common_var_1.vue_event.$on("on_qry_result", this.printResult);
+        common_var_1.vueEvent.$on("on_qry_result", this.printResult);
     };
     QueryResult = __decorate([
         vue_property_decorator_1.Component
@@ -1049,26 +941,25 @@ ___scope___.file("helpers/query_checker.js", function(exports, require, module, 
 Object.defineProperty(exports, "__esModule", { value: true });
 var QueryChecker = /** @class */ (function () {
     function QueryChecker(query) {
-        this._errMessage = "";
-        this._api = "";
-        this._query = query;
+        this.errMessage = "";
+        this.api = "";
+        this.query = query;
     }
     QueryChecker.prototype.isQryValid = function () {
+        var _this = this;
         var api;
         var option = "";
-        var not_allowed_keywords = ["Instance", "then", "catch"];
-        not_allowed_keywords.every(function (item) {
-            if (this._query.indexOf(item) >= 0) {
-                this._errMessage = "keyword: '" + item + "' is not allowed, only write code for api call";
+        var notAllowedKeywords = ["Instance", "then", "catch"];
+        notAllowedKeywords.every(function (item) {
+            if (_this.query.indexOf(item) >= 0) {
+                _this.errMessage = "keyword: '" + item + "' is not allowed, only write code for api call";
                 return false;
             }
             return true;
-        }, this);
-        if (this._errMessage.length === 0) {
-            api = this
-                ._query
-                .substring(0, this._query.indexOf("("));
-            var allowed_api = [
+        });
+        if (this.errMessage.length === 0) {
+            api = this.query.substring(0, this.query.indexOf("("));
+            var allowedApi = [
                 "select",
                 "insert",
                 "remove",
@@ -1080,10 +971,8 @@ var QueryChecker = /** @class */ (function () {
                 "bulkInsert",
                 "exportJson"
             ];
-            if (allowed_api.indexOf(api) >= 0) {
-                option = this
-                    ._query
-                    .substring(this._query.indexOf("(") + 1, this._query.lastIndexOf(")"));
+            if (allowedApi.indexOf(api) >= 0) {
+                option = this.query.substring(this.query.indexOf("(") + 1, this.query.lastIndexOf(")"));
                 eval("option =" + option);
                 switch (api) {
                     case "select":
@@ -1094,30 +983,30 @@ var QueryChecker = /** @class */ (function () {
                     case "bulkInsert":
                     case "exportJson":
                         if (typeof option !== "object") {
-                            this._errMessage = "invalid syntax, please take a look at doc for api - '" + api + "'";
+                            this.errMessage = "invalid syntax, please take a look at doc for api - '" + api + "'";
                         }
                         break;
                     case "clear":
                         if (typeof option !== "string") {
-                            this._errMessage = "invalid syntax, please take a look at doc for api - '" + api + "'";
+                            this.errMessage = "invalid syntax, please take a look at doc for api - '" + api + "'";
                         }
                         break;
                     case "isDbExist":
                         if (typeof option !== "string" || typeof option !== "object") {
-                            this._errMessage = "invalid syntax, please take a look at doc for api - '" + api + "'";
+                            this.errMessage = "invalid syntax, please take a look at doc for api - '" + api + "'";
                         }
                         break;
                 }
             }
             else if (api.length > 0) {
-                this._errMessage = "invalid api - '" + api + "'";
+                this.errMessage = "invalid api - '" + api + "'";
             }
             else {
-                this._errMessage = "invalid query";
+                this.errMessage = "invalid query";
             }
-            if (this._errMessage.length === 0) {
-                this._option = option;
-                this._api = api;
+            if (this.errMessage.length === 0) {
+                this.option = option;
+                this.api = api;
                 return true;
             }
             else {

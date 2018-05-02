@@ -7,9 +7,9 @@
 <script lang="ts">
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
-import { vue_event } from "../common_var";
+import { vueEvent } from "../common_var";
 import { Util } from "../util";
-declare var JsStore;
+import { DATA_TYPE } from "jsstore";
 
 @Component
 export default class QueryResult extends Vue {
@@ -23,7 +23,7 @@ export default class QueryResult extends Vue {
     console.log(result);
     var resultType = Util.getType(result);
     switch (resultType) {
-      case JsStore.Data_Type.Array:
+      case DATA_TYPE.Array:
         var rowsLength = result.length,
           htmlString = "<tr>",
           props: string[] = [];
@@ -56,10 +56,10 @@ export default class QueryResult extends Vue {
         //   .show()
         //   .text("No of Record : " + result.length);
         break;
-      case JsStore.Data_Type.Object:
+      case DATA_TYPE.Object:
         result = JSON.stringify(result);
-      case JsStore.Data_Type.String:
-      case JsStore.Data_Type.Number:
+      case DATA_TYPE.String:
+      case DATA_TYPE.Number:
         this.resultInnerHtml = result;
         break;
       default:
@@ -68,7 +68,7 @@ export default class QueryResult extends Vue {
   }
 
   catchEvents() {
-    vue_event.$on("on_qry_result", this.printResult);
+    vueEvent.$on("on_qry_result", this.printResult);
   }
 }
 </script>

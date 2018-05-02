@@ -20,7 +20,7 @@ import DbList from "./db_list.vue";
 import Menu from "./menu.vue";
 import DbInfo from "./db_info.vue";
 import QueryExecutor from "./query_executor.vue";
-import { vue_event } from "../common_var";
+import { vueEvent } from "../common_var";
 
 declare var ace;
 ace.config.set("workerPath", "/assets/scripts");
@@ -41,7 +41,7 @@ export default class Main extends Vue {
   }
 
   private catchEvent() {
-    vue_event.$on("on_error", errMessage => {
+    vueEvent.$on("on_error", errMessage => {
       alert(errMessage);
     });
   }

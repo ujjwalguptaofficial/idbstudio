@@ -1,7 +1,7 @@
 var fs = require('fs');
-var deleteFolderRecursive = function(path) {
+var deleteFolderRecursive = function (path) {
   if (fs.existsSync(path)) {
-    fs.readdirSync(path).forEach(function(file, index){
+    fs.readdirSync(path).forEach(function (file, index) {
       var curPath = path + "/" + file;
       if (fs.lstatSync(curPath).isDirectory()) { // recurse
         deleteFolderRecursive(curPath);
@@ -24,7 +24,8 @@ const {
   CSSResourcePlugin,
   QuantumPlugin,
   VueComponentPlugin,
-  Spark
+  Spark,
+  CopyPlugin
 } = require("fuse-box");
 
 Sparky.task("clean", () => Sparky.src("./.fusebox").clean(".fusebox/"));
@@ -34,8 +35,12 @@ Sparky.task("set-prod", () => {
   isProduction = true;
 });
 Sparky.task("clean", () => Sparky.src("./dist").clean("dist/"));
-Sparky.task("watch-assets", () => Sparky.watch("./assets", {base: "./code"}).dest("./dist"));
-Sparky.task("copy-assets", () => Sparky.src("./assets", {base: "./code"}).dest("./dist"));
+Sparky.task("watch-assets", () => Sparky.watch("./assets", {
+  base: "./code"
+}).dest("./dist"));
+Sparky.task("copy-assets", () => Sparky.src("./assets", {
+  base: "./code"
+}).dest("./dist"));
 
 Sparky.task("config", () => {
   fuse = FuseBox.init({
@@ -44,15 +49,30 @@ Sparky.task("config", () => {
     debug: !isProduction,
     useTypescriptCompiler: true,
     plugins: [
+      CopyPlugin({
+        files: ["jsstore.worker.js"],
+        // dest: 'worker',
+        useDefault: false
+      }),
       VueComponentPlugin({
         style: [
-          SassPlugin({importer: true}),
+          SassPlugin({
+            importer: true
+          }),
           CSSResourcePlugin(),
-          CSSPlugin({group: 'components.css', inject: 'components.css'})
+          CSSPlugin({
+            group: 'components.css',
+            inject: 'components.css'
+          })
         ]
       }),
-      CSSPlugin({group: "bundle.css", minify: isProduction}),
-      WebIndexPlugin({template: "code/index.html"}),
+      CSSPlugin({
+        group: "bundle.css",
+        minify: isProduction
+      }),
+      WebIndexPlugin({
+        template: "code/index.html"
+      }),
       isProduction && QuantumPlugin({
         bakeApiIntoBundle: "app",
         uglify: true,
@@ -64,7 +84,10 @@ Sparky.task("config", () => {
     ]
   });
   if (!isProduction) {
-    fuse.dev({open: true, port: 4000})
+    fuse.dev({
+      open: true,
+      port: 4000
+    })
   }
   const vendor = fuse
     .bundle("vendor")

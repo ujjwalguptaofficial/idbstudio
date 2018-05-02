@@ -1,7 +1,7 @@
 <template>
   <div class="row" id="divMenu">
     <div class="col-sm-1">
-      {{$data._dbName}}
+      {{dbName}}
     </div>
     <div class="col-sm-1">
      <a href="#" @click="createNewQry">New Query</a>
@@ -15,28 +15,28 @@
 <script lang="ts">
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
-import { vue_event } from "../common_var";
+import { vueEvent } from "../common_var";
 
 @Component
 export default class Menu extends Vue {
-  _dbName: string = "";
+  dbName: string = "";
   createNewQry() {
-    vue_event.$emit("open_editor");
+    vueEvent.$emit("open_editor");
   }
 
   setDbName(dbName: string) {
-    this.$data._dbName = dbName;
+    this.dbName = dbName;
   }
 
   catchEvent() {
-    vue_event.$on("db_selected", (dbName: string) => {
+    vueEvent.$on("db_selected", (dbName: string) => {
       console.log(dbName);
       this.setDbName(dbName);
     });
   }
 
   executeQry() {
-    vue_event.$emit("execute_qry");
+    vueEvent.$emit("execute_qry");
   }
 
   constructor() {

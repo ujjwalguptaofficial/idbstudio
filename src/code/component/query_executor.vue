@@ -45,10 +45,9 @@
 <script lang="ts">
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
-import { vue_event } from "../common_var";
+import { vueEvent } from "../common_var";
 import Editor from "./editor.vue";
 import QueryResult from "./qry_result.vue";
-import { throws } from "assert";
 import { MainService } from "../service/main_service";
 import { QueryChecker } from "../helpers/query_checker";
 import { IResult } from "../interfaces";
@@ -73,31 +72,31 @@ export default class QueryExecutor extends Vue {
   }
 
   executeQry() {
-    vue_event.$emit("get_qry");
+    vueEvent.$emit("get_qry");
   }
 
   showResult(qry: string) {
-    var query_checker = new QueryChecker(qry);
-    if (query_checker.isQryValid()) {
+    var queryCheckerInstance = new QueryChecker(qry);
+    if (queryCheckerInstance.isQryValid()) {
       new MainService()
-        .executeQry(query_checker._api, query_checker._option)
+        .executeQry(queryCheckerInstance.api, queryCheckerInstance.option)
         .then(qryResult => {
           this.resultCount = qryResult.result.length;
           this.timeTaken = qryResult.timeTaken;
           // console.log(result);
-          vue_event.$emit("on_qry_result", qryResult.result);
+          vueEvent.$emit("on_qry_result", qryResult.result);
         })
         .catch(function(err) {
-          vue_event.$emit("on_error", err._message);
+          vueEvent.$emit("on_error", err.message);
         });
     } else {
-      vue_event.$emit("on_error", query_checker._errMessage);
+      vueEvent.$emit("on_error", queryCheckerInstance.errMessage);
     }
   }
 
   catchEvents() {
-    vue_event.$on("db_selected", this.createNewTab);
-    vue_event.$on("set_qry", this.showResult);
+    vueEvent.$on("db_selected", this.createNewTab);
+    vueEvent.$on("set_qry", this.showResult);
   }
 }
 </script>

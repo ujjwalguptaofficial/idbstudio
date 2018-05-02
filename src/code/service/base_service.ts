@@ -1,27 +1,20 @@
-import {
-    Data_Type,
-    IDataBaseOption,
-    Instance,
-    ITableOption,
-    Model,
-    IError
-} from 'jsstore';
-declare var JsStore;
-export const idb_con : Instance = new JsStore.Instance();
-export class BaseService
-{
-    getDbList()
-    {
-        return JsStore.getDbList();
+
+import { ServiceHelper } from './service_helper';
+export class BaseService {
+
+    private get connection() {
+        return ServiceHelper.idbCon;
     }
 
-    isDbExist(dbName : string)
-    {
-        return JsStore.isDbExist(dbName);
+    public getDbList() {
+        return this.connection.getDbList();
     }
 
-    protected getDbSchema(dbName : string, onSuccess : (schema : Model.DataBase) => void)
-    {
-        JsStore.getDbSchema(dbName, onSuccess);
+    protected isDbExist(dbName: string) {
+        return this.connection.isDbExist(dbName);
+    }
+
+    protected getDbSchema(dbName: string) {
+        this.connection.getDbSchema(dbName);
     }
 }

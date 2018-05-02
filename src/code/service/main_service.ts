@@ -1,33 +1,23 @@
-import {BaseService, idb_con} from "./base_service";
-import {IResult} from "../interfaces";
-export class MainService extends BaseService
-{
-    _dbName = "Demo";
-    constructor()
-    {
+import { BaseService } from "./base_service";
+import { IResult } from "../interfaces";
+export class MainService extends BaseService {
+    constructor() {
         super();
     }
 
-    public openDb(dbName : string, onSuccess, onErr)
-    {
-        return idb_con.openDb(dbName, onSuccess, onErr);
+    public openDb(dbName: string) {
+        return this.connection.openDb(dbName);
     }
 
-    public getDbInfo(dbName)
-    {
-        return new Promise((resolve, reject) => {
-            this.getDbSchema(dbName, (schema) => {
-                resolve(schema);
-            });
-        });
+    public getDbSchema(dbName) {
+        return this.connection.getDbSchema(dbName);
     }
 
-    public executeQry(api : string, option : object)
-    {
+    public executeQry(api: string, option: object) {
         var startTime = performance.now();
         return new Promise((resolve, reject) => {
-            idb_con[api](option).then(qryResult => {
-                const idbResult : IResult = {
+            this.connection[api](option).then(qryResult => {
+                const idbResult: IResult = {
                     timeTaken: (performance.now() - startTime) / 1000,
                     result: qryResult
                 };

@@ -7,8 +7,7 @@
 <script lang="ts">
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
-import { vue_event } from "../common_var";
-import { fail } from "assert";
+import { vueEvent } from "../common_var";
 import { DomHelper } from "../helpers/dom_helper";
 declare var ace;
 @Component({
@@ -37,13 +36,13 @@ export default class Editor extends Vue {
   getQry() {
     var $ = new DomHelper();
     if (!$.isHidden($.parent($.getById(this.id)))) {
-      vue_event.$emit("set_qry", this.editor.getValue());
+      vueEvent.$emit("set_qry", this.editor.getValue());
     }
   }
 
   catchEvent() {
-    vue_event.$on("execute_qry", this.executeJsStoreQry);
-    vue_event.$on("get_qry", this.getQry);
+    vueEvent.$on("execute_qry", this.executeJsStoreQry);
+    vueEvent.$on("get_qry", this.getQry);
   }
 
   executeJsStoreQry() {
