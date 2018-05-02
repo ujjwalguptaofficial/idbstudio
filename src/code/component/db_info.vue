@@ -33,7 +33,6 @@
 <script lang="ts">
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
-import { settings } from "cluster";
 import { MainService } from "../service/main_service";
 import { DemoService } from "../service/demo_service";
 import { IformSelect } from "../interfaces/form_select";

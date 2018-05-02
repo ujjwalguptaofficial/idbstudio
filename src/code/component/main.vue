@@ -47,9 +47,4 @@ export default class Main extends Vue {
   }
 }
 </script>
-<style lang="sass" scoped>
-#divEditorContainers
-{
-  background-color: rebeccapurple;
-}
-</style>
+

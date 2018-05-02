@@ -6,7 +6,6 @@ import Main from './component/main.vue';
 import BootstrapVue from "bootstrap-vue";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-vue/dist/bootstrap-vue.min.css";
-import "font-awesome/css/font-awesome.min.css";
 
 // Configure vue setting
 Vue.use(BootstrapVue);

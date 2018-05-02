@@ -5,7 +5,7 @@
       <b-form-group id="exampleInputGroup1"
                     label="Email address:"
                     label-for="selectDb">
-        <b-form-select id="selectDb" v-model="$data._selectedDb" :options="$data._dbList" class="mb-3" />
+        <b-form-select id="selectDb" v-model="selectedDb" :options="dbList" class="mb-3" />
       </b-form-group>
     </b-form>
     <div slot="modal-footer" class="w-100">
@@ -31,8 +31,8 @@ import { vue_event } from "../common_var";
 
 @Component
 export default class DbList extends Vue {
-  _dbList: IformSelect[] = [];
-  _selectedDb: string = "null";
+  dbList: IformSelect[] = [];
+  selectedDb: string = "null";
 
   // Lifecycle hook
   mounted() {
@@ -64,12 +64,12 @@ export default class DbList extends Vue {
         value: val
       });
     });
-    this.$data._dbList = temp_list;
+    this.dbList = temp_list;
   }
 
   setSelectedDb() {
     new MainService().openDb(
-      this.$data._selectedDb,
+      this.selectedDb,
       () => {
         this.$refs.db_list.hide();
         vue_event.$emit("db_selected", this.$data._selectedDb);

@@ -4,6 +4,7 @@ export class DomHelper
     {
         return document.getElementById(id);
     }
+    
     parent(el : HTMLElement)
     {
         return el.parentElement;
