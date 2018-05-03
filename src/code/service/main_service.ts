@@ -5,14 +5,6 @@ export class MainService extends BaseService {
         super();
     }
 
-    public openDb(dbName: string) {
-        return this.connection.openDb(dbName);
-    }
-
-    public getDbSchema(dbName) {
-        return this.connection.getDbSchema(dbName);
-    }
-
     public executeQry(api: string, option: object) {
         var startTime = performance.now();
         return new Promise((resolve, reject) => {

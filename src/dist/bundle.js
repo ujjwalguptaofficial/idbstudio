@@ -103,7 +103,7 @@ ___scope___.file("component/db_list.vue", function(exports, require, module, __f
 var _options = { _vueModuleId: 'data-v-1fec8355'}
 Object.assign(_options, {
         _scopeId: null,
-        render: function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('b-modal',{ref:"db_list",attrs:{"id":"modal1","title":"IdbStudio"}},[_c('b-form',[_c('b-form-group',{attrs:{"id":"exampleInputGroup1"}},[_c('b-form-select',{staticClass:"mb-3",attrs:{"id":"selectDb","options":_vm.dbList},model:{value:(_vm.selectedDb),callback:function ($$v) {_vm.selectedDb=$$v},expression:"selectedDb"}})],1)],1),_vm._v(" "),_c('div',{staticClass:"w-100",attrs:{"slot":"modal-footer"},slot:"modal-footer"},[_c('b-btn',{staticClass:"float-left",attrs:{"variant":"primary"},on:{"click":_vm.setSelectedDb}},[_vm._v("\n         Create Database\n       ")]),_vm._v(" "),_c('b-btn',{staticClass:"float-right",attrs:{"variant":"primary"},on:{"click":_vm.setSelectedDb}},[_vm._v("\n         Open\n       ")])],1)],1)],1)},
+        render: function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('b-modal',{ref:"db_list",attrs:{"id":"modal1","title":"IdbStudio"}},[_c('b-form',[_c('b-form-group',{attrs:{"id":"exampleInputGroup1"}},[_c('b-form-select',{staticClass:"mb-3",attrs:{"id":"selectDb","options":_vm.dbList},model:{value:(_vm.selectedDb),callback:function ($$v) {_vm.selectedDb=$$v},expression:"selectedDb"}})],1)],1),_vm._v(" "),_c('div',{staticClass:"w-100",attrs:{"slot":"modal-footer"},slot:"modal-footer"},[_c('b-btn',{staticClass:"float-left",attrs:{"variant":"primary"},on:{"click":_vm.setSelectedDb}},[_vm._v("\n        Create Database\n      ")]),_vm._v(" "),_c('b-btn',{staticClass:"float-right",attrs:{"variant":"primary"},on:{"click":_vm.setSelectedDb}},[_vm._v("\n        Open\n      ")])],1)],1)],1)},
         staticRenderFns: []
       })
 "use strict";
@@ -135,26 +135,29 @@ var DbList = /** @class */ (function (_super) {
         var _this = _super.call(this) || this;
         _this.dbList = [];
         _this.selectedDb = "null";
-        new demo_service_1.DemoService().createDemoDataBase();
+        new demo_service_1.DemoService().createDemoDataBase().then(function () {
+            _this.openDbListModal();
+        });
         return _this;
     }
     // Lifecycle hook
     DbList.prototype.mounted = function () {
-        var _this = this;
         //give some time to create the database
-        setTimeout(function () {
-            new main_service_1.MainService()
-                .getDbList()
-                .then(function (list) {
-                console.log(list);
-                _this.updateDbList(list);
-                _this.$refs.db_list.show();
-            })
-                .catch(function (err) {
-                console.log(err);
-                alert(err._message);
-            });
-        }, 2000);
+        setTimeout(function () { }, 2000);
+    };
+    DbList.prototype.openDbListModal = function () {
+        var _this = this;
+        new main_service_1.MainService()
+            .getDbList()
+            .then(function (list) {
+            console.log(list);
+            _this.updateDbList(list);
+            _this.$refs.db_list.show();
+        })
+            .catch(function (err) {
+            console.log(err);
+            alert(err._message);
+        });
     };
     DbList.prototype.updateDbList = function (list) {
         var tempList = [
@@ -226,12 +229,6 @@ var MainService = /** @class */ (function (_super) {
     function MainService() {
         return _super.call(this) || this;
     }
-    MainService.prototype.openDb = function (dbName) {
-        return this.connection.openDb(dbName);
-    };
-    MainService.prototype.getDbSchema = function (dbName) {
-        return this.connection.getDbSchema(dbName);
-    };
     MainService.prototype.executeQry = function (api, option) {
         var _this = this;
         var startTime = performance.now();
@@ -260,6 +257,12 @@ var service_helper_1 = require("./service_helper");
 var BaseService = /** @class */ (function () {
     function BaseService() {
     }
+    BaseService.prototype.openDb = function (dbName) {
+        return this.connection.openDb(dbName);
+    };
+    BaseService.prototype.getDbSchema = function (dbName) {
+        return this.connection.getDbSchema(dbName);
+    };
     Object.defineProperty(BaseService.prototype, "connection", {
         get: function () {
             return service_helper_1.ServiceHelper.idbCon;
@@ -272,9 +275,6 @@ var BaseService = /** @class */ (function () {
     };
     BaseService.prototype.isDbExist = function (dbName) {
         return this.connection.isDbExist(dbName);
-    };
-    BaseService.prototype.getDbSchema = function (dbName) {
-        this.connection.getDbSchema(dbName);
     };
     return BaseService;
 }());
@@ -321,12 +321,19 @@ var DemoService = /** @class */ (function (_super) {
     }
     DemoService.prototype.createDemoDataBase = function () {
         var _this = this;
-        this.isDbExist(this.dbName).then(function (exist) {
-            if (exist === false) {
-                _this.connection.createDb(_this.getDbSchema());
-            }
-        }).catch(function (err) {
-            alert(err._message);
+        return new Promise(function (resolve, reject) {
+            _this.isDbExist(_this.dbName).then(function (exist) {
+                if (exist === false) {
+                    _this.connection.createDb(_this.getDbSchema()).then(function () {
+                        resolve();
+                    });
+                }
+                else {
+                    resolve();
+                }
+            }).catch(function (err) {
+                reject(err);
+            });
         });
     };
     DemoService.prototype.getDbSchema = function () {
@@ -399,7 +406,7 @@ var DemoService = /** @class */ (function (_super) {
             ]
         };
         var suppliers = {
-            name: 'suppliers',
+            name: 'Suppliers',
             columns: [
                 new jsstore_1.Column('supplierId').options([jsstore_1.COL_OPTION.PrimaryKey, jsstore_1.COL_OPTION.AutoIncrement]),
                 new jsstore_1.Column('supplierName').options([jsstore_1.COL_OPTION.NotNull]).setDataType(jsstore_1.DATA_TYPE.String),
@@ -521,7 +528,7 @@ var _options = { _vueModuleId: 'data-v-926b6219'}
 Object.assign(_options, {_scopeId: 'data-v-926b6219'})
 Object.assign(_options, {
         _scopeId: "data-v-926b6219",
-        render: function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"db-name"},[_vm._v(_vm._s(_vm.dbInfo._name))]),_vm._v(" "),_c('table',[_c('thead'),_vm._v(" "),_c('tbody',_vm._l((_vm.dbInfo.tables),function(table){return _c('tr',{key:table.name},[_c('td',[_c('span',{directives:[{name:"b-toggle",rawName:"v-b-toggle",value:(table._name),expression:"table._name"}],staticClass:"table-name"},[_vm._v(_vm._s(table.name)+" "),_c('i',{staticClass:"fas fa-plus"})]),_vm._v(" "),_c('b-collapse',{staticClass:"ml-4",attrs:{"id":table.name}},_vm._l((table.columns),function(column){return _c('div',{key:column.name,staticClass:"column-name"},[_c('span',{directives:[{name:"b-toggle",rawName:"v-b-toggle",value:(column._name),expression:"column._name"}]},[_vm._v(_vm._s(column.name)+" "),_c('i',{staticClass:"fas fa-plus-square"})]),_vm._v(" "),_c('b-collapse',{staticClass:"ml-4",attrs:{"id":column.name}},[_c('div',[_vm._v("Primary Key : "),_c('span',{staticClass:"column-schema"},[_vm._v(_vm._s(column.primaryKey))])]),_vm._v(" "),_c('div',[_vm._v("Auto Increment : "),_c('span',{staticClass:"column-schema"},[_vm._v(_vm._s(column.autoIncrement))])]),_vm._v(" "),_c('div',[_vm._v("Not Null: "),_c('span',{staticClass:"column-schema"},[_vm._v(_vm._s(column.notNull))])]),_vm._v(" "),_c('div',[_vm._v("Data Type : "),_c('span',{staticClass:"column-schema"},[_vm._v(_vm._s(column.dataType))])]),_vm._v(" "),_c('div',[_vm._v("Default : "),_c('span',{staticClass:"column-schema"},[_vm._v(_vm._s(column.default))])]),_vm._v(" "),_c('div',[_vm._v("Unique : "),_c('span',{staticClass:"column-schema"},[_vm._v(_vm._s(column.unique))])]),_vm._v(" "),_c('div',[_vm._v("Multi Entry : "),_c('span',{staticClass:"column-schema"},[_vm._v(_vm._s(column.multiEntry))])]),_vm._v(" "),_c('div',[_vm._v("Enable Search : "),_c('span',{staticClass:"column-schema"},[_vm._v(_vm._s(column.enableSearch))])])])],1)}))],1)])})),_vm._v(" "),_c('tfoot')])])},
+        render: function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"db-name"},[_vm._v(_vm._s(_vm.dbInfo.name))]),_vm._v(" "),_c('table',[_c('thead'),_vm._v(" "),_c('tbody',_vm._l((_vm.dbInfo.tables),function(table){return _c('tr',{key:table.name},[_c('td',[_c('span',{directives:[{name:"b-toggle",rawName:"v-b-toggle",value:(table.name),expression:"table.name"}],staticClass:"table-name"},[_vm._v(_vm._s(table.name)+"\n            "),_c('i',{staticClass:"fas fa-plus"})]),_vm._v(" "),_c('b-collapse',{staticClass:"ml-4",attrs:{"id":table.name}},_vm._l((table.columns),function(column){return _c('div',{key:column.name,staticClass:"column-name"},[_c('span',{directives:[{name:"b-toggle",rawName:"v-b-toggle",value:(column.name),expression:"column.name"}]},[_vm._v(_vm._s(column.name)+"\n                "),_c('i',{staticClass:"fas fa-plus-square"})]),_vm._v(" "),_c('b-collapse',{staticClass:"ml-4",attrs:{"id":column.name}},[_c('div',[_vm._v("Primary Key :\n                  "),_c('span',{staticClass:"column-schema"},[_vm._v(_vm._s(column.primaryKey))])]),_vm._v(" "),_c('div',[_vm._v("Auto Increment :\n                  "),_c('span',{staticClass:"column-schema"},[_vm._v(_vm._s(column.autoIncrement))])]),_vm._v(" "),_c('div',[_vm._v("Not Null:\n                  "),_c('span',{staticClass:"column-schema"},[_vm._v(_vm._s(column.notNull))])]),_vm._v(" "),_c('div',[_vm._v("Data Type :\n                  "),_c('span',{staticClass:"column-schema"},[_vm._v(_vm._s(column.dataType))])]),_vm._v(" "),_c('div',[_vm._v("Default :\n                  "),_c('span',{staticClass:"column-schema"},[_vm._v(_vm._s(column.default))])]),_vm._v(" "),_c('div',[_vm._v("Unique :\n                  "),_c('span',{staticClass:"column-schema"},[_vm._v(_vm._s(column.unique))])]),_vm._v(" "),_c('div',[_vm._v("Multi Entry :\n                  "),_c('span',{staticClass:"column-schema"},[_vm._v(_vm._s(column.multiEntry))])]),_vm._v(" "),_c('div',[_vm._v("Enable Search :\n                  "),_c('span',{staticClass:"column-schema"},[_vm._v(_vm._s(column.enableSearch))])])])],1)}))],1)])})),_vm._v(" "),_c('tfoot')])])},
         staticRenderFns: []
       })
 "use strict";
@@ -600,7 +607,7 @@ var _options = { _vueModuleId: 'data-v-3466dbfc'}
 Object.assign(_options, {_scopeId: 'data-v-3466dbfc'})
 Object.assign(_options, {
         _scopeId: "data-v-3466dbfc",
-        render: function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{attrs:{"id":"divQueryExecutor"}},[_c('div',{attrs:{"id":"divButtonContainer"}},[_c('b-button-group',{attrs:{"size":"mg"}},[_c('b-button',{attrs:{"variant":"primary"},on:{"click":_vm.createNewTab}},[_vm._v("\n           New Query "),_c('i',{staticClass:"fas fa-plus-circle"})]),_vm._v(" "),_c('b-button',{attrs:{"variant":"primary"},on:{"click":_vm.createNewTab}},[_vm._v("\n           Open "),_c('i',{staticClass:"fas fa-folder-open"})]),_vm._v(" "),_c('b-button',{attrs:{"variant":"primary"},on:{"click":_vm.createNewTab}},[_vm._v("\n           Save "),_c('i',{staticClass:"fas fa-save"})]),_vm._v(" "),_c('b-button',{attrs:{"variant":"success"},on:{"click":_vm.executeQry}},[_vm._v("\n           Execute "),_c('i',{staticClass:"fas fa-play"})])],1)],1),_vm._v(" "),_c('b-card',{attrs:{"no-body":""}},[_c('b-tabs',{attrs:{"card":""}},_vm._l((_vm.$data.tabCount),function(item){return _c('b-tab',{key:'tab'+item,attrs:{"active":"","title":'Query '+item}},[_c('Editor',{attrs:{"id":'editor' + item}})],1)}))],1),_vm._v(" "),_c('QueryResult'),_vm._v(" "),_c('transition',{attrs:{"name":"fade"}},[(_vm.resultCount)?_c('div',{attrs:{"id":"divResultInfo"}},[_c('table',[_c('tr',[_c('td',[_c('b',[_vm._v("No of Record :")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.resultCount))]),_vm._v(" "),_c('b',{staticClass:"seperator"},[_vm._v("|")]),_vm._v(" "),_c('b',[_vm._v("Time Taken :")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.timeTaken)+" sec.")])]),_vm._v(" "),_c('td',[_c('i',{staticClass:"fas fa-times",on:{"click":function($event){_vm.resultCount=''}}})])])])]):_vm._e()])],1)},
+        render: function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{attrs:{"id":"divQueryExecutor"}},[_c('div',{attrs:{"id":"divButtonContainer"}},[_c('b-button-group',{attrs:{"size":"mg"}},[_c('b-button',{attrs:{"variant":"primary"},on:{"click":_vm.createNewTab}},[_vm._v("\n        New Query\n        "),_c('i',{staticClass:"fas fa-plus-circle"})]),_vm._v(" "),_c('b-button',{attrs:{"variant":"primary"},on:{"click":_vm.createNewTab}},[_vm._v("\n        Open\n        "),_c('i',{staticClass:"fas fa-folder-open"})]),_vm._v(" "),_c('b-button',{attrs:{"variant":"primary"},on:{"click":_vm.createNewTab}},[_vm._v("\n        Save\n        "),_c('i',{staticClass:"fas fa-save"})]),_vm._v(" "),_c('b-button',{attrs:{"variant":"success"},on:{"click":_vm.executeQry}},[_vm._v("\n        Execute\n        "),_c('i',{staticClass:"fas fa-play"})])],1)],1),_vm._v(" "),_c('b-card',{attrs:{"no-body":""}},[_c('b-tabs',{attrs:{"card":""}},_vm._l((_vm.$data.tabCount),function(item){return _c('b-tab',{key:'tab'+item,attrs:{"active":"","title":'Query '+item}},[_c('Editor',{attrs:{"id":'editor' + item}})],1)}))],1),_vm._v(" "),_c('QueryResult'),_vm._v(" "),_c('transition',{attrs:{"name":"fade"}},[(_vm.resultCount)?_c('div',{attrs:{"id":"divResultInfo"}},[_c('table',[_c('tr',[_c('td',[_c('b',[_vm._v("No of Record :")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.resultCount))]),_vm._v(" "),_c('b',{staticClass:"seperator"},[_vm._v("|")]),_vm._v(" "),_c('b',[_vm._v("Time Taken :")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.timeTaken)+" sec.")])]),_vm._v(" "),_c('td',[_c('i',{staticClass:"fas fa-times",on:{"click":function($event){_vm.resultCount=''}}})])])])]):_vm._e()])],1)},
         staticRenderFns: []
       })
 "use strict";
@@ -913,18 +920,19 @@ ___scope___.file("util.js", function(exports, require, module, __filename, __dir
 
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var jsstore_1 = require("jsstore");
 var Util = /** @class */ (function () {
     function Util() {
     }
     Util.getType = function (value) {
         if (value === null) {
-            return JsStore.Data_Type.Null;
+            return jsstore_1.DATA_TYPE.Null;
         }
         var type = typeof value;
         switch (type) {
             case 'object':
                 if (Array.isArray(value)) {
-                    return JsStore.Data_Type.Array;
+                    return jsstore_1.DATA_TYPE.Array;
                 }
             default:
                 return type;
@@ -973,7 +981,12 @@ var QueryChecker = /** @class */ (function () {
             ];
             if (allowedApi.indexOf(api) >= 0) {
                 option = this.query.substring(this.query.indexOf("(") + 1, this.query.lastIndexOf(")"));
-                eval("option =" + option);
+                if (option.length > 0) {
+                    eval("option =" + option);
+                }
+                else {
+                    option = null;
+                }
                 switch (api) {
                     case "select":
                     case "insert":

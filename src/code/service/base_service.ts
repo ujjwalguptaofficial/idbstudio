@@ -2,7 +2,15 @@
 import { ServiceHelper } from './service_helper';
 export class BaseService {
 
-    private get connection() {
+    public openDb(dbName: string) {
+        return this.connection.openDb(dbName);
+    }
+
+    public getDbSchema(dbName: string) {
+        return this.connection.getDbSchema(dbName);
+    }
+
+    protected get connection() {
         return ServiceHelper.idbCon;
     }
 
@@ -10,11 +18,8 @@ export class BaseService {
         return this.connection.getDbList();
     }
 
-    protected isDbExist(dbName: string) {
+    public isDbExist(dbName: string) {
         return this.connection.isDbExist(dbName);
     }
 
-    protected getDbSchema(dbName: string) {
-        this.connection.getDbSchema(dbName);
-    }
 }

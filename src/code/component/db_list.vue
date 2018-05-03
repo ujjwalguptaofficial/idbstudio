@@ -1,20 +1,20 @@
 <template>
   <div>
-  <b-modal id="modal1" ref="db_list" title="IdbStudio">
-    <b-form>
-      <b-form-group id="exampleInputGroup1">
-        <b-form-select id="selectDb" v-model="selectedDb" :options="dbList" class="mb-3" />
-      </b-form-group>
-    </b-form>
-    <div slot="modal-footer" class="w-100">
-          <b-btn class="float-left" variant="primary" @click="setSelectedDb">
-           Create Database
-         </b-btn> 
-         <b-btn class="float-right" variant="primary" @click="setSelectedDb">
-           Open
-         </b-btn>
+    <b-modal id="modal1" ref="db_list" title="IdbStudio">
+      <b-form>
+        <b-form-group id="exampleInputGroup1">
+          <b-form-select id="selectDb" v-model="selectedDb" :options="dbList" class="mb-3" />
+        </b-form-group>
+      </b-form>
+      <div slot="modal-footer" class="w-100">
+        <b-btn class="float-left" variant="primary" @click="setSelectedDb">
+          Create Database
+        </b-btn>
+        <b-btn class="float-right" variant="primary" @click="setSelectedDb">
+          Open
+        </b-btn>
       </div>
-  </b-modal>
+    </b-modal>
   </div>
 </template>
 
@@ -34,19 +34,21 @@ export default class DbList extends Vue {
   // Lifecycle hook
   mounted() {
     //give some time to create the database
-    setTimeout(() => {
-      new MainService()
-        .getDbList()
-        .then(list => {
-          console.log(list);
-          this.updateDbList(list);
-          this.$refs.db_list.show();
-        })
-        .catch(err => {
-          console.log(err);
-          alert(err._message);
-        });
-    }, 2000);
+    setTimeout(() => {}, 2000);
+  }
+
+  openDbListModal() {
+    new MainService()
+      .getDbList()
+      .then(list => {
+        console.log(list);
+        this.updateDbList(list);
+        this.$refs.db_list.show();
+      })
+      .catch(err => {
+        console.log(err);
+        alert(err._message);
+      });
   }
 
   updateDbList(list: string[]) {
@@ -80,7 +82,9 @@ export default class DbList extends Vue {
 
   constructor() {
     super();
-    new DemoService().createDemoDataBase();
+    new DemoService().createDemoDataBase().then(() => {
+      this.openDbListModal();
+    });
   }
 }
 </script>

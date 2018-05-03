@@ -1,30 +1,34 @@
 <template>
   <div id="divQueryExecutor">
-     <div id="divButtonContainer">
-         <b-button-group size="mg">
-          <b-button variant="primary" @click="createNewTab">
-           New Query <i class="fas fa-plus-circle"></i>
-          </b-button>
-          <b-button variant="primary" @click="createNewTab">
-           Open <i class="fas fa-folder-open"></i>
-          </b-button>
-          <b-button variant="primary" @click="createNewTab">
-           Save <i class="fas fa-save"></i>
-          </b-button>
-          <b-button variant="success" @click="executeQry">
-           Execute <i class="fas fa-play"></i>
-          </b-button>
-        </b-button-group>
+    <div id="divButtonContainer">
+      <b-button-group size="mg">
+        <b-button variant="primary" @click="createNewTab">
+          New Query
+          <i class="fas fa-plus-circle"></i>
+        </b-button>
+        <b-button variant="primary" @click="createNewTab">
+          Open
+          <i class="fas fa-folder-open"></i>
+        </b-button>
+        <b-button variant="primary" @click="createNewTab">
+          Save
+          <i class="fas fa-save"></i>
+        </b-button>
+        <b-button variant="success" @click="executeQry">
+          Execute
+          <i class="fas fa-play"></i>
+        </b-button>
+      </b-button-group>
     </div>
-  <b-card no-body>
-  <b-tabs card>
-    <b-tab active v-for="(item) in $data.tabCount" :key="'tab'+item" v-bind:title="'Query '+item">
-     <Editor v-bind:id="'editor' + item"></Editor>
-    </b-tab>
-  </b-tabs>
-</b-card>
-  <QueryResult></QueryResult>
-   <transition name="fade">
+    <b-card no-body>
+      <b-tabs card>
+        <b-tab active v-for="(item) in $data.tabCount" :key="'tab'+item" v-bind:title="'Query '+item">
+          <Editor v-bind:id="'editor' + item"></Editor>
+        </b-tab>
+      </b-tabs>
+    </b-card>
+    <QueryResult></QueryResult>
+    <transition name="fade">
       <div id="divResultInfo" v-if="resultCount">
         <table>
           <tr>
@@ -32,14 +36,17 @@
               <b>No of Record :</b>
               <span>{{resultCount}}</span>
               <b class="seperator">|</b>
-              <b>Time Taken :</b> <span>{{timeTaken}} sec.</span>
+              <b>Time Taken :</b>
+              <span>{{timeTaken}} sec.</span>
             </td>
-            <td><i @click="resultCount=''" class="fas fa-times"></td>
+            <td>
+              <i @click="resultCount=''" class="fas fa-times">
+            </td>
           </tr>
         </table>
       </div>
-   </transition>
-</div>
+    </transition>
+  </div>
 </template>
 
 <script lang="ts">

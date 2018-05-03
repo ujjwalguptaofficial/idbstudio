@@ -36,7 +36,12 @@ export class QueryChecker {
       ];
       if (allowedApi.indexOf(api) >= 0) {
         option = this.query.substring(this.query.indexOf("(") + 1, this.query.lastIndexOf(")"));
-        eval("option =" + option);
+        if (option.length > 0) {
+          eval("option =" + option);
+        }
+        else {
+          option = null;
+        }
         switch (api) {
           case "select":
           case "insert":

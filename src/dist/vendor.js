@@ -16723,10 +16723,10 @@ module.exports = cssHandler;
 return ___scope___.entry = "index.js";
 });
 FuseBox.pkg("jsstore", {}, function(___scope___){
-___scope___.file("dist/jsstore.js", function(exports, require, module, __filename, __dirname){
+___scope___.file("dist/jsstore.commonjs2.js", function(exports, require, module, __filename, __dirname){
 
 /*!
- * @license :jsstore - V2.0.0 - 02/05/2018
+ * @license :jsstore - V2.0.0 - 03/05/2018
  * https://github.com/ujjwalguptaofficial/JsStore
  * Copyright (c) 2018 @Ujjwal Gupta; Licensed MIT
  */
@@ -17392,13 +17392,13 @@ var Column = /** @class */ (function () {
 
 /***/ })
 /******/ ]);
-//# sourceMappingURL=jsstore.js.map
+//# sourceMappingURL=jsstore.commonjs2.js.map
 });
 ___scope___.file("dist/jsstore.worker.js", function(exports, require, module, __filename, __dirname){
 
 module.exports = "/assets/61863669-jsstore.worker.js";
 });
-return ___scope___.entry = "dist/jsstore.js";
+return ___scope___.entry = "dist/jsstore.commonjs2.js";
 });
 FuseBox.pkg("process", {}, function(___scope___){
 ___scope___.file("index.js", function(exports, require, module, __filename, __dirname){

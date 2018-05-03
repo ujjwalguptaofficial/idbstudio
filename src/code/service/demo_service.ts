@@ -8,12 +8,19 @@ export class DemoService extends BaseService {
     }
 
     createDemoDataBase() {
-        this.isDbExist(this.dbName).then((exist) => {
-            if (exist === false) {
-                this.connection.createDb(this.getDbSchema());
-            }
-        }).catch((err) => {
-            alert(err._message);
+        return new Promise((resolve, reject) => {
+            this.isDbExist(this.dbName).then((exist) => {
+                if (exist === false) {
+                    this.connection.createDb(this.getDbSchema()).then(() => {
+                        resolve();
+                    });
+                }
+                else {
+                    resolve();
+                }
+            }).catch((err) => {
+                reject(err);
+            });
         });
     }
 
@@ -94,7 +101,7 @@ export class DemoService extends BaseService {
         };
 
         var suppliers: ITable = {
-            name: 'suppliers',
+            name: 'Suppliers',
             columns: [
                 new Column('supplierId').options([COL_OPTION.PrimaryKey, COL_OPTION.AutoIncrement]),
                 new Column('supplierName').options([COL_OPTION.NotNull]).setDataType(DATA_TYPE.String),
