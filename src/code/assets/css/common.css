@@ -1,3 +1,7 @@
 .align-text-right {
     text-align: right;
 }
+
+.seperator {
+    margin: 0 10px;
+}

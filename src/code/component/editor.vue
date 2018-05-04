@@ -1,7 +1,7 @@
 <template>
- <div class="idb-editor" v-bind:id="id">
+  <div class="idb-editor" v-bind:id="id">
 
- </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -46,7 +46,7 @@ export default class Editor extends Vue {
   }
 
   executeJsStoreQry() {
-    
+
   }
 }
 </script>

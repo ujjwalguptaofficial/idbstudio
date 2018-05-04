@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-modal id="modal1" ref="db_list" title="IdbStudio">
+    <b-modal id="modal1" ref="db_list" title="IDBStudio">
       <b-form>
         <b-form-group id="exampleInputGroup1">
           <b-form-select id="selectDb" v-model="selectedDb" :options="dbList" class="mb-3" />
@@ -34,21 +34,18 @@ export default class DbList extends Vue {
   // Lifecycle hook
   mounted() {
     //give some time to create the database
-    setTimeout(() => {}, 2000);
+    setTimeout(() => { }, 2000);
   }
 
   openDbListModal() {
-    new MainService()
-      .getDbList()
-      .then(list => {
-        console.log(list);
-        this.updateDbList(list);
-        this.$refs.db_list.show();
-      })
-      .catch(err => {
-        console.log(err);
-        alert(err._message);
-      });
+    new MainService().getDbList().then(list => {
+      console.log(list);
+      this.updateDbList(list);
+      this.$refs.db_list.show();
+    }).catch(err => {
+      console.log(err);
+      alert(err._message);
+    });
   }
 
   updateDbList(list: string[]) {
@@ -86,6 +83,8 @@ export default class DbList extends Vue {
       this.openDbListModal();
     });
   }
+
+  
 }
 </script>
 <style>

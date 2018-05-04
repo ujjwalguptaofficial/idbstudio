@@ -1,17 +1,17 @@
-export class DomHelper
-{
-    getById(id : string)
-    {
+export class DomHelper {
+    getById(id: string) {
         return document.getElementById(id);
     }
-    
-    parent(el : HTMLElement)
-    {
+
+    parent(el: HTMLElement) {
         return el.parentElement;
     }
 
-    isHidden(el : HTMLElement)
-    {
+    isHidden(el: HTMLElement) {
         return el.offsetParent === null;
+    }
+
+    qry(query: string) {
+        return document.querySelector(query);
     }
 }

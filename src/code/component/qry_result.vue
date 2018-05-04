@@ -20,7 +20,6 @@ export default class QueryResult extends Vue {
   }
 
   printResult(result) {
-    console.log(result);
     var resultType = Util.getType(result);
     switch (resultType) {
       case DATA_TYPE.Array:
@@ -52,9 +51,6 @@ export default class QueryResult extends Vue {
         }
 
         this.resultInnerHtml = htmlString;
-        // $("#recordCount")
-        //   .show()
-        //   .text("No of Record : " + result.length);
         break;
       case DATA_TYPE.Object:
         result = JSON.stringify(result);
@@ -72,17 +68,21 @@ export default class QueryResult extends Vue {
   }
 }
 </script>
-<style lang="sass" scoped>
+<style lang="sass">
 #divResult
 {
+    overflow-y: scroll;
+    overflow-x: hidden;
     min-height:200px;
     width: 99%;
     left: 5px;
     position: relative;
     right: 5px;
     background-color: white;
-    table tr td{
-      text-align:center;
+
+    .table tr td, .table tr th{
+     border:1px inset;
+     text-align:center;
     }
 }
 

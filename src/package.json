@@ -21,6 +21,7 @@
     "vue-template-es2015-compiler": "^1.6.0"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "bootstrap": "^4.1.1",
     "bootstrap-vue": "^2.0.0-rc.2",
     "jsstore": "^1.6.4",

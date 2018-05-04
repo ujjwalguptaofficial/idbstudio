@@ -103,7 +103,7 @@ ___scope___.file("component/db_list.vue", function(exports, require, module, __f
 var _options = { _vueModuleId: 'data-v-1fec8355'}
 Object.assign(_options, {
         _scopeId: null,
-        render: function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('b-modal',{ref:"db_list",attrs:{"id":"modal1","title":"IdbStudio"}},[_c('b-form',[_c('b-form-group',{attrs:{"id":"exampleInputGroup1"}},[_c('b-form-select',{staticClass:"mb-3",attrs:{"id":"selectDb","options":_vm.dbList},model:{value:(_vm.selectedDb),callback:function ($$v) {_vm.selectedDb=$$v},expression:"selectedDb"}})],1)],1),_vm._v(" "),_c('div',{staticClass:"w-100",attrs:{"slot":"modal-footer"},slot:"modal-footer"},[_c('b-btn',{staticClass:"float-left",attrs:{"variant":"primary"},on:{"click":_vm.setSelectedDb}},[_vm._v("\n        Create Database\n      ")]),_vm._v(" "),_c('b-btn',{staticClass:"float-right",attrs:{"variant":"primary"},on:{"click":_vm.setSelectedDb}},[_vm._v("\n        Open\n      ")])],1)],1)],1)},
+        render: function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('b-modal',{ref:"db_list",attrs:{"id":"modal1","title":"IDBStudio"}},[_c('b-form',[_c('b-form-group',{attrs:{"id":"exampleInputGroup1"}},[_c('b-form-select',{staticClass:"mb-3",attrs:{"id":"selectDb","options":_vm.dbList},model:{value:(_vm.selectedDb),callback:function ($$v) {_vm.selectedDb=$$v},expression:"selectedDb"}})],1)],1),_vm._v(" "),_c('div',{staticClass:"w-100",attrs:{"slot":"modal-footer"},slot:"modal-footer"},[_c('b-btn',{staticClass:"float-left",attrs:{"variant":"primary"},on:{"click":_vm.setSelectedDb}},[_vm._v("\n        Create Database\n      ")]),_vm._v(" "),_c('b-btn',{staticClass:"float-right",attrs:{"variant":"primary"},on:{"click":_vm.setSelectedDb}},[_vm._v("\n        Open\n      ")])],1)],1)],1)},
         staticRenderFns: []
       })
 "use strict";
@@ -147,14 +147,11 @@ var DbList = /** @class */ (function (_super) {
     };
     DbList.prototype.openDbListModal = function () {
         var _this = this;
-        new main_service_1.MainService()
-            .getDbList()
-            .then(function (list) {
+        new main_service_1.MainService().getDbList().then(function (list) {
             console.log(list);
             _this.updateDbList(list);
             _this.$refs.db_list.show();
-        })
-            .catch(function (err) {
+        }).catch(function (err) {
             console.log(err);
             alert(err._message);
         });
@@ -312,6 +309,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var base_service_1 = require("./base_service");
 var jsstore_1 = require("jsstore");
+var axios_1 = require("axios");
 var DemoService = /** @class */ (function (_super) {
     __extends(DemoService, _super);
     function DemoService() {
@@ -325,7 +323,7 @@ var DemoService = /** @class */ (function (_super) {
             _this.isDbExist(_this.dbName).then(function (exist) {
                 if (exist === false) {
                     _this.connection.createDb(_this.getDbSchema()).then(function () {
-                        resolve();
+                        _this.insertDemoDbData(resolve);
                     });
                 }
                 else {
@@ -334,6 +332,55 @@ var DemoService = /** @class */ (function (_super) {
             }).catch(function (err) {
                 reject(err);
             });
+        });
+    };
+    DemoService.prototype.insertDemoDbData = function (callBack) {
+        var _this = this;
+        var filesList = ["Customers", "Categories", "Employees", "OrderDetails",
+            "Orders", "Products", "Shippers", "Suppliers"];
+        var filesProcessed = 0;
+        var onFileProcessed = function () {
+            filesProcessed++;
+            console.log('inserted file:' + filesList[filesProcessed - 1]);
+            if (filesProcessed === filesList.length) {
+                callBack();
+            }
+        };
+        filesList.forEach(function (file) {
+            var url = "/assets/demo_database/" + file + ".json";
+            axios_1.default.get(url).then(function (response) {
+                switch (file) {
+                    case filesList[4]:
+                        response.data.forEach(function (value) {
+                            value.orderDate = new Date();
+                        });
+                        _this.insert(file, response.data).then(onFileProcessed);
+                        break;
+                    case filesList[2]:
+                        response.data.forEach(function (value) {
+                            value.birthDate = new Date();
+                        });
+                        _this.insert(file, response.data).then(onFileProcessed);
+                        break;
+                    case filesList[3]:
+                        _this.bulkInsert(file, response.data).then(onFileProcessed);
+                        break;
+                    default:
+                        _this.insert(file, response.data).then(onFileProcessed);
+                }
+            });
+        });
+    };
+    DemoService.prototype.insert = function (table, datas) {
+        return this.connection.insert({
+            into: table,
+            values: datas
+        });
+    };
+    DemoService.prototype.bulkInsert = function (table, datas) {
+        return this.connection.bulkInsert({
+            into: table,
+            values: datas
         });
     };
     DemoService.prototype.getDbSchema = function () {
@@ -364,7 +411,7 @@ var DemoService = /** @class */ (function (_super) {
                 new jsstore_1.Column('lastName').options([jsstore_1.COL_OPTION.NotNull]).setDataType(jsstore_1.DATA_TYPE.String),
                 new jsstore_1.Column('birthDate').options([jsstore_1.COL_OPTION.NotNull]).setDataType(jsstore_1.DATA_TYPE.DateTime),
                 new jsstore_1.Column('photo').options([jsstore_1.COL_OPTION.NotNull]).setDataType(jsstore_1.DATA_TYPE.String),
-                new jsstore_1.Column('notes').setDataType(jsstore_1.DATA_TYPE.DateTime),
+                new jsstore_1.Column('notes').setDataType(jsstore_1.DATA_TYPE.String),
             ]
         };
         var order_details = {
@@ -452,8 +499,8 @@ var _options = { _vueModuleId: 'data-v-c33a269d'}
 Object.assign(_options, {_scopeId: 'data-v-c33a269d'})
 Object.assign(_options, {
         _scopeId: "data-v-c33a269d",
-        render: function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"row",attrs:{"id":"divMenu"}},[_c('div',{staticClass:"col-sm-1"},[_vm._v("\n    "+_vm._s(_vm.dbName)+"\n  ")]),_vm._v(" "),_c('div',{staticClass:"col-sm-1"},[_c('a',{attrs:{"href":"#"},on:{"click":_vm.createNewQry}},[_vm._v("New Query")])]),_vm._v(" "),_c('div',{staticClass:"col-sm-1"},[_c('span',{on:{"click":_vm.executeQry}},[_vm._v("Execute "),_c('i',{staticClass:"fas fa-play"})])])])},
-        staticRenderFns: []
+        render: function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"row",attrs:{"id":"divMenu"}},[_c('span',{staticClass:"title"},[_vm._v(" IDBStudio ")]),_vm._v(" "),_c('ul',{staticClass:"right-menu align-right"},[_vm._m(0),_vm._v(" "),_c('li',{staticClass:"seperator"},[_vm._v("|")]),_vm._v(" "),_c('li',[_c('a',{attrs:{"title":"fork on github","href":"https://github.com/ujjwalguptaofficial/JsStore/fork"}},[_c('svg',{staticClass:"octicon octicon-repo-forked",staticStyle:{"fill":"white","vertical-align":"sub"},attrs:{"version":"1.1","width":"10","height":"18","viewBox":"0 0 10 16","aria-hidden":"true"}},[_c('path',{attrs:{"fill-rule":"evenodd","d":"M8 1a1.993 1.993 0 0 0-1 3.72V6L5 8 3 6V4.72A1.993 1.993 0 0 0 2 1a1.993 1.993 0 0 0-1 3.72V6.5l3 3v1.78A1.993 1.993 0 0 0 5 15a1.993 1.993 0 0 0 1-3.72V9.5l3-3V4.72A1.993 1.993 0 0 0 8 1zM2 4.2C1.34 4.2.8 3.65.8 3c0-.65.55-1.2 1.2-1.2.65 0 1.2.55 1.2 1.2 0 .65-.55 1.2-1.2 1.2zm3 10c-.66 0-1.2-.55-1.2-1.2 0-.65.55-1.2 1.2-1.2.65 0 1.2.55 1.2 1.2 0 .65-.55 1.2-1.2 1.2zm3-10c-.66 0-1.2-.55-1.2-1.2 0-.65.55-1.2 1.2-1.2.65 0 1.2.55 1.2 1.2 0 .65-.55 1.2-1.2 1.2z"}})]),_vm._v(" Fork")])])])])},
+        staticRenderFns: [function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('li',[_c('a',{attrs:{"href":"https://github.com/ujjwalguptaofficial/JsStore"}},[_c('i',{staticClass:"fas fa-star"}),_vm._v(" Star")])])}]
       })
 "use strict";
 var __extends = (this && this.__extends) || (function () {
@@ -607,7 +654,7 @@ var _options = { _vueModuleId: 'data-v-3466dbfc'}
 Object.assign(_options, {_scopeId: 'data-v-3466dbfc'})
 Object.assign(_options, {
         _scopeId: "data-v-3466dbfc",
-        render: function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{attrs:{"id":"divQueryExecutor"}},[_c('div',{attrs:{"id":"divButtonContainer"}},[_c('b-button-group',{attrs:{"size":"mg"}},[_c('b-button',{attrs:{"variant":"primary"},on:{"click":_vm.createNewTab}},[_vm._v("\n        New Query\n        "),_c('i',{staticClass:"fas fa-plus-circle"})]),_vm._v(" "),_c('b-button',{attrs:{"variant":"primary"},on:{"click":_vm.createNewTab}},[_vm._v("\n        Open\n        "),_c('i',{staticClass:"fas fa-folder-open"})]),_vm._v(" "),_c('b-button',{attrs:{"variant":"primary"},on:{"click":_vm.createNewTab}},[_vm._v("\n        Save\n        "),_c('i',{staticClass:"fas fa-save"})]),_vm._v(" "),_c('b-button',{attrs:{"variant":"success"},on:{"click":_vm.executeQry}},[_vm._v("\n        Execute\n        "),_c('i',{staticClass:"fas fa-play"})])],1)],1),_vm._v(" "),_c('b-card',{attrs:{"no-body":""}},[_c('b-tabs',{attrs:{"card":""}},_vm._l((_vm.$data.tabCount),function(item){return _c('b-tab',{key:'tab'+item,attrs:{"active":"","title":'Query '+item}},[_c('Editor',{attrs:{"id":'editor' + item}})],1)}))],1),_vm._v(" "),_c('QueryResult'),_vm._v(" "),_c('transition',{attrs:{"name":"fade"}},[(_vm.resultCount)?_c('div',{attrs:{"id":"divResultInfo"}},[_c('table',[_c('tr',[_c('td',[_c('b',[_vm._v("No of Record :")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.resultCount))]),_vm._v(" "),_c('b',{staticClass:"seperator"},[_vm._v("|")]),_vm._v(" "),_c('b',[_vm._v("Time Taken :")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.timeTaken)+" sec.")])]),_vm._v(" "),_c('td',[_c('i',{staticClass:"fas fa-times",on:{"click":function($event){_vm.resultCount=''}}})])])])]):_vm._e()])],1)},
+        render: function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{attrs:{"id":"divQueryExecutor"}},[_c('div',{attrs:{"id":"divButtonContainer"}},[_c('b-button-group',{attrs:{"size":"mg"}},[_c('b-button',{attrs:{"variant":"primary"},on:{"click":_vm.createNewTab}},[_vm._v("\n        New Query\n        "),_c('i',{staticClass:"fas fa-plus-circle"})]),_vm._v(" "),_c('b-button',{attrs:{"variant":"primary"},on:{"click":_vm.createNewTab}},[_vm._v("\n        Open\n        "),_c('i',{staticClass:"fas fa-folder-open"})]),_vm._v(" "),_c('b-button',{attrs:{"variant":"primary"},on:{"click":_vm.createNewTab}},[_vm._v("\n        Save\n        "),_c('i',{staticClass:"fas fa-save"})]),_vm._v(" "),_c('b-button',{attrs:{"variant":"success"},on:{"click":_vm.executeQry}},[_vm._v("\n        Execute\n        "),_c('i',{staticClass:"fas fa-play"})])],1)],1),_vm._v(" "),_c('b-card',{attrs:{"no-body":"","id":"divEditorContainer"}},[_c('b-tabs',{attrs:{"card":""}},_vm._l((_vm.$data.tabCount),function(item){return _c('b-tab',{key:'tab'+item,attrs:{"active":"","title":'Query '+item}},[_c('Editor',{attrs:{"id":'editor' + item}})],1)}))],1),_vm._v(" "),_c('QueryResult'),_vm._v(" "),_c('transition',{attrs:{"name":"fade"}},[(_vm.showResultInfo)?_c('div',{attrs:{"id":"divResultInfo"}},[_c('table',[_c('tr',[_c('td',[_c('b',[_vm._v("No of Record :")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.resultCount))]),_vm._v(" "),_c('b',{staticClass:"seperator"},[_vm._v("|")]),_vm._v(" "),_c('b',[_vm._v("Time Taken :")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.timeTaken)+" sec.")])]),_vm._v(" "),_c('td',[_c('i',{staticClass:"fas fa-times",on:{"click":function($event){_vm.showResultInfo=false}}})])])])]):_vm._e()])],1)},
         staticRenderFns: []
       })
 "use strict";
@@ -635,6 +682,7 @@ var editor_vue_1 = require("./editor.vue");
 var qry_result_vue_1 = require("./qry_result.vue");
 var main_service_1 = require("../service/main_service");
 var query_checker_1 = require("../helpers/query_checker");
+var dom_helper_1 = require("../helpers/dom_helper");
 var QueryExecutor = /** @class */ (function (_super) {
     __extends(QueryExecutor, _super);
     function QueryExecutor() {
@@ -642,9 +690,19 @@ var QueryExecutor = /** @class */ (function (_super) {
         _this.tabCount = 0;
         _this.timeTaken = "";
         _this.resultCount = "";
+        _this.showResultInfo = false;
         _this.catchEvents();
         return _this;
     }
+    QueryExecutor.prototype.mounted = function () {
+        var $ = new dom_helper_1.DomHelper();
+        var menuHeight = 50;
+        var buttonHeight = $.qry('#divButtonContainer').clientHeight;
+        var margin = 10;
+        var editorHeight = (window.innerHeight - (menuHeight + buttonHeight + margin)) / 2;
+        $.qry('#divEditorContainer').style.height = editorHeight + buttonHeight + "px";
+        $.qry('#divResult').style.height = editorHeight - buttonHeight - 10 + "px";
+    };
     QueryExecutor.prototype.createNewTab = function () {
         this.$data.tabCount++;
     };
@@ -655,15 +713,12 @@ var QueryExecutor = /** @class */ (function (_super) {
         var _this = this;
         var queryCheckerInstance = new query_checker_1.QueryChecker(qry);
         if (queryCheckerInstance.isQryValid()) {
-            new main_service_1.MainService()
-                .executeQry(queryCheckerInstance.api, queryCheckerInstance.option)
-                .then(function (qryResult) {
+            new main_service_1.MainService().executeQry(queryCheckerInstance.api, queryCheckerInstance.option).then(function (qryResult) {
+                _this.showResultInfo = true;
                 _this.resultCount = qryResult.result.length;
                 _this.timeTaken = qryResult.timeTaken;
-                // console.log(result);
                 common_var_1.vueEvent.$emit("on_qry_result", qryResult.result);
-            })
-                .catch(function (err) {
+            }).catch(function (err) {
                 common_var_1.vueEvent.$emit("on_error", err.message);
             });
         }
@@ -801,6 +856,9 @@ var DomHelper = /** @class */ (function () {
     DomHelper.prototype.isHidden = function (el) {
         return el.offsetParent === null;
     };
+    DomHelper.prototype.qry = function (query) {
+        return document.querySelector(query);
+    };
     return DomHelper;
 }());
 exports.DomHelper = DomHelper;
@@ -809,9 +867,8 @@ exports.DomHelper = DomHelper;
 ___scope___.file("component/qry_result.vue", function(exports, require, module, __filename, __dirname){
 
 var _options = { _vueModuleId: 'data-v-c760ee62'}
-Object.assign(_options, {_scopeId: 'data-v-c760ee62'})
 Object.assign(_options, {
-        _scopeId: "data-v-c760ee62",
+        _scopeId: null,
         render: function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{attrs:{"id":"divResult"}},[_c('table',{staticClass:"table",domProps:{"innerHTML":_vm._s(_vm.resultInnerHtml)}})])},
         staticRenderFns: []
       })
@@ -847,7 +904,6 @@ var QueryResult = /** @class */ (function (_super) {
         return _this;
     }
     QueryResult.prototype.printResult = function (result) {
-        console.log(result);
         var resultType = util_1.Util.getType(result);
         switch (resultType) {
             case jsstore_1.DATA_TYPE.Array:
@@ -877,9 +933,6 @@ var QueryResult = /** @class */ (function (_super) {
                     htmlString += tempHtml;
                 }
                 this.resultInnerHtml = htmlString;
-                // $("#recordCount")
-                //   .show()
-                //   .text("No of Record : " + result.length);
                 break;
             case jsstore_1.DATA_TYPE.Object:
                 result = JSON.stringify(result);
@@ -1035,7 +1088,7 @@ exports.QueryChecker = QueryChecker;
 ___scope___.file("components.css", function(exports, require, module, __filename, __dirname){
 
 
-require("fuse-box-css")("components.css", "#selectDb option {\n  text-align: center; }\n\n/*# sourceMappingURL=style.css.map */\n\n#divMenu[data-v-c33a269d] {\n  background-color: #d4d4f3;\n  height: 50px;\n}\n#divMenu div a[data-v-c33a269d] {\n    color: white;\n}\n\n#selectDb option[data-v-926b6219] {\n  text-align: center;\n}\n.table-name[data-v-926b6219] {\n  font-size: 20px;\n  font-family: monospace;\n}\n.column-name[data-v-926b6219] {\n  font-size: 15px;\n}\n.column-schema[data-v-926b6219] {\n  color: #372ae5;\n}\ntable[data-v-926b6219] {\n  margin-left: 15px;\n  border-right: 5px solid #777adb;\n  display: block;\n  width: 100%;\n}\n.db-name[data-v-926b6219] {\n  background-color: #ec6f42;\n  color: white;\n  font-size: 20px;\n  text-align: center;\n  margin-top: 10px;\n  margin-bottom: 20px;\n  padding: 10px;\n}\n\n#divQueryExecutor[data-v-3466dbfc] {\n  margin-top: 10px;\n  background-color: #f1f1f1;\n  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;\n}\n#divResultInfo[data-v-3466dbfc] {\n  height: 50px;\n  position: absolute;\n  bottom: 0px;\n  background: inherit;\n  z-index: 100;\n  width: 97%;\n}\ntable[data-v-3466dbfc] {\n  height: inherit;\n  width: 100%;\n}\ntable tr td[data-v-3466dbfc] {\n  padding-left: 20px;\n}\ntable tr td[data-v-3466dbfc]:last-child {\n  text-align: right;\n  padding-right: 20px;\n  padding-left: 50px;\n}\n.fade-enter-active[data-v-3466dbfc], .fade-leave-active[data-v-3466dbfc] {\n  transition: opacity .5s;\n  bottom: 0px;\n}\n.fade-enter[data-v-3466dbfc], .fade-leave-to[data-v-3466dbfc] {\n  opacity: 0;\n  bottom: -100px;\n}\n.seperator[data-v-3466dbfc] {\n  padding: 0px 10px;\n}\n.idb-editor {\n  width: 100%;\n  min-height: 200px; }\n\n/*# sourceMappingURL=style.sass.map */\n\n#divResult[data-v-c760ee62] {\n  min-height: 200px;\n  width: 99%;\n  left: 5px;\n  position: relative;\n  right: 5px;\n  background-color: white;\n}\n#divResult table tr td[data-v-c760ee62] {\n    text-align: center;\n}");
+require("fuse-box-css")("components.css", "#selectDb option {\n  text-align: center; }\n\n/*# sourceMappingURL=style.css.map */\n\n#divMenu[data-v-c33a269d] {\n  background-color: #d4d4f3;\n  height: 50px;\n}\n#divMenu div a[data-v-c33a269d] {\n    color: white;\n}\nul li[data-v-c33a269d] {\n  display: inline-block;\n}\n.right-menu[data-v-c33a269d] {\n  position: absolute;\n  right: 10px;\n}\n#divMenu[data-v-c33a269d] {\n  line-height: 45px;\n}\n.title[data-v-c33a269d] {\n  margin-left: 15px;\n}\n\n#selectDb option[data-v-926b6219] {\n  text-align: center;\n}\n.table-name[data-v-926b6219] {\n  font-size: 20px;\n  font-family: monospace;\n}\n.column-name[data-v-926b6219] {\n  font-size: 15px;\n}\n.column-schema[data-v-926b6219] {\n  color: #372ae5;\n}\ntable[data-v-926b6219] {\n  margin-left: 15px;\n  border-right: 5px solid #777adb;\n  display: block;\n  width: 100%;\n}\n.db-name[data-v-926b6219] {\n  background-color: #ec6f42;\n  color: white;\n  font-size: 20px;\n  text-align: center;\n  margin-top: 10px;\n  margin-bottom: 20px;\n  padding: 10px;\n}\n\n#divQueryExecutor[data-v-3466dbfc] {\n  margin-top: 10px;\n  background-color: #f1f1f1;\n  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;\n}\n#divResultInfo[data-v-3466dbfc] {\n  height: 50px;\n  position: absolute;\n  bottom: 0px;\n  background: inherit;\n  z-index: 100;\n  width: 97%;\n}\ntable[data-v-3466dbfc] {\n  height: inherit;\n  width: 100%;\n}\ntable tr td[data-v-3466dbfc] {\n  padding-left: 20px;\n}\ntable tr td[data-v-3466dbfc]:last-child {\n  text-align: right;\n  padding-right: 20px;\n  padding-left: 50px;\n}\n.fade-enter-active[data-v-3466dbfc], .fade-leave-active[data-v-3466dbfc] {\n  transition: opacity .5s;\n  bottom: 0px;\n}\n.fade-enter[data-v-3466dbfc], .fade-leave-to[data-v-3466dbfc] {\n  opacity: 0;\n  bottom: -100px;\n}\n.seperator[data-v-3466dbfc] {\n  padding: 0px 10px;\n}\n.idb-editor {\n  width: 100%;\n  min-height: 200px; }\n\n/*# sourceMappingURL=style.sass.map */\n#divResult {\n  overflow-y: scroll;\n  overflow-x: hidden;\n  min-height: 200px;\n  width: 99%;\n  left: 5px;\n  position: relative;\n  right: 5px;\n  background-color: white; }\n  #divResult .table tr td, #divResult .table tr th {\n    border: 1px inset;\n    text-align: center; }\n\n/*# sourceMappingURL=style.sass.map */");
 });
 return ___scope___.entry = "index.js";
 });

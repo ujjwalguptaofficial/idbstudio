@@ -20,7 +20,7 @@
         </b-button>
       </b-button-group>
     </div>
-    <b-card no-body>
+    <b-card no-body id="divEditorContainer">
       <b-tabs card>
         <b-tab active v-for="(item) in $data.tabCount" :key="'tab'+item" v-bind:title="'Query '+item">
           <Editor v-bind:id="'editor' + item"></Editor>
@@ -29,7 +29,7 @@
     </b-card>
     <QueryResult></QueryResult>
     <transition name="fade">
-      <div id="divResultInfo" v-if="resultCount">
+      <div id="divResultInfo" v-if="showResultInfo">
         <table>
           <tr>
             <td>
@@ -40,7 +40,7 @@
               <span>{{timeTaken}} sec.</span>
             </td>
             <td>
-              <i @click="resultCount=''" class="fas fa-times">
+              <i @click="showResultInfo=false" class="fas fa-times">
             </td>
           </tr>
         </table>
@@ -58,6 +58,7 @@ import QueryResult from "./qry_result.vue";
 import { MainService } from "../service/main_service";
 import { QueryChecker } from "../helpers/query_checker";
 import { IResult } from "../interfaces";
+import { DomHelper } from '../helpers/dom_helper';
 
 @Component({
   components: {
@@ -69,9 +70,20 @@ export default class QueryExecutor extends Vue {
   tabCount = 0;
   timeTaken = "";
   resultCount: number | string = "";
+  showResultInfo = false;
   constructor() {
     super();
     this.catchEvents();
+  }
+
+  mounted() {
+    const $ = new DomHelper();
+    const menuHeight = 50;
+    const buttonHeight = $.qry('#divButtonContainer').clientHeight;
+    const margin = 10;
+    const editorHeight = (window.innerHeight - (menuHeight + buttonHeight + margin)) / 2;
+    $.qry('#divEditorContainer').style.height = editorHeight + buttonHeight + "px";
+    $.qry('#divResult').style.height = editorHeight - buttonHeight - 10 + "px";
   }
 
   createNewTab() {
@@ -85,17 +97,14 @@ export default class QueryExecutor extends Vue {
   showResult(qry: string) {
     var queryCheckerInstance = new QueryChecker(qry);
     if (queryCheckerInstance.isQryValid()) {
-      new MainService()
-        .executeQry(queryCheckerInstance.api, queryCheckerInstance.option)
-        .then(qryResult => {
-          this.resultCount = qryResult.result.length;
-          this.timeTaken = qryResult.timeTaken;
-          // console.log(result);
-          vueEvent.$emit("on_qry_result", qryResult.result);
-        })
-        .catch(function(err) {
-          vueEvent.$emit("on_error", err.message);
-        });
+      new MainService().executeQry(queryCheckerInstance.api, queryCheckerInstance.option).then(qryResult => {
+        this.showResultInfo = true;
+        this.resultCount = qryResult.result.length;
+        this.timeTaken = qryResult.timeTaken;
+        vueEvent.$emit("on_qry_result", qryResult.result);
+      }).catch(function (err) {
+        vueEvent.$emit("on_error", err.message);
+      });
     } else {
       vueEvent.$emit("on_error", queryCheckerInstance.errMessage);
     }

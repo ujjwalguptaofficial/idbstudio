@@ -1,6 +1,7 @@
 import { BaseService } from './base_service';
 import { ITable, Column, COL_OPTION, DATA_TYPE, IDataBase } from 'jsstore';
-declare var JsStore;
+import Axios from "axios";
+
 export class DemoService extends BaseService {
     dbName = "Demo";
     constructor() {
@@ -12,7 +13,7 @@ export class DemoService extends BaseService {
             this.isDbExist(this.dbName).then((exist) => {
                 if (exist === false) {
                     this.connection.createDb(this.getDbSchema()).then(() => {
-                        resolve();
+                        this.insertDemoDbData(resolve);
                     });
                 }
                 else {
@@ -21,6 +22,58 @@ export class DemoService extends BaseService {
             }).catch((err) => {
                 reject(err);
             });
+        });
+    }
+
+    insertDemoDbData(callBack) {
+        const filesList = ["Customers", "Categories", "Employees", "OrderDetails",
+            "Orders", "Products", "Shippers", "Suppliers"];
+        var filesProcessed = 0;
+        var onFileProcessed = function () {
+            filesProcessed++;
+            console.log('inserted file:' + filesList[filesProcessed - 1]);
+            if (filesProcessed === filesList.length) {
+                callBack();
+            }
+        };
+        filesList.forEach((file) => {
+            const url = `/assets/demo_database/${file}.json`;
+            Axios.get(url).then((response) => {
+                switch (file) {
+                    case filesList[4]:
+                        response.data.forEach(function (value) {
+                            value.orderDate = new Date();
+                        });
+                        this.insert(file, response.data).then(onFileProcessed);
+                        break;
+                    case filesList[2]:
+                        response.data.forEach(function (value) {
+                            value.birthDate = new Date();
+                        });
+                        this.insert(file, response.data).then(onFileProcessed);
+                        break;
+                    case filesList[3]:
+                        this.bulkInsert(file, response.data).then(onFileProcessed);
+                        break;
+                    default:
+                        this.insert(file, response.data).then(onFileProcessed);
+                }
+
+            });
+        });
+    }
+
+    insert(table: string, datas: any[]) {
+        return this.connection.insert({
+            into: table,
+            values: datas
+        });
+    }
+
+    bulkInsert(table: string, datas: any[]) {
+        return this.connection.bulkInsert({
+            into: table,
+            values: datas
         });
     }
 
@@ -54,7 +107,7 @@ export class DemoService extends BaseService {
                 new Column('lastName').options([COL_OPTION.NotNull]).setDataType(DATA_TYPE.String),
                 new Column('birthDate').options([COL_OPTION.NotNull]).setDataType(DATA_TYPE.DateTime),
                 new Column('photo').options([COL_OPTION.NotNull]).setDataType(DATA_TYPE.String),
-                new Column('notes').setDataType(DATA_TYPE.DateTime),
+                new Column('notes').setDataType(DATA_TYPE.String),
             ]
         };
 
