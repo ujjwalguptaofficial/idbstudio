@@ -1,6 +1,10 @@
 <template>
   <div>
-    <div class="db-name">{{dbInfo.name}}</div>
+    <!-- <div >{{dbInfo.name}}</div> -->
+  <b-form-select v-model="selectedDb" class="mb-3 db-list">
+      <option value="null">--Select Database--</option>
+      <option v-for="db in dbList" :key="db"  :value="db">{{db}}</option>
+    </b-form-select>
     <table>
       <thead></thead>
       <tbody>
@@ -64,11 +68,23 @@ export default class DbInfo extends Vue {
   dbInfo: IDataBase = {
     tables: []
   } as any;
+  selectedDb = "Demo";
+  dbList: string[] = [];
 
-  getDbInfo(dbName: string) {
-    new MainService().getDbSchema(dbName).then(result => {
-      console.log(result);
-      this.updateDbInfo(result);
+  mounted() {
+    var demoServiceInstance = new DemoService();
+    demoServiceInstance.createDemoDataBase().then(() => {
+      this.getDbInfo();
+      demoServiceInstance.getDbList().then(list => {
+        this.dbList = list;
+      });
+    });
+  }
+
+  getDbInfo() {
+    new MainService().getDbSchema(this.selectedDb).then(result => {
+     
+      this.dbInfo = result;
     });
   }
 
@@ -78,7 +94,8 @@ export default class DbInfo extends Vue {
 
   catchEvent() {
     vueEvent.$on("db_selected", (dbName: string) => {
-      this.getDbInfo(dbName);
+      this.selectedDb = dbName;
+      this.getDbInfo();
     });
   }
 
@@ -97,7 +114,7 @@ export default class DbInfo extends Vue {
 .table-name
 {
   font-size:20px;
-  font-family: monospace;
+  font-family: ABeeZee;
 }
 .column-name
 {
@@ -113,13 +130,8 @@ table
   display: block;
   width: 100%;
 }
-.db-name{
-  background-color: #F44336;
-    color: white;
-    font-size: 20px;
-    text-align: center;
+.db-list{
     margin-top: 10px;
     margin-bottom: 20px;
-    padding: 10px;
 }
 </style>

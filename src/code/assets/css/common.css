@@ -5,3 +5,13 @@
 .seperator {
     padding: 0px 10px;
 }
+
+@font-face {
+    font-family: Allerta;
+    src: url('../assets/fonts/Allerta-Regular.ttf') format("truetype");
+}
+
+@font-face {
+    font-family: ABeeZee;
+    src: url('../assets/fonts/ABeeZee-Regular.ttf') format("truetype");
+}

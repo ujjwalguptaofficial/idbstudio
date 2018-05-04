@@ -4,7 +4,7 @@ FuseBox.pkg("default", {}, function(___scope___){
 ___scope___.file("components.css", function(exports, require, module, __filename, __dirname){
 
 
-require("fuse-box-css")("components.css", "#selectDb option {\n  text-align: center; }\n\n/*# sourceMappingURL=style.css.map */\n\n#divMenu[data-v-c33a269d] {\n  background-color: #d4d4f3;\n  line-height: 45px;\n  height: 50px;\n}\n#divMenu div a[data-v-c33a269d] {\n    color: white;\n}\n#divMenu ul li[data-v-c33a269d] {\n    display: inline-block;\n}\n#divMenu .right-menu[data-v-c33a269d] {\n    position: absolute;\n    right: 10px;\n}\n#divMenu .title[data-v-c33a269d] {\n    margin-left: 15px;\n}\n\n#selectDb option[data-v-926b6219] {\n  text-align: center;\n}\n.table-name[data-v-926b6219] {\n  font-size: 20px;\n  font-family: monospace;\n}\n.column-name[data-v-926b6219] {\n  font-size: 15px;\n}\n.column-schema[data-v-926b6219] {\n  color: #372ae5;\n}\ntable[data-v-926b6219] {\n  margin-left: 15px;\n  border-right: 5px solid #777adb;\n  display: block;\n  width: 100%;\n}\n.db-name[data-v-926b6219] {\n  background-color: #ec6f42;\n  color: white;\n  font-size: 20px;\n  text-align: center;\n  margin-top: 10px;\n  margin-bottom: 20px;\n  padding: 10px;\n}\n\n#divQueryExecutor[data-v-3466dbfc] {\n  margin-top: 10px;\n  background-color: #f1f1f1;\n  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;\n}\n#divResultInfo[data-v-3466dbfc] {\n  height: 50px;\n  position: absolute;\n  bottom: 0px;\n  background: inherit;\n  z-index: 100;\n  width: 97%;\n}\ntable[data-v-3466dbfc] {\n  height: inherit;\n  width: 100%;\n}\ntable tr td[data-v-3466dbfc] {\n  padding-left: 20px;\n}\ntable tr td[data-v-3466dbfc]:last-child {\n  text-align: right;\n  padding-right: 20px;\n  padding-left: 50px;\n}\n.fade-enter-active[data-v-3466dbfc], .fade-leave-active[data-v-3466dbfc] {\n  transition: opacity .5s;\n  bottom: 0px;\n}\n.fade-enter[data-v-3466dbfc], .fade-leave-to[data-v-3466dbfc] {\n  opacity: 0;\n  bottom: -100px;\n}\n.idb-editor {\n  width: 100%;\n  min-height: 200px; }\n\n/*# sourceMappingURL=style.sass.map */\n#divResult {\n  overflow-y: scroll;\n  overflow-x: hidden;\n  min-height: 200px;\n  width: 99%;\n  left: 5px;\n  position: relative;\n  right: 5px;\n  background-color: white; }\n  #divResult .table tr td, #divResult .table tr th {\n    border: 1px inset;\n    text-align: center; }\n\n/*# sourceMappingURL=style.sass.map */");
+require("fuse-box-css")("components.css", "@import undefined;\n#divQueryExecutorContainer {\n  border-left: 5px solid #777adb; }\n\n/*# sourceMappingURL=style.sass.map */\n#selectDb option {\n  text-align: center; }\n\n/*# sourceMappingURL=style.css.map */\n\n#divMenu[data-v-c33a269d] {\n  background-color: #2c3e50;\n  width: 100%;\n  line-height: 45px;\n  color: white;\n  height: 50px;\n}\n#divMenu a[data-v-c33a269d] {\n    color: white;\n}\n#divMenu ul li[data-v-c33a269d] {\n    display: inline-block;\n}\n#divMenu .right-menu[data-v-c33a269d] {\n    float: right;\n    position: relative;\n    right: 10px;\n}\n#divMenu .title[data-v-c33a269d] {\n    margin-left: 15px;\n    font-size: 20px;\n    line-height: 50px;\n    font-family: Allerta;\n}\n\n#selectDb option[data-v-926b6219] {\n  text-align: center;\n}\n.table-name[data-v-926b6219] {\n  font-size: 20px;\n  font-family: ABeeZee;\n}\n.column-name[data-v-926b6219] {\n  font-size: 15px;\n}\n.column-schema[data-v-926b6219] {\n  color: #372ae5;\n}\ntable[data-v-926b6219] {\n  margin-left: 15px;\n  display: block;\n  width: 100%;\n}\n.db-list[data-v-926b6219] {\n  margin-top: 10px;\n  margin-bottom: 20px;\n}\n\n#divQueryExecutor[data-v-3466dbfc] {\n  margin-top: 10px;\n  background-color: #f1f1f1;\n  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;\n}\n#divResultInfo[data-v-3466dbfc] {\n  height: 50px;\n  position: absolute;\n  bottom: 0px;\n  background: inherit;\n  z-index: 100;\n  width: 97%;\n}\ntable[data-v-3466dbfc] {\n  height: inherit;\n  width: 100%;\n}\ntable tr td[data-v-3466dbfc] {\n  padding-left: 20px;\n}\ntable tr td[data-v-3466dbfc]:last-child {\n  text-align: right;\n  padding-right: 20px;\n  padding-left: 50px;\n}\n.fade-enter-active[data-v-3466dbfc], .fade-leave-active[data-v-3466dbfc] {\n  transition: opacity .5s;\n  bottom: 0px;\n}\n.fade-enter[data-v-3466dbfc], .fade-leave-to[data-v-3466dbfc] {\n  opacity: 0;\n  bottom: -100px;\n}\n.idb-editor {\n  width: 100%;\n  min-height: 200px; }\n\n/*# sourceMappingURL=style.sass.map */\n#divResult {\n  overflow-y: scroll;\n  overflow-x: hidden;\n  min-height: 200px;\n  width: 99%;\n  left: 5px;\n  position: relative;\n  right: 5px;\n  background-color: white; }\n  #divResult .table tr td, #divResult .table tr th {\n    border: 1px inset;\n    text-align: center; }\n\n/*# sourceMappingURL=style.sass.map */\n.start-page {\n  background-color: #2c3e50;\n  width: 100%;\n  height: 100%;\n  position: absolute;\n  z-index: 1000; }\n  .start-page .title {\n    font-family: Allerta;\n    color: white;\n    text-align: center;\n    margin-top: 150px; }\n\n/*# sourceMappingURL=style.sass.map */");
 });
 ___scope___.file("bundle.css", function(exports, require, module, __filename, __dirname){
 
@@ -18225,7 +18225,7 @@ FuseBox.pkg("jsstore", {}, function(___scope___){
 ___scope___.file("dist/jsstore.commonjs2.js", function(exports, require, module, __filename, __dirname){
 
 /*!
- * @license :jsstore - V2.0.0 - 03/05/2018
+ * @license :jsstore - V2.0.0 - 04/05/2018
  * https://github.com/ujjwalguptaofficial/JsStore
  * Copyright (c) 2018 @Ujjwal Gupta; Licensed MIT
  */
@@ -18603,7 +18603,14 @@ var InstanceHelper = /** @class */ (function () {
         this.isDbOpened_ = false;
         this.requestQueue_ = [];
         this.isCodeExecuting_ = false;
-        this.whiteListApi_ = ['create_db', 'is_db_exist', 'get_db_version', 'get_db_list', 'open_db'];
+        this.whiteListApi_ = [
+            "create_db",
+            "is_db_exist",
+            "get_db_version",
+            "get_db_list",
+            "open_db",
+            "get_db_schema"
+        ];
         if (worker) {
             this.worker_ = worker;
             this.worker_.onmessage = this.onMessageFromWorker_.bind(this);
@@ -18627,7 +18634,7 @@ var InstanceHelper = /** @class */ (function () {
             }
             else {
                 if (finishedRequest.onSuccess) {
-                    var openDbQueries = ['open_db', 'create_db'];
+                    var openDbQueries = ["open_db", "create_db"];
                     if (openDbQueries.indexOf(finishedRequest.name) >= 0) {
                         this.isDbOpened_ = true;
                     }

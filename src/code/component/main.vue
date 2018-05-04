@@ -1,6 +1,7 @@
 <template>
 <div class="container-fluid">
-  <div class="row">
+   <Start></Start>
+  <div class="row" id="divMain">
     <Menu></Menu>
     <div style="border-top:5px solid #777adb;width: 100%;"></div>
     <div class="col-sm-3">
@@ -8,7 +9,6 @@
     </div>
     <div class="col" id="divQueryExecutorContainer">
       <QueryExecutor></QueryExecutor>
-     <DbList></DbList>
     </div>
   </div>
 </div>
@@ -21,7 +21,9 @@ import DbList from "./db_list.vue";
 import Menu from "./menu.vue";
 import DbInfo from "./db_info.vue";
 import QueryExecutor from "./query_executor.vue";
+import Start from "./start.vue";
 import { vueEvent } from "../common_var";
+import "../assets/css/common.css";
 
 declare var ace;
 ace.config.set("workerPath", "/assets/scripts");
@@ -32,7 +34,8 @@ ace.config.set("themePath", "/assets/scripts");
     DbList,
     Menu,
     DbInfo,
-    QueryExecutor
+    QueryExecutor,
+    Start
   }
 })
 export default class Main extends Vue {
@@ -49,8 +52,8 @@ export default class Main extends Vue {
 }
 </script>
 <style lang="sass">
-#divQueryExecutorContainer{
-  border-left:5px solid #777adb;
+#divMain{
+display:none;
 }
 </style>
 

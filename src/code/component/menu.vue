@@ -52,7 +52,8 @@ export default class Menu extends Vue {
 </script>
 <style lang="sass" scoped>
 #divMenu {
-    background-color: #1f24ff;
+    // background-color: #1f24ff;
+    background-color:#2c3e50;
     width:100%;
     line-height:45px;
     color:white;
@@ -73,6 +74,7 @@ export default class Menu extends Vue {
       margin-left:15px;
       font-size:20px;
       line-height:50px;
+      font-family: Allerta;
     }
 }
 

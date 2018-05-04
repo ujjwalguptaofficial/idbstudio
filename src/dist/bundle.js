@@ -29,7 +29,7 @@ ___scope___.file("component/main.vue", function(exports, require, module, __file
 var _options = { _vueModuleId: 'data-v-266cf365'}
 Object.assign(_options, {
         _scopeId: null,
-        render: function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"container-fluid"},[_c('div',{staticClass:"row"},[_c('Menu'),_vm._v(" "),_c('div',{staticStyle:{"border-top":"5px solid #777adb","width":"100%"}}),_vm._v(" "),_c('div',{staticClass:"col-sm-3"},[_c('DbInfo')],1),_vm._v(" "),_c('div',{staticClass:"col",attrs:{"id":"divQueryExecutorContainer"}},[_c('QueryExecutor'),_vm._v(" "),_c('DbList')],1)],1)])},
+        render: function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"container-fluid"},[_c('Start'),_vm._v(" "),_c('div',{staticClass:"row",attrs:{"id":"divMain"}},[_c('Menu'),_vm._v(" "),_c('div',{staticStyle:{"border-top":"5px solid #777adb","width":"100%"}}),_vm._v(" "),_c('div',{staticClass:"col-sm-3"},[_c('DbInfo')],1),_vm._v(" "),_c('div',{staticClass:"col",attrs:{"id":"divQueryExecutorContainer"}},[_c('QueryExecutor')],1)],1)],1)},
         staticRenderFns: []
       })
 "use strict";
@@ -56,7 +56,9 @@ var db_list_vue_1 = require("./db_list.vue");
 var menu_vue_1 = require("./menu.vue");
 var db_info_vue_1 = require("./db_info.vue");
 var query_executor_vue_1 = require("./query_executor.vue");
+var start_vue_1 = require("./start.vue");
 var common_var_1 = require("../common_var");
+require("../assets/css/common.css");
 ace.config.set("workerPath", "/assets/scripts");
 ace.config.set("themePath", "/assets/scripts");
 var Main = /** @class */ (function (_super) {
@@ -77,7 +79,8 @@ var Main = /** @class */ (function (_super) {
                 DbList: db_list_vue_1.default,
                 Menu: menu_vue_1.default,
                 DbInfo: db_info_vue_1.default,
-                QueryExecutor: query_executor_vue_1.default
+                QueryExecutor: query_executor_vue_1.default,
+                Start: start_vue_1.default
             }
         })
     ], Main);
@@ -577,7 +580,7 @@ var _options = { _vueModuleId: 'data-v-926b6219'}
 Object.assign(_options, {_scopeId: 'data-v-926b6219'})
 Object.assign(_options, {
         _scopeId: "data-v-926b6219",
-        render: function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"db-name"},[_vm._v(_vm._s(_vm.dbInfo.name))]),_vm._v(" "),_c('table',[_c('thead'),_vm._v(" "),_c('tbody',_vm._l((_vm.dbInfo.tables),function(table){return _c('tr',{key:table.name},[_c('td',[_c('span',{directives:[{name:"b-toggle",rawName:"v-b-toggle",value:(table.name),expression:"table.name"}],staticClass:"table-name"},[_vm._v(_vm._s(table.name)+"\n            "),_c('i',{staticClass:"fas fa-plus"})]),_vm._v(" "),_c('b-collapse',{staticClass:"ml-4",attrs:{"id":table.name}},_vm._l((table.columns),function(column){return _c('div',{key:column.name,staticClass:"column-name"},[_c('span',{directives:[{name:"b-toggle",rawName:"v-b-toggle",value:(column.name),expression:"column.name"}]},[_vm._v(_vm._s(column.name)+"\n                "),_c('i',{staticClass:"fas fa-plus-square"})]),_vm._v(" "),_c('b-collapse',{staticClass:"ml-4",attrs:{"id":column.name}},[_c('div',[_vm._v("Primary Key :\n                  "),_c('span',{staticClass:"column-schema"},[_vm._v(_vm._s(column.primaryKey))])]),_vm._v(" "),_c('div',[_vm._v("Auto Increment :\n                  "),_c('span',{staticClass:"column-schema"},[_vm._v(_vm._s(column.autoIncrement))])]),_vm._v(" "),_c('div',[_vm._v("Not Null:\n                  "),_c('span',{staticClass:"column-schema"},[_vm._v(_vm._s(column.notNull))])]),_vm._v(" "),_c('div',[_vm._v("Data Type :\n                  "),_c('span',{staticClass:"column-schema"},[_vm._v(_vm._s(column.dataType))])]),_vm._v(" "),_c('div',[_vm._v("Default :\n                  "),_c('span',{staticClass:"column-schema"},[_vm._v(_vm._s(column.default))])]),_vm._v(" "),_c('div',[_vm._v("Unique :\n                  "),_c('span',{staticClass:"column-schema"},[_vm._v(_vm._s(column.unique))])]),_vm._v(" "),_c('div',[_vm._v("Multi Entry :\n                  "),_c('span',{staticClass:"column-schema"},[_vm._v(_vm._s(column.multiEntry))])]),_vm._v(" "),_c('div',[_vm._v("Enable Search :\n                  "),_c('span',{staticClass:"column-schema"},[_vm._v(_vm._s(column.enableSearch))])])])],1)}))],1)])})),_vm._v(" "),_c('tfoot')])])},
+        render: function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('b-form-select',{staticClass:"mb-3 db-list",model:{value:(_vm.selectedDb),callback:function ($$v) {_vm.selectedDb=$$v},expression:"selectedDb"}},[_c('option',{attrs:{"value":"null"}},[_vm._v("--Select Database--")]),_vm._v(" "),_vm._l((_vm.dbList),function(db){return _c('option',{key:db,domProps:{"value":db}},[_vm._v(_vm._s(db))])})],2),_vm._v(" "),_c('table',[_c('thead'),_vm._v(" "),_c('tbody',_vm._l((_vm.dbInfo.tables),function(table){return _c('tr',{key:table.name},[_c('td',[_c('span',{directives:[{name:"b-toggle",rawName:"v-b-toggle",value:(table.name),expression:"table.name"}],staticClass:"table-name"},[_vm._v(_vm._s(table.name)+"\n            "),_c('i',{staticClass:"fas fa-plus"})]),_vm._v(" "),_c('b-collapse',{staticClass:"ml-4",attrs:{"id":table.name}},_vm._l((table.columns),function(column){return _c('div',{key:column.name,staticClass:"column-name"},[_c('span',{directives:[{name:"b-toggle",rawName:"v-b-toggle",value:(column.name),expression:"column.name"}]},[_vm._v(_vm._s(column.name)+"\n                "),_c('i',{staticClass:"fas fa-plus-square"})]),_vm._v(" "),_c('b-collapse',{staticClass:"ml-4",attrs:{"id":column.name}},[_c('div',[_vm._v("Primary Key :\n                  "),_c('span',{staticClass:"column-schema"},[_vm._v(_vm._s(column.primaryKey))])]),_vm._v(" "),_c('div',[_vm._v("Auto Increment :\n                  "),_c('span',{staticClass:"column-schema"},[_vm._v(_vm._s(column.autoIncrement))])]),_vm._v(" "),_c('div',[_vm._v("Not Null:\n                  "),_c('span',{staticClass:"column-schema"},[_vm._v(_vm._s(column.notNull))])]),_vm._v(" "),_c('div',[_vm._v("Data Type :\n                  "),_c('span',{staticClass:"column-schema"},[_vm._v(_vm._s(column.dataType))])]),_vm._v(" "),_c('div',[_vm._v("Default :\n                  "),_c('span',{staticClass:"column-schema"},[_vm._v(_vm._s(column.default))])]),_vm._v(" "),_c('div',[_vm._v("Unique :\n                  "),_c('span',{staticClass:"column-schema"},[_vm._v(_vm._s(column.unique))])]),_vm._v(" "),_c('div',[_vm._v("Multi Entry :\n                  "),_c('span',{staticClass:"column-schema"},[_vm._v(_vm._s(column.multiEntry))])]),_vm._v(" "),_c('div',[_vm._v("Enable Search :\n                  "),_c('span',{staticClass:"column-schema"},[_vm._v(_vm._s(column.enableSearch))])])])],1)}))],1)])})),_vm._v(" "),_c('tfoot')])],1)},
         staticRenderFns: []
       })
 "use strict";
@@ -601,6 +604,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var vue_1 = require("vue");
 var vue_property_decorator_1 = require("vue-property-decorator");
 var main_service_1 = require("../service/main_service");
+var demo_service_1 = require("../service/demo_service");
 var common_var_1 = require("../common_var");
 var DbInfo = /** @class */ (function (_super) {
     __extends(DbInfo, _super);
@@ -609,14 +613,25 @@ var DbInfo = /** @class */ (function (_super) {
         _this.dbInfo = {
             tables: []
         };
+        _this.selectedDb = "Demo";
+        _this.dbList = [];
         _this.catchEvent();
         return _this;
     }
-    DbInfo.prototype.getDbInfo = function (dbName) {
+    DbInfo.prototype.mounted = function () {
         var _this = this;
-        new main_service_1.MainService().getDbSchema(dbName).then(function (result) {
-            console.log(result);
-            _this.updateDbInfo(result);
+        var demoServiceInstance = new demo_service_1.DemoService();
+        demoServiceInstance.createDemoDataBase().then(function () {
+            _this.getDbInfo();
+            demoServiceInstance.getDbList().then(function (list) {
+                _this.dbList = list;
+            });
+        });
+    };
+    DbInfo.prototype.getDbInfo = function () {
+        var _this = this;
+        new main_service_1.MainService().getDbSchema(this.selectedDb).then(function (result) {
+            _this.dbInfo = result;
         });
     };
     DbInfo.prototype.updateDbInfo = function (value) {
@@ -625,7 +640,8 @@ var DbInfo = /** @class */ (function (_super) {
     DbInfo.prototype.catchEvent = function () {
         var _this = this;
         common_var_1.vueEvent.$on("db_selected", function (dbName) {
-            _this.getDbInfo(dbName);
+            _this.selectedDb = dbName;
+            _this.getDbInfo();
         });
     };
     DbInfo = __decorate([
@@ -1091,10 +1107,65 @@ var QueryChecker = /** @class */ (function () {
 exports.QueryChecker = QueryChecker;
 //# sourceMappingURL=query_checker.js.map
 });
+___scope___.file("component/start.vue", function(exports, require, module, __filename, __dirname){
+
+var _options = { _vueModuleId: 'data-v-1dd2f1ae'}
+Object.assign(_options, {
+        _scopeId: null,
+        render: function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _vm._m(0)},
+        staticRenderFns: [function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"start-page"},[_c('h1',{staticClass:"title"},[_vm._v("IDBStudio")])])}]
+      })
+"use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var vue_1 = require("vue");
+var Start = /** @class */ (function (_super) {
+    __extends(Start, _super);
+    function Start() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return Start;
+}(vue_1.default));
+exports.default = Start;
+//# sourceMappingURL=module.js.map
+Object.assign(exports.default.options||exports.default, _options)
+
+require("default/components.css")
+var process = FuseBox.import('process');
+
+
+        if (process.env.NODE_ENV !== "production") {
+          var api = require('vue-hot-reload-api');
+
+          if (api && !api.isRecorded('data-v-1dd2f1ae')) {
+            api.createRecord('data-v-1dd2f1ae', module.exports.default);
+          }
+        }
+      
+});
+___scope___.file("assets/css/common.css", function(exports, require, module, __filename, __dirname){
+
+
+require("default/bundle.css")
+});
 ___scope___.file("components.css", function(exports, require, module, __filename, __dirname){
 
 
-require("fuse-box-css")("components.css", "#divQueryExecutorContainer {\n  border-left: 5px solid #777adb; }\n\n/*# sourceMappingURL=style.sass.map */\n#selectDb option {\n  text-align: center; }\n\n/*# sourceMappingURL=style.css.map */\n\n#divMenu[data-v-c33a269d] {\n  background-color: #1f24ff;\n  width: 100%;\n  line-height: 45px;\n  color: white;\n  height: 50px;\n}\n#divMenu a[data-v-c33a269d] {\n    color: white;\n}\n#divMenu ul li[data-v-c33a269d] {\n    display: inline-block;\n}\n#divMenu .right-menu[data-v-c33a269d] {\n    float: right;\n    position: relative;\n    right: 10px;\n}\n#divMenu .title[data-v-c33a269d] {\n    margin-left: 15px;\n    font-size: 20px;\n    line-height: 50px;\n}\n\n#selectDb option[data-v-926b6219] {\n  text-align: center;\n}\n.table-name[data-v-926b6219] {\n  font-size: 20px;\n  font-family: monospace;\n}\n.column-name[data-v-926b6219] {\n  font-size: 15px;\n}\n.column-schema[data-v-926b6219] {\n  color: #372ae5;\n}\ntable[data-v-926b6219] {\n  margin-left: 15px;\n  display: block;\n  width: 100%;\n}\n.db-name[data-v-926b6219] {\n  background-color: #F44336;\n  color: white;\n  font-size: 20px;\n  text-align: center;\n  margin-top: 10px;\n  margin-bottom: 20px;\n  padding: 10px;\n}\n\n#divQueryExecutor[data-v-3466dbfc] {\n  margin-top: 10px;\n  background-color: #f1f1f1;\n  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;\n}\n#divResultInfo[data-v-3466dbfc] {\n  height: 50px;\n  position: absolute;\n  bottom: 0px;\n  background: inherit;\n  z-index: 100;\n  width: 97%;\n}\ntable[data-v-3466dbfc] {\n  height: inherit;\n  width: 100%;\n}\ntable tr td[data-v-3466dbfc] {\n  padding-left: 20px;\n}\ntable tr td[data-v-3466dbfc]:last-child {\n  text-align: right;\n  padding-right: 20px;\n  padding-left: 50px;\n}\n.fade-enter-active[data-v-3466dbfc], .fade-leave-active[data-v-3466dbfc] {\n  transition: opacity .5s;\n  bottom: 0px;\n}\n.fade-enter[data-v-3466dbfc], .fade-leave-to[data-v-3466dbfc] {\n  opacity: 0;\n  bottom: -100px;\n}\n.idb-editor {\n  width: 100%;\n  min-height: 200px; }\n\n/*# sourceMappingURL=style.sass.map */\n#divResult {\n  overflow-y: scroll;\n  overflow-x: hidden;\n  min-height: 200px;\n  width: 99%;\n  left: 5px;\n  position: relative;\n  right: 5px;\n  background-color: white; }\n  #divResult .table tr td, #divResult .table tr th {\n    border: 1px inset;\n    text-align: center; }\n\n/*# sourceMappingURL=style.sass.map */");
+require("fuse-box-css")("components.css", "#divMain {\n  display: none; }\n\n/*# sourceMappingURL=style.sass.map */\n#selectDb option {\n  text-align: center; }\n\n/*# sourceMappingURL=style.css.map */\n\n#divMenu[data-v-c33a269d] {\n  background-color: #2c3e50;\n  width: 100%;\n  line-height: 45px;\n  color: white;\n  height: 50px;\n}\n#divMenu a[data-v-c33a269d] {\n    color: white;\n}\n#divMenu ul li[data-v-c33a269d] {\n    display: inline-block;\n}\n#divMenu .right-menu[data-v-c33a269d] {\n    float: right;\n    position: relative;\n    right: 10px;\n}\n#divMenu .title[data-v-c33a269d] {\n    margin-left: 15px;\n    font-size: 20px;\n    line-height: 50px;\n    font-family: Allerta;\n}\n\n#selectDb option[data-v-926b6219] {\n  text-align: center;\n}\n.table-name[data-v-926b6219] {\n  font-size: 20px;\n  font-family: ABeeZee;\n}\n.column-name[data-v-926b6219] {\n  font-size: 15px;\n}\n.column-schema[data-v-926b6219] {\n  color: #372ae5;\n}\ntable[data-v-926b6219] {\n  margin-left: 15px;\n  display: block;\n  width: 100%;\n}\n.db-list[data-v-926b6219] {\n  margin-top: 10px;\n  margin-bottom: 20px;\n}\n\n#divQueryExecutor[data-v-3466dbfc] {\n  margin-top: 10px;\n  background-color: #f1f1f1;\n  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;\n}\n#divResultInfo[data-v-3466dbfc] {\n  height: 50px;\n  position: absolute;\n  bottom: 0px;\n  background: inherit;\n  z-index: 100;\n  width: 97%;\n}\ntable[data-v-3466dbfc] {\n  height: inherit;\n  width: 100%;\n}\ntable tr td[data-v-3466dbfc] {\n  padding-left: 20px;\n}\ntable tr td[data-v-3466dbfc]:last-child {\n  text-align: right;\n  padding-right: 20px;\n  padding-left: 50px;\n}\n.fade-enter-active[data-v-3466dbfc], .fade-leave-active[data-v-3466dbfc] {\n  transition: opacity .5s;\n  bottom: 0px;\n}\n.fade-enter[data-v-3466dbfc], .fade-leave-to[data-v-3466dbfc] {\n  opacity: 0;\n  bottom: -100px;\n}\n.idb-editor {\n  width: 100%;\n  min-height: 200px; }\n\n/*# sourceMappingURL=style.sass.map */\n#divResult {\n  overflow-y: scroll;\n  overflow-x: hidden;\n  min-height: 200px;\n  width: 99%;\n  left: 5px;\n  position: relative;\n  right: 5px;\n  background-color: white; }\n  #divResult .table tr td, #divResult .table tr th {\n    border: 1px inset;\n    text-align: center; }\n\n/*# sourceMappingURL=style.sass.map */\n.start-page {\n  background-color: #2c3e50;\n  width: 100%;\n  height: 100%;\n  position: absolute;\n  z-index: 1000; }\n  .start-page .title {\n    font-family: Allerta;\n    color: white;\n    text-align: center;\n    margin-top: 150px; }\n\n/*# sourceMappingURL=style.sass.map */");
+});
+___scope___.file("bundle.css", function(exports, require, module, __filename, __dirname){
+
+
+require("fuse-box-css")("bundle.css", ".align-text-right {\r\n    text-align: right;\r\n}\r\n\r\n.seperator {\r\n    padding: 0px 10px;\r\n}\r\n\r\n@font-face {\r\n    font-family: Allerta;\r\n    src: url('../assets/fonts/Allerta-Regular.ttf') format(\"truetype\");\r\n}\r\n\r\n@font-face {\r\n    font-family: ABeeZee;\r\n    src: url('../assets/fonts/ABeeZee-Regular.ttf') format(\"truetype\");\r\n}");
 });
 return ___scope___.entry = "index.js";
 });
