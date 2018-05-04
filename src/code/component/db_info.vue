@@ -110,12 +110,11 @@ export default class DbInfo extends Vue {
 table
 {
   margin-left: 15px;
-  border-right: 5px solid #777adb;
   display: block;
   width: 100%;
 }
 .db-name{
-  background-color: #ec6f42;
+  background-color: #F44336;
     color: white;
     font-size: 20px;
     text-align: center;

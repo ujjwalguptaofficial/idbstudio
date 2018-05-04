@@ -14,11 +14,11 @@
           Save
           <i class="fas fa-save"></i>
         </b-button>
-        <b-button variant="success" @click="executeQry">
+      </b-button-group>
+      <b-button variant="success" @click="executeQry" class="float-right">
           Execute
           <i class="fas fa-play"></i>
         </b-button>
-      </b-button-group>
     </div>
     <b-card no-body id="divEditorContainer">
       <b-tabs card>
@@ -58,7 +58,7 @@ import QueryResult from "./qry_result.vue";
 import { MainService } from "../service/main_service";
 import { QueryChecker } from "../helpers/query_checker";
 import { IResult } from "../interfaces";
-import { DomHelper } from '../helpers/dom_helper';
+import { DomHelper } from "../helpers/dom_helper";
 
 @Component({
   components: {
@@ -79,11 +79,13 @@ export default class QueryExecutor extends Vue {
   mounted() {
     const $ = new DomHelper();
     const menuHeight = 50;
-    const buttonHeight = $.qry('#divButtonContainer').clientHeight;
+    const buttonHeight = $.qry("#divButtonContainer").clientHeight;
     const margin = 10;
-    const editorHeight = (window.innerHeight - (menuHeight + buttonHeight + margin)) / 2;
-    $.qry('#divEditorContainer').style.height = editorHeight + buttonHeight + "px";
-    $.qry('#divResult').style.height = editorHeight - buttonHeight - 10 + "px";
+    const editorHeight =
+      (window.innerHeight - (menuHeight + buttonHeight + margin)) / 2;
+    $.qry("#divEditorContainer").style.height =
+      editorHeight + buttonHeight + "px";
+    $.qry("#divResult").style.height = editorHeight - buttonHeight - 10 + "px";
   }
 
   createNewTab() {
@@ -97,14 +99,17 @@ export default class QueryExecutor extends Vue {
   showResult(qry: string) {
     var queryCheckerInstance = new QueryChecker(qry);
     if (queryCheckerInstance.isQryValid()) {
-      new MainService().executeQry(queryCheckerInstance.api, queryCheckerInstance.option).then(qryResult => {
-        this.showResultInfo = true;
-        this.resultCount = qryResult.result.length;
-        this.timeTaken = qryResult.timeTaken;
-        vueEvent.$emit("on_qry_result", qryResult.result);
-      }).catch(function (err) {
-        vueEvent.$emit("on_error", err.message);
-      });
+      new MainService()
+        .executeQry(queryCheckerInstance.api, queryCheckerInstance.option)
+        .then(qryResult => {
+          this.showResultInfo = true;
+          this.resultCount = qryResult.result.length;
+          this.timeTaken = qryResult.timeTaken;
+          vueEvent.$emit("on_qry_result", qryResult.result);
+        })
+        .catch(function(err) {
+          vueEvent.$emit("on_error", err.message);
+        });
     } else {
       vueEvent.$emit("on_error", queryCheckerInstance.errMessage);
     }
@@ -151,9 +156,6 @@ table tr td:last-child{
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
   bottom:-100px;
-}
-.seperator{
-  padding:0px 10px;
 }
 </style>
 

@@ -1,11 +1,12 @@
 <template>
 <div class="container-fluid">
-  <Menu></Menu>
   <div class="row">
+    <Menu></Menu>
+    <div style="border-top:5px solid #777adb;width: 100%;"></div>
     <div class="col-sm-3">
       <DbInfo></DbInfo>
     </div>
-    <div class="col" >
+    <div class="col" id="divQueryExecutorContainer">
       <QueryExecutor></QueryExecutor>
      <DbList></DbList>
     </div>
@@ -47,4 +48,9 @@ export default class Main extends Vue {
   }
 }
 </script>
+<style lang="sass">
+#divQueryExecutorContainer{
+  border-left:5px solid #777adb;
+}
+</style>
 

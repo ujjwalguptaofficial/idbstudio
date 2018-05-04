@@ -1,7 +1,7 @@
 <template>
-  <div class="row" id="divMenu">
+  <div id="divMenu">
     <span class="title"> IDBStudio </span>
-    <ul class="right-menu align-right">
+    <ul class="right-menu">
       <li>
         <a href="https://github.com/ujjwalguptaofficial/JsStore">
           <i class="fas fa-star"></i> Star</a>
@@ -52,26 +52,30 @@ export default class Menu extends Vue {
 </script>
 <style lang="sass" scoped>
 #divMenu {
-    background-color: #d4d4f3;
-    div a
+    background-color: #1f24ff;
+    width:100%;
+    line-height:45px;
+    color:white;
+    a
     {
         color:white;
     }
     height:50px;
+    ul li{
+      display:inline-block;
+    }
+    .right-menu{
+        float: right;
+      position: relative;
+      right: 10px;
+    }
+    .title{
+      margin-left:15px;
+      font-size:20px;
+      line-height:50px;
+    }
 }
-ul li{
-  display:inline-block;
-}
-.right-menu{
-  position:absolute;
-  right:10px;
-}
-#divMenu{
-  line-height:45px;
-}
-.title{
-  margin-left:15px;
-}
+
 </style>
 
 

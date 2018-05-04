@@ -29,7 +29,7 @@ ___scope___.file("component/main.vue", function(exports, require, module, __file
 var _options = { _vueModuleId: 'data-v-266cf365'}
 Object.assign(_options, {
         _scopeId: null,
-        render: function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"container-fluid"},[_c('Menu'),_vm._v(" "),_c('div',{staticClass:"row"},[_c('div',{staticClass:"col-sm-3"},[_c('DbInfo')],1),_vm._v(" "),_c('div',{staticClass:"col"},[_c('QueryExecutor'),_vm._v(" "),_c('DbList')],1)])],1)},
+        render: function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"container-fluid"},[_c('div',{staticClass:"row"},[_c('Menu'),_vm._v(" "),_c('div',{staticStyle:{"border-top":"5px solid #777adb","width":"100%"}}),_vm._v(" "),_c('div',{staticClass:"col-sm-3"},[_c('DbInfo')],1),_vm._v(" "),_c('div',{staticClass:"col",attrs:{"id":"divQueryExecutorContainer"}},[_c('QueryExecutor'),_vm._v(" "),_c('DbList')],1)],1)])},
         staticRenderFns: []
       })
 "use strict";
@@ -86,6 +86,8 @@ var Main = /** @class */ (function (_super) {
 exports.default = Main;
 //# sourceMappingURL=module.js.map
 Object.assign(exports.default.options||exports.default, _options)
+
+require("default/components.css")
 var process = FuseBox.import('process');
 
 
@@ -499,7 +501,7 @@ var _options = { _vueModuleId: 'data-v-c33a269d'}
 Object.assign(_options, {_scopeId: 'data-v-c33a269d'})
 Object.assign(_options, {
         _scopeId: "data-v-c33a269d",
-        render: function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"row",attrs:{"id":"divMenu"}},[_c('span',{staticClass:"title"},[_vm._v(" IDBStudio ")]),_vm._v(" "),_c('ul',{staticClass:"right-menu align-right"},[_vm._m(0),_vm._v(" "),_c('li',{staticClass:"seperator"},[_vm._v("|")]),_vm._v(" "),_c('li',[_c('a',{attrs:{"title":"fork on github","href":"https://github.com/ujjwalguptaofficial/JsStore/fork"}},[_c('svg',{staticClass:"octicon octicon-repo-forked",staticStyle:{"fill":"white","vertical-align":"sub"},attrs:{"version":"1.1","width":"10","height":"18","viewBox":"0 0 10 16","aria-hidden":"true"}},[_c('path',{attrs:{"fill-rule":"evenodd","d":"M8 1a1.993 1.993 0 0 0-1 3.72V6L5 8 3 6V4.72A1.993 1.993 0 0 0 2 1a1.993 1.993 0 0 0-1 3.72V6.5l3 3v1.78A1.993 1.993 0 0 0 5 15a1.993 1.993 0 0 0 1-3.72V9.5l3-3V4.72A1.993 1.993 0 0 0 8 1zM2 4.2C1.34 4.2.8 3.65.8 3c0-.65.55-1.2 1.2-1.2.65 0 1.2.55 1.2 1.2 0 .65-.55 1.2-1.2 1.2zm3 10c-.66 0-1.2-.55-1.2-1.2 0-.65.55-1.2 1.2-1.2.65 0 1.2.55 1.2 1.2 0 .65-.55 1.2-1.2 1.2zm3-10c-.66 0-1.2-.55-1.2-1.2 0-.65.55-1.2 1.2-1.2.65 0 1.2.55 1.2 1.2 0 .65-.55 1.2-1.2 1.2z"}})]),_vm._v(" Fork")])])])])},
+        render: function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{attrs:{"id":"divMenu"}},[_c('span',{staticClass:"title"},[_vm._v(" IDBStudio ")]),_vm._v(" "),_c('ul',{staticClass:"right-menu"},[_vm._m(0),_vm._v(" "),_c('li',{staticClass:"seperator"},[_vm._v("|")]),_vm._v(" "),_c('li',[_c('a',{attrs:{"title":"fork on github","href":"https://github.com/ujjwalguptaofficial/JsStore/fork"}},[_c('svg',{staticClass:"octicon octicon-repo-forked",staticStyle:{"fill":"white","vertical-align":"sub"},attrs:{"version":"1.1","width":"10","height":"18","viewBox":"0 0 10 16","aria-hidden":"true"}},[_c('path',{attrs:{"fill-rule":"evenodd","d":"M8 1a1.993 1.993 0 0 0-1 3.72V6L5 8 3 6V4.72A1.993 1.993 0 0 0 2 1a1.993 1.993 0 0 0-1 3.72V6.5l3 3v1.78A1.993 1.993 0 0 0 5 15a1.993 1.993 0 0 0 1-3.72V9.5l3-3V4.72A1.993 1.993 0 0 0 8 1zM2 4.2C1.34 4.2.8 3.65.8 3c0-.65.55-1.2 1.2-1.2.65 0 1.2.55 1.2 1.2 0 .65-.55 1.2-1.2 1.2zm3 10c-.66 0-1.2-.55-1.2-1.2 0-.65.55-1.2 1.2-1.2.65 0 1.2.55 1.2 1.2 0 .65-.55 1.2-1.2 1.2zm3-10c-.66 0-1.2-.55-1.2-1.2 0-.65.55-1.2 1.2-1.2.65 0 1.2.55 1.2 1.2 0 .65-.55 1.2-1.2 1.2z"}})]),_vm._v(" Fork")])])])])},
         staticRenderFns: [function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('li',[_c('a',{attrs:{"href":"https://github.com/ujjwalguptaofficial/JsStore"}},[_c('i',{staticClass:"fas fa-star"}),_vm._v(" Star")])])}]
       })
 "use strict";
@@ -654,7 +656,7 @@ var _options = { _vueModuleId: 'data-v-3466dbfc'}
 Object.assign(_options, {_scopeId: 'data-v-3466dbfc'})
 Object.assign(_options, {
         _scopeId: "data-v-3466dbfc",
-        render: function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{attrs:{"id":"divQueryExecutor"}},[_c('div',{attrs:{"id":"divButtonContainer"}},[_c('b-button-group',{attrs:{"size":"mg"}},[_c('b-button',{attrs:{"variant":"primary"},on:{"click":_vm.createNewTab}},[_vm._v("\n        New Query\n        "),_c('i',{staticClass:"fas fa-plus-circle"})]),_vm._v(" "),_c('b-button',{attrs:{"variant":"primary"},on:{"click":_vm.createNewTab}},[_vm._v("\n        Open\n        "),_c('i',{staticClass:"fas fa-folder-open"})]),_vm._v(" "),_c('b-button',{attrs:{"variant":"primary"},on:{"click":_vm.createNewTab}},[_vm._v("\n        Save\n        "),_c('i',{staticClass:"fas fa-save"})]),_vm._v(" "),_c('b-button',{attrs:{"variant":"success"},on:{"click":_vm.executeQry}},[_vm._v("\n        Execute\n        "),_c('i',{staticClass:"fas fa-play"})])],1)],1),_vm._v(" "),_c('b-card',{attrs:{"no-body":"","id":"divEditorContainer"}},[_c('b-tabs',{attrs:{"card":""}},_vm._l((_vm.$data.tabCount),function(item){return _c('b-tab',{key:'tab'+item,attrs:{"active":"","title":'Query '+item}},[_c('Editor',{attrs:{"id":'editor' + item}})],1)}))],1),_vm._v(" "),_c('QueryResult'),_vm._v(" "),_c('transition',{attrs:{"name":"fade"}},[(_vm.showResultInfo)?_c('div',{attrs:{"id":"divResultInfo"}},[_c('table',[_c('tr',[_c('td',[_c('b',[_vm._v("No of Record :")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.resultCount))]),_vm._v(" "),_c('b',{staticClass:"seperator"},[_vm._v("|")]),_vm._v(" "),_c('b',[_vm._v("Time Taken :")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.timeTaken)+" sec.")])]),_vm._v(" "),_c('td',[_c('i',{staticClass:"fas fa-times",on:{"click":function($event){_vm.showResultInfo=false}}})])])])]):_vm._e()])],1)},
+        render: function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{attrs:{"id":"divQueryExecutor"}},[_c('div',{attrs:{"id":"divButtonContainer"}},[_c('b-button-group',{attrs:{"size":"mg"}},[_c('b-button',{attrs:{"variant":"primary"},on:{"click":_vm.createNewTab}},[_vm._v("\n        New Query\n        "),_c('i',{staticClass:"fas fa-plus-circle"})]),_vm._v(" "),_c('b-button',{attrs:{"variant":"primary"},on:{"click":_vm.createNewTab}},[_vm._v("\n        Open\n        "),_c('i',{staticClass:"fas fa-folder-open"})]),_vm._v(" "),_c('b-button',{attrs:{"variant":"primary"},on:{"click":_vm.createNewTab}},[_vm._v("\n        Save\n        "),_c('i',{staticClass:"fas fa-save"})])],1),_vm._v(" "),_c('b-button',{staticClass:"float-right",attrs:{"variant":"success"},on:{"click":_vm.executeQry}},[_vm._v("\n        Execute\n        "),_c('i',{staticClass:"fas fa-play"})])],1),_vm._v(" "),_c('b-card',{attrs:{"no-body":"","id":"divEditorContainer"}},[_c('b-tabs',{attrs:{"card":""}},_vm._l((_vm.$data.tabCount),function(item){return _c('b-tab',{key:'tab'+item,attrs:{"active":"","title":'Query '+item}},[_c('Editor',{attrs:{"id":'editor' + item}})],1)}))],1),_vm._v(" "),_c('QueryResult'),_vm._v(" "),_c('transition',{attrs:{"name":"fade"}},[(_vm.showResultInfo)?_c('div',{attrs:{"id":"divResultInfo"}},[_c('table',[_c('tr',[_c('td',[_c('b',[_vm._v("No of Record :")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.resultCount))]),_vm._v(" "),_c('b',{staticClass:"seperator"},[_vm._v("|")]),_vm._v(" "),_c('b',[_vm._v("Time Taken :")]),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.timeTaken)+" sec.")])]),_vm._v(" "),_c('td',[_c('i',{staticClass:"fas fa-times",on:{"click":function($event){_vm.showResultInfo=false}}})])])])]):_vm._e()])],1)},
         staticRenderFns: []
       })
 "use strict";
@@ -697,11 +699,12 @@ var QueryExecutor = /** @class */ (function (_super) {
     QueryExecutor.prototype.mounted = function () {
         var $ = new dom_helper_1.DomHelper();
         var menuHeight = 50;
-        var buttonHeight = $.qry('#divButtonContainer').clientHeight;
+        var buttonHeight = $.qry("#divButtonContainer").clientHeight;
         var margin = 10;
         var editorHeight = (window.innerHeight - (menuHeight + buttonHeight + margin)) / 2;
-        $.qry('#divEditorContainer').style.height = editorHeight + buttonHeight + "px";
-        $.qry('#divResult').style.height = editorHeight - buttonHeight - 10 + "px";
+        $.qry("#divEditorContainer").style.height =
+            editorHeight + buttonHeight + "px";
+        $.qry("#divResult").style.height = editorHeight - buttonHeight - 10 + "px";
     };
     QueryExecutor.prototype.createNewTab = function () {
         this.$data.tabCount++;
@@ -713,12 +716,15 @@ var QueryExecutor = /** @class */ (function (_super) {
         var _this = this;
         var queryCheckerInstance = new query_checker_1.QueryChecker(qry);
         if (queryCheckerInstance.isQryValid()) {
-            new main_service_1.MainService().executeQry(queryCheckerInstance.api, queryCheckerInstance.option).then(function (qryResult) {
+            new main_service_1.MainService()
+                .executeQry(queryCheckerInstance.api, queryCheckerInstance.option)
+                .then(function (qryResult) {
                 _this.showResultInfo = true;
                 _this.resultCount = qryResult.result.length;
                 _this.timeTaken = qryResult.timeTaken;
                 common_var_1.vueEvent.$emit("on_qry_result", qryResult.result);
-            }).catch(function (err) {
+            })
+                .catch(function (err) {
                 common_var_1.vueEvent.$emit("on_error", err.message);
             });
         }
@@ -1088,7 +1094,7 @@ exports.QueryChecker = QueryChecker;
 ___scope___.file("components.css", function(exports, require, module, __filename, __dirname){
 
 
-require("fuse-box-css")("components.css", "#selectDb option {\n  text-align: center; }\n\n/*# sourceMappingURL=style.css.map */\n\n#divMenu[data-v-c33a269d] {\n  background-color: #d4d4f3;\n  height: 50px;\n}\n#divMenu div a[data-v-c33a269d] {\n    color: white;\n}\nul li[data-v-c33a269d] {\n  display: inline-block;\n}\n.right-menu[data-v-c33a269d] {\n  position: absolute;\n  right: 10px;\n}\n#divMenu[data-v-c33a269d] {\n  line-height: 45px;\n}\n.title[data-v-c33a269d] {\n  margin-left: 15px;\n}\n\n#selectDb option[data-v-926b6219] {\n  text-align: center;\n}\n.table-name[data-v-926b6219] {\n  font-size: 20px;\n  font-family: monospace;\n}\n.column-name[data-v-926b6219] {\n  font-size: 15px;\n}\n.column-schema[data-v-926b6219] {\n  color: #372ae5;\n}\ntable[data-v-926b6219] {\n  margin-left: 15px;\n  border-right: 5px solid #777adb;\n  display: block;\n  width: 100%;\n}\n.db-name[data-v-926b6219] {\n  background-color: #ec6f42;\n  color: white;\n  font-size: 20px;\n  text-align: center;\n  margin-top: 10px;\n  margin-bottom: 20px;\n  padding: 10px;\n}\n\n#divQueryExecutor[data-v-3466dbfc] {\n  margin-top: 10px;\n  background-color: #f1f1f1;\n  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;\n}\n#divResultInfo[data-v-3466dbfc] {\n  height: 50px;\n  position: absolute;\n  bottom: 0px;\n  background: inherit;\n  z-index: 100;\n  width: 97%;\n}\ntable[data-v-3466dbfc] {\n  height: inherit;\n  width: 100%;\n}\ntable tr td[data-v-3466dbfc] {\n  padding-left: 20px;\n}\ntable tr td[data-v-3466dbfc]:last-child {\n  text-align: right;\n  padding-right: 20px;\n  padding-left: 50px;\n}\n.fade-enter-active[data-v-3466dbfc], .fade-leave-active[data-v-3466dbfc] {\n  transition: opacity .5s;\n  bottom: 0px;\n}\n.fade-enter[data-v-3466dbfc], .fade-leave-to[data-v-3466dbfc] {\n  opacity: 0;\n  bottom: -100px;\n}\n.seperator[data-v-3466dbfc] {\n  padding: 0px 10px;\n}\n.idb-editor {\n  width: 100%;\n  min-height: 200px; }\n\n/*# sourceMappingURL=style.sass.map */\n#divResult {\n  overflow-y: scroll;\n  overflow-x: hidden;\n  min-height: 200px;\n  width: 99%;\n  left: 5px;\n  position: relative;\n  right: 5px;\n  background-color: white; }\n  #divResult .table tr td, #divResult .table tr th {\n    border: 1px inset;\n    text-align: center; }\n\n/*# sourceMappingURL=style.sass.map */");
+require("fuse-box-css")("components.css", "#divQueryExecutorContainer {\n  border-left: 5px solid #777adb; }\n\n/*# sourceMappingURL=style.sass.map */\n#selectDb option {\n  text-align: center; }\n\n/*# sourceMappingURL=style.css.map */\n\n#divMenu[data-v-c33a269d] {\n  background-color: #1f24ff;\n  width: 100%;\n  line-height: 45px;\n  color: white;\n  height: 50px;\n}\n#divMenu a[data-v-c33a269d] {\n    color: white;\n}\n#divMenu ul li[data-v-c33a269d] {\n    display: inline-block;\n}\n#divMenu .right-menu[data-v-c33a269d] {\n    float: right;\n    position: relative;\n    right: 10px;\n}\n#divMenu .title[data-v-c33a269d] {\n    margin-left: 15px;\n    font-size: 20px;\n    line-height: 50px;\n}\n\n#selectDb option[data-v-926b6219] {\n  text-align: center;\n}\n.table-name[data-v-926b6219] {\n  font-size: 20px;\n  font-family: monospace;\n}\n.column-name[data-v-926b6219] {\n  font-size: 15px;\n}\n.column-schema[data-v-926b6219] {\n  color: #372ae5;\n}\ntable[data-v-926b6219] {\n  margin-left: 15px;\n  display: block;\n  width: 100%;\n}\n.db-name[data-v-926b6219] {\n  background-color: #F44336;\n  color: white;\n  font-size: 20px;\n  text-align: center;\n  margin-top: 10px;\n  margin-bottom: 20px;\n  padding: 10px;\n}\n\n#divQueryExecutor[data-v-3466dbfc] {\n  margin-top: 10px;\n  background-color: #f1f1f1;\n  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;\n}\n#divResultInfo[data-v-3466dbfc] {\n  height: 50px;\n  position: absolute;\n  bottom: 0px;\n  background: inherit;\n  z-index: 100;\n  width: 97%;\n}\ntable[data-v-3466dbfc] {\n  height: inherit;\n  width: 100%;\n}\ntable tr td[data-v-3466dbfc] {\n  padding-left: 20px;\n}\ntable tr td[data-v-3466dbfc]:last-child {\n  text-align: right;\n  padding-right: 20px;\n  padding-left: 50px;\n}\n.fade-enter-active[data-v-3466dbfc], .fade-leave-active[data-v-3466dbfc] {\n  transition: opacity .5s;\n  bottom: 0px;\n}\n.fade-enter[data-v-3466dbfc], .fade-leave-to[data-v-3466dbfc] {\n  opacity: 0;\n  bottom: -100px;\n}\n.idb-editor {\n  width: 100%;\n  min-height: 200px; }\n\n/*# sourceMappingURL=style.sass.map */\n#divResult {\n  overflow-y: scroll;\n  overflow-x: hidden;\n  min-height: 200px;\n  width: 99%;\n  left: 5px;\n  position: relative;\n  right: 5px;\n  background-color: white; }\n  #divResult .table tr td, #divResult .table tr th {\n    border: 1px inset;\n    text-align: center; }\n\n/*# sourceMappingURL=style.sass.map */");
 });
 return ___scope___.entry = "index.js";
 });
