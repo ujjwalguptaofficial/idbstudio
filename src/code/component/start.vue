@@ -13,7 +13,7 @@
       <option v-for="db in dbList" :key="db"  :value="db">{{db}}</option>
     </select>
 	</div>
-	<button type="submit" class="btn btn-primary mb-2" style="margin-left:50px;">Confirm identity</button>
+	<button type="button" @click="connectDb" class="btn btn-primary mb-2" style="margin-left:50px;padding: 0 30px;">Connect</button>
 	</div>
   </div>
 </form>
@@ -34,13 +34,32 @@ export default class Start extends Vue {
 
   mounted() {
     var demoServiceInstance = new DemoService();
-    demoServiceInstance.createDemoDataBase().then(() => {
-      demoServiceInstance.getDbList().then(list => {
-        this.dbList = list;
-        console.log(list);
-        // vueEvent.$emit("db_selected", list[0]);
-      });
+    demoServiceInstance.isDemoDbExist().then(isExist => {
+      if (isExist) {
+        setTimeout(() => {
+          this.getDbList();
+        }, 1000);
+      } else {
+        demoServiceInstance.createDemoDataBase().then(() => {
+          this.getDbList();
+        });
+      }
     });
+  }
+
+  getDbList() {
+    var demoServiceInstance = new DemoService();
+    demoServiceInstance.getDbList().then(list => {
+      this.dbList = list;
+    });
+  }
+
+  connectDb() {
+    if (this.selectedDb != "null") {
+      vueEvent.$emit("page_loaded", this.selectedDb);
+    } else {
+      vueEvent.$emit("on_error", "Please select a valid database");
+    }
   }
 }
 </script>

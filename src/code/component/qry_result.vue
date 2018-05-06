@@ -1,5 +1,5 @@
 <template>
-  <div id="divResult">
+  <div id="divResult" class="hide">
     <table v-html="resultInnerHtml" class="table"></table>
   </div>
 </template>

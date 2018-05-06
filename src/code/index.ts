@@ -9,8 +9,6 @@ Vue.use(BootstrapVue);
 
 Vue.config.keyCodes.f5 = 116;
 
-console.log(document.getElementById('app'));
-
 // Initiate vue app
 var vue_app = new Vue({
     el: '#app',

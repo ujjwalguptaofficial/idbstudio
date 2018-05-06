@@ -8,7 +8,9 @@ export class MainService extends BaseService {
     public executeQry(api: string, option: object): Promise<IResult> {
         var startTime = performance.now();
         return new Promise((resolve, reject) => {
+            console.log('api:' + api + 'option:' + option);
             this.connection[api](option).then(qryResult => {
+                console.log(qryResult);
                 const idbResult: IResult = {
                     timeTaken: (performance.now() - startTime) / 1000,
                     result: qryResult

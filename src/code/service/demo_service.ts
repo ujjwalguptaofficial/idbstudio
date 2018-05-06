@@ -8,17 +8,14 @@ export class DemoService extends BaseService {
         super();
     }
 
+    isDemoDbExist() {
+        return this.isDbExist(this.dbName);
+    }
+
     createDemoDataBase() {
         return new Promise((resolve, reject) => {
-            this.isDbExist(this.dbName).then((exist) => {
-                if (exist === false) {
-                    this.connection.createDb(this.getDbStructure()).then(() => {
-                        this.insertDemoDbData(resolve);
-                    });
-                }
-                else {
-                    resolve();
-                }
+            this.connection.createDb(this.getDbStructure()).then(() => {
+                this.insertDemoDbData(resolve);
             }).catch((err) => {
                 reject(err);
             });

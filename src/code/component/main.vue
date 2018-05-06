@@ -6,7 +6,7 @@
     <Menu></Menu>
     <div style="border-top:5px solid #777adb;width: 100%;"></div>
     <div class="col-sm-3">
-      <DbInfo></DbInfo>
+      <DbInfo v-bind:selectedDb="selectedDb"></DbInfo>
     </div>
     <div class="col" id="divQueryExecutorContainer">
       <QueryExecutor></QueryExecutor>
@@ -41,12 +41,10 @@ ace.config.set("themePath", "/assets/scripts");
 })
 export default class Main extends Vue {
   isPageLoaded = false;
+  selectedDb;
   constructor() {
     super();
     this.catchEvent();
-    setTimeout(() => {
-      // this.togglePageLoadedStatus();
-    }, 1000);
   }
 
   togglePageLoadedStatus() {
@@ -57,19 +55,11 @@ export default class Main extends Vue {
     vueEvent.$on("on_error", errMessage => {
       alert(errMessage);
     });
-    vueEvent.$on("db_selected", dbName => {
+    vueEvent.$on("page_loaded", dbName => {
+      this.selectedDb = dbName;
       this.togglePageLoadedStatus();
     });
   }
-
-  mounted() {
-    console.log("h");
-  }
 }
 </script>
-<style lang="scss">
-// #divMain {
-//   display: none;
-// }
-</style>
 

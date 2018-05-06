@@ -58,17 +58,20 @@
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import { MainService } from "../service/main_service";
-import { DemoService } from "../service/demo_service";
 import { IFormSelect } from "../interfaces/form_select";
 import { IDataBase } from "jsstore";
 import { vueEvent } from "../common_var";
 
-@Component
+@Component({
+  props: {
+    selectedDb: String
+  }
+})
 export default class DbInfo extends Vue {
   dbInfo: IDataBase = {
     tables: []
   } as any;
-  selectedDb = "Demo";
+  selectedDb!:string;
   dbList: string[] = [];
 
   constructor() {
@@ -76,27 +79,24 @@ export default class DbInfo extends Vue {
     this.catchEvent();
   }
 
-  mounted() {
-    var demoServiceInstance = new DemoService();
-    demoServiceInstance.createDemoDataBase().then(() => {
-      this.getDbInfo();
-      demoServiceInstance.getDbList().then(list => {
-        this.dbList = list;
-      });
-    });
+  mounted(){
+    this.setDbInfo();
   }
 
-  getDbInfo() {
-    new MainService().getDbSchema(this.selectedDb).then(result => {
+  setDbInfo() {
+    var mainService = new MainService();
+    mainService.openDb(this.selectedDb);
+    mainService.getDbSchema(this.selectedDb).then(result => {
       this.dbInfo = result;
     });
+    mainService.getDbList().then(list => {
+      this.dbList = list;
+    });
+    vueEvent.$emit('db_info_loaded');
   }
 
   catchEvent() {
-    vueEvent.$on("db_selected", (dbName: string) => {
-      this.selectedDb = dbName;
-      this.getDbInfo();
-    });
+   
   }
 }
 </script>

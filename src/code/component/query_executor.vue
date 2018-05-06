@@ -1,20 +1,21 @@
 <template>
   <div id="divQueryExecutor">
     <div id="divButtonContainer">
-      <b-button-group size="mg">
+      <b-button-group>
         <b-button variant="primary" @click="createNewTab">
           New Query
           <i class="fas fa-plus-circle"></i>
         </b-button>
-        <b-button variant="primary" @click="createNewTab">
+        <b-button variant="primary" @click="open">
           Open
           <i class="fas fa-folder-open"></i>
         </b-button>
-        <b-button variant="primary" @click="createNewTab">
+        <b-button variant="primary" @click="save">
           Save
           <i class="fas fa-save"></i>
         </b-button>
       </b-button-group>
+      <input type="file" id="inputFileOpener" class="hide" accept='.js' @change="onFileOpened"/>
       <b-button variant="success" @click="executeQry" class="float-right">
           Execute
           <i class="fas fa-play"></i>
@@ -71,6 +72,11 @@ export default class QueryExecutor extends Vue {
   timeTaken = "";
   resultCount: number | string = "";
   showResultInfo = false;
+  editorContainerHeight;
+  resultContainerHeight;
+  isResultVisible = false;
+  isQueryExecuting = false;
+
   constructor() {
     super();
     this.catchEvents();
@@ -84,21 +90,77 @@ export default class QueryExecutor extends Vue {
     const margin = 10;
     const editorHeight =
       (window.innerHeight - (menuHeight + buttonHeight + margin)) / 2;
+    this.editorContainerHeight = editorHeight + buttonHeight;
+    this.resultContainerHeight = editorHeight - buttonHeight - 10;
     ($.qry("#divEditorContainer") as HTMLElement).style.height =
-      editorHeight + buttonHeight + "px";
+      this.getEditorContainerHeight() + "px";
     ($.qry("#divResult") as HTMLElement).style.height =
-      editorHeight - buttonHeight - 10 + "px";
+      this.resultContainerHeight + "px";
+  }
+
+  onFileOpened(event) {
+    var input = event.target;
+    var reader = new FileReader();
+    reader.onload = function() {
+      var text = reader.result;
+      vueEvent.$emit("set_qry", text);
+    };
+    reader.readAsText(input.files[0]);
+  }
+
+  open() {
+    var $ = new DomHelper();
+    $.getById("inputFileOpener").click();
+  }
+
+  fireGetQry() {
+    vueEvent.$emit("get_qry");
+  }
+
+  getEditorContainerHeight() {
+    return this.isResultVisible
+      ? this.editorContainerHeight
+      : this.editorContainerHeight + this.resultContainerHeight;
   }
 
   createNewTab() {
     this.$data.tabCount++;
   }
 
-  executeQry() {
-    vueEvent.$emit("get_qry");
+  save() {
+    this.isQueryExecuting = false;
+    this.fireGetQry();
   }
 
-  showResult(qry: string) {
+  saveQuery(qry) {
+    const stringValue = "query_save_count";
+    var count = Number(localStorage.getItem(stringValue));
+    ++count;
+    localStorage.setItem(stringValue, count.toString());
+    var fileName = prompt("FileName", "idbstudio_qry_" + count);
+    if (fileName != null) {
+      const url = URL.createObjectURL(new Blob([qry], { type: "text/plain" }));
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = fileName + ".js";
+      link.click();
+    }
+  }
+
+  executeQry() {
+    this.isQueryExecuting = true;
+    this.isResultVisible = true;
+    this.fireGetQry();
+    const $ = new DomHelper();
+    ($.qry("#divEditorContainer") as HTMLElement).style.height =
+      this.getEditorContainerHeight() + "px";
+    var resultContainer = $.qry("#divResult") as HTMLElement;
+    resultContainer.style.height = this.resultContainerHeight + "px";
+    resultContainer.classList.remove("hide");
+    vueEvent.$emit("set_editor_height", this.editorHeight);
+  }
+
+  evaluateAndShowResult(qry: string) {
     var queryCheckerInstance = new QueryChecker(qry);
     if (queryCheckerInstance.isQryValid()) {
       new MainService()
@@ -110,6 +172,7 @@ export default class QueryExecutor extends Vue {
           vueEvent.$emit("on_qry_result", qryResult.result);
         })
         .catch(function(err) {
+          console.log(err);
           vueEvent.$emit("on_error", err.message);
         });
     } else {
@@ -117,9 +180,24 @@ export default class QueryExecutor extends Vue {
     }
   }
 
+  takeQuery(qry: string) {
+    if (this.isQueryExecuting) {
+      this.evaluateAndShowResult(qry);
+    } else {
+      this.saveQuery(qry);
+    }
+  }
+
+  get editorHeight() {
+    return this.getEditorContainerHeight() - 90;
+  }
+
   catchEvents() {
-    vueEvent.$on("db_selected", this.createNewTab);
-    vueEvent.$on("set_qry", this.showResult);
+    vueEvent.$on("db_info_loaded", this.createNewTab);
+    vueEvent.$on("take_qry", this.takeQuery);
+    vueEvent.$on("get_editor_height", () => {
+      vueEvent.$emit("set_editor_height", this.editorHeight);
+    });
   }
 }
 </script>

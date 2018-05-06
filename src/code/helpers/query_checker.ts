@@ -9,8 +9,7 @@ export class QueryChecker {
   }
 
   isQryValid() {
-    var api: string;
-    var option: string | null = "";
+    
     const notAllowedKeywords = ["Instance", "then", "catch"];
     notAllowedKeywords.every((item) => {
       if (this.query.indexOf(item) >= 0) {
@@ -21,7 +20,8 @@ export class QueryChecker {
     });
 
     if (this.errMessage.length === 0) {
-      api = this.query.substring(0, this.query.indexOf("("));
+      const api = this.query.substring(0, this.query.indexOf("("));
+      var option: string | null = "";
       const allowedApi = [
         "select",
         "insert",

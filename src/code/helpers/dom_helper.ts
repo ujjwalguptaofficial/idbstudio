@@ -14,4 +14,8 @@ export class DomHelper {
     qry(query: string) {
         return document.querySelector(query);
     }
+
+    removePx(value: string) {
+        parseInt(value, 10);
+    }
 }

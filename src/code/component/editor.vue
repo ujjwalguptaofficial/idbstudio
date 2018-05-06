@@ -17,7 +17,7 @@ declare var ace;
 })
 export default class Editor extends Vue {
   editor;
-  id: string = "";
+  id!: string;
   constructor() {
     super();
     this.catchEvent();
@@ -31,27 +31,40 @@ export default class Editor extends Vue {
 
   mounted() {
     this.createEditor();
+    vueEvent.$emit('get_editor_height');
   }
 
   getQry() {
     var $ = new DomHelper();
     var el = $.getById(this.id);
     if (!$.isHidden($.parent(el))) {
-      vueEvent.$emit("set_qry", this.editor.getValue());
+      vueEvent.$emit("take_qry", this.editor.getValue());
     }
   }
 
-  catchEvent() {
-    vueEvent.$on("execute_qry", this.executeJsStoreQry);
-    vueEvent.$on("get_qry", this.getQry);
+  setQry(qry){
+     var $ = new DomHelper();
+    var el = $.getById(this.id);
+    if (!$.isHidden($.parent(el))) {
+      this.editor.setValue(qry);
+    }
   }
 
-  executeJsStoreQry() {}
+  setHeight(height){
+    var $ = new DomHelper();
+    $.getById(this.id).style.height = height+'px';
+  }
+
+  catchEvent() {
+    vueEvent.$on("get_qry", this.getQry);
+    vueEvent.$on('set_editor_height',this.setHeight);
+    vueEvent.$on('set_qry',this.setQry);
+  }
 }
 </script>
 <style lang="scss">
-.idb-editor{
-   width:100%;
-   min-height:200px;
+.idb-editor {
+  width: 100%;
+  min-height: 200px;
 }
 </style>
