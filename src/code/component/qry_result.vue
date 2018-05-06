@@ -68,7 +68,7 @@ export default class QueryResult extends Vue {
   }
 }
 </script>
-<style lang="sass">
+<style lang="scss">
 #divResult
 {
     overflow-y: scroll;

@@ -1,10 +1,10 @@
 export class DomHelper {
-    getById(id: string) {
-        return document.getElementById(id);
+    getById(id: string): HTMLElement {
+        return document.getElementById(id) as HTMLElement;
     }
 
-    parent(el: HTMLElement) {
-        return el.parentElement;
+    parent(el: HTMLElement): HTMLElement {
+        return el.parentElement as HTMLElement;
     }
 
     isHidden(el: HTMLElement) {

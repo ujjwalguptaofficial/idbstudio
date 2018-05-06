@@ -10,7 +10,7 @@ export class QueryChecker {
 
   isQryValid() {
     var api: string;
-    var option: string = "";
+    var option: string | null = "";
     const notAllowedKeywords = ["Instance", "then", "catch"];
     notAllowedKeywords.every((item) => {
       if (this.query.indexOf(item) >= 0) {

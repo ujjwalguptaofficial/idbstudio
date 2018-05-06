@@ -1,7 +1,8 @@
 <template>
+<div>
+ <Start v-if="!isPageLoaded"></Start>
 <div class="container-fluid">
-   <Start></Start>
-  <div class="row" id="divMain">
+  <div class="row" v-if="isPageLoaded" id="divMain">
     <Menu></Menu>
     <div style="border-top:5px solid #777adb;width: 100%;"></div>
     <div class="col-sm-3">
@@ -11,6 +12,7 @@
       <QueryExecutor></QueryExecutor>
     </div>
   </div>
+</div>
 </div>
 </template>
 
@@ -31,7 +33,6 @@ ace.config.set("themePath", "/assets/scripts");
 
 @Component({
   components: {
-    DbList,
     Menu,
     DbInfo,
     QueryExecutor,
@@ -39,21 +40,36 @@ ace.config.set("themePath", "/assets/scripts");
   }
 })
 export default class Main extends Vue {
+  isPageLoaded = false;
   constructor() {
     super();
     this.catchEvent();
+    setTimeout(() => {
+      // this.togglePageLoadedStatus();
+    }, 1000);
+  }
+
+  togglePageLoadedStatus() {
+    this.isPageLoaded = !this.isPageLoaded;
   }
 
   private catchEvent() {
     vueEvent.$on("on_error", errMessage => {
       alert(errMessage);
     });
+    vueEvent.$on("db_selected", dbName => {
+      this.togglePageLoadedStatus();
+    });
+  }
+
+  mounted() {
+    console.log("h");
   }
 }
 </script>
-<style lang="sass">
-#divMain{
-display:none;
-}
+<style lang="scss">
+// #divMain {
+//   display: none;
+// }
 </style>
 

@@ -12,7 +12,7 @@ export class DemoService extends BaseService {
         return new Promise((resolve, reject) => {
             this.isDbExist(this.dbName).then((exist) => {
                 if (exist === false) {
-                    this.connection.createDb(this.getDbSchema()).then(() => {
+                    this.connection.createDb(this.getDbStructure()).then(() => {
                         this.insertDemoDbData(resolve);
                     });
                 }
@@ -77,7 +77,7 @@ export class DemoService extends BaseService {
         });
     }
 
-    getDbSchema() {
+    getDbStructure() {
         const customers: ITable = {
             name: 'Customers',
             columns: [

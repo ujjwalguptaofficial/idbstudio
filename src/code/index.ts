@@ -1,6 +1,3 @@
-// import { hello } from "./hello"; const name: string = `Mr. Mike`;
-// console.log(hello(name));
-
 import Vue from 'vue';
 import Main from './component/main.vue';
 import BootstrapVue from "bootstrap-vue";
@@ -11,6 +8,8 @@ import "bootstrap-vue/dist/bootstrap-vue.min.css";
 Vue.use(BootstrapVue);
 
 Vue.config.keyCodes.f5 = 116;
+
+console.log(document.getElementById('app'));
 
 // Initiate vue app
 var vue_app = new Vue({

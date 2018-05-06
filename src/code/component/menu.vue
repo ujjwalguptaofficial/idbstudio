@@ -50,7 +50,7 @@ export default class Menu extends Vue {
   }
 }
 </script>
-<style lang="sass" scoped>
+<style lang="scss" scoped>
 #divMenu {
     // background-color: #1f24ff;
     background-color:#2c3e50;

@@ -40,7 +40,7 @@
               <span>{{timeTaken}} sec.</span>
             </td>
             <td>
-              <i @click="showResultInfo=false" class="fas fa-times">
+              <i @click="showResultInfo=false" class="fas fa-times"></i>
             </td>
           </tr>
         </table>
@@ -57,7 +57,7 @@ import Editor from "./editor.vue";
 import QueryResult from "./qry_result.vue";
 import { MainService } from "../service/main_service";
 import { QueryChecker } from "../helpers/query_checker";
-import { IResult } from "../interfaces";
+import { IResult } from "../interfaces/result";
 import { DomHelper } from "../helpers/dom_helper";
 
 @Component({
@@ -79,13 +79,15 @@ export default class QueryExecutor extends Vue {
   mounted() {
     const $ = new DomHelper();
     const menuHeight = 50;
-    const buttonHeight = $.qry("#divButtonContainer").clientHeight;
+    const buttonHeight = ($.qry("#divButtonContainer") as HTMLElement)
+      .clientHeight;
     const margin = 10;
     const editorHeight =
       (window.innerHeight - (menuHeight + buttonHeight + margin)) / 2;
-    $.qry("#divEditorContainer").style.height =
+    ($.qry("#divEditorContainer") as HTMLElement).style.height =
       editorHeight + buttonHeight + "px";
-    $.qry("#divResult").style.height = editorHeight - buttonHeight - 10 + "px";
+    ($.qry("#divResult") as HTMLElement).style.height =
+      editorHeight - buttonHeight - 10 + "px";
   }
 
   createNewTab() {
@@ -104,7 +106,7 @@ export default class QueryExecutor extends Vue {
         .then(qryResult => {
           this.showResultInfo = true;
           this.resultCount = qryResult.result.length;
-          this.timeTaken = qryResult.timeTaken;
+          this.timeTaken = qryResult.timeTaken.toString();
           vueEvent.$emit("on_qry_result", qryResult.result);
         })
         .catch(function(err) {
@@ -121,41 +123,41 @@ export default class QueryExecutor extends Vue {
   }
 }
 </script>
-<style lang="sass" scoped>
-#divQueryExecutor
-{
-    margin-top: 10px;
-    background-color: rgb(241, 241, 241);
-    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+<style lang="scss" scoped>
+#divQueryExecutor {
+  margin-top: 10px;
+  background-color: rgb(241, 241, 241);
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
 }
-#divResultInfo
-{
-  height:50px;
+#divResultInfo {
+  height: 50px;
   position: absolute;
   bottom: 0px;
   background: inherit;
   z-index: 100;
   width: 97%;
 }
-table{
-  height:inherit;
-  width:100%;
+table {
+  height: inherit;
+  width: 100%;
 }
-table tr td{
-  padding-left:20px;
+table tr td {
+  padding-left: 20px;
 }
-table tr td:last-child{
-  text-align:right;
+table tr td:last-child {
+  text-align: right;
   padding-right: 20px;
   padding-left: 50px;
 }
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
-  bottom:0px;
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+  bottom: 0px;
 }
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+.fade-enter,
+.fade-leave-to {
   opacity: 0;
-  bottom:-100px;
+  bottom: -100px;
 }
 </style>
 

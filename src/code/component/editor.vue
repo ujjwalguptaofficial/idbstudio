@@ -17,7 +17,7 @@ declare var ace;
 })
 export default class Editor extends Vue {
   editor;
-  id: string;
+  id: string = "";
   constructor() {
     super();
     this.catchEvent();
@@ -35,7 +35,8 @@ export default class Editor extends Vue {
 
   getQry() {
     var $ = new DomHelper();
-    if (!$.isHidden($.parent($.getById(this.id)))) {
+    var el = $.getById(this.id);
+    if (!$.isHidden($.parent(el))) {
       vueEvent.$emit("set_qry", this.editor.getValue());
     }
   }
@@ -45,12 +46,10 @@ export default class Editor extends Vue {
     vueEvent.$on("get_qry", this.getQry);
   }
 
-  executeJsStoreQry() {
-
-  }
+  executeJsStoreQry() {}
 }
 </script>
-<style lang="sass">
+<style lang="scss">
 .idb-editor{
    width:100%;
    min-height:200px;

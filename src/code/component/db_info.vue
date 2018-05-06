@@ -71,6 +71,11 @@ export default class DbInfo extends Vue {
   selectedDb = "Demo";
   dbList: string[] = [];
 
+  constructor() {
+    super();
+    this.catchEvent();
+  }
+
   mounted() {
     var demoServiceInstance = new DemoService();
     demoServiceInstance.createDemoDataBase().then(() => {
@@ -83,13 +88,8 @@ export default class DbInfo extends Vue {
 
   getDbInfo() {
     new MainService().getDbSchema(this.selectedDb).then(result => {
-     
       this.dbInfo = result;
     });
-  }
-
-  updateDbInfo(value: IDataBase) {
-    this.dbInfo = value;
   }
 
   catchEvent() {
@@ -98,40 +98,31 @@ export default class DbInfo extends Vue {
       this.getDbInfo();
     });
   }
-
-  constructor() {
-    super();
-    this.catchEvent();
-  }
 }
 </script>
-<style lang="sass" scoped>
-#selectDb{ 
+<style lang="scss" scoped>
+#selectDb {
   option {
     text-align: center;
   }
 }
-.table-name
-{
-  font-size:20px;
+.table-name {
+  font-size: 20px;
   font-family: ABeeZee;
 }
-.column-name
-{
-  font-size:15px;
+.column-name {
+  font-size: 15px;
 }
-.column-schema
-{
-  color:#372ae5;
+.column-schema {
+  color: #372ae5;
 }
-table
-{
+table {
   margin-left: 15px;
   display: block;
   width: 100%;
 }
-.db-list{
-    margin-top: 10px;
-    margin-bottom: 20px;
+.db-list {
+  margin-top: 10px;
+  margin-bottom: 20px;
 }
 </style>

@@ -1,4 +1,5 @@
 var fs = require('fs');
+const version = Date.now();
 var deleteFolderRecursive = function (path) {
   if (fs.existsSync(path)) {
     fs.readdirSync(path).forEach(function (file, index) {
@@ -67,11 +68,11 @@ Sparky.task("config", () => {
         ]
       }),
       CSSPlugin({
-        group: "bundle.css",
+        group: isProduction ? "bundle.css?" + version : "bundle.css",
         minify: isProduction
       }),
       WebIndexPlugin({
-        template: "code/index.html"
+        template: "code/index.html",
       }),
       isProduction && QuantumPlugin({
         bakeApiIntoBundle: "app",
@@ -90,11 +91,11 @@ Sparky.task("config", () => {
     })
   }
   const vendor = fuse
-    .bundle("vendor")
+    .bundle(isProduction ? "vendor?" + version : "vendor")
     .instructions("~ index.ts");
 
   const app = fuse
-    .bundle("bundle")
+    .bundle(isProduction ? "bundle?" + version : "bundle")
     .instructions("> [index.ts]");
 
   if (!isProduction) {
