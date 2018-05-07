@@ -60,6 +60,7 @@ import { MainService } from "../service/main_service";
 import { QueryChecker } from "../helpers/query_checker";
 import { IResult } from "../interfaces/result";
 import { DomHelper } from "../helpers/dom_helper";
+import { Util } from "../util";
 
 @Component({
   components: {
@@ -124,7 +125,7 @@ export default class QueryExecutor extends Vue {
   }
 
   createNewTab() {
-    this.$data.tabCount++;
+    ++this.tabCount; 
   }
 
   save() {

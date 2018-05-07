@@ -9,6 +9,8 @@ import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import { vueEvent } from "../common_var";
 import { DomHelper } from "../helpers/dom_helper";
+import { Util } from "../util";
+
 declare var ace;
 @Component({
   props: {
@@ -32,6 +34,12 @@ export default class Editor extends Vue {
   mounted() {
     this.createEditor();
     vueEvent.$emit('get_editor_height');
+    if (this.id === "editor1") {
+      const query = Util.getParameterByName("query");
+      if (query != null && query.length > 0) {
+        this.setQry(decodeURI(query));
+      }
+    }
   }
 
   getQry() {
@@ -43,6 +51,7 @@ export default class Editor extends Vue {
   }
 
   setQry(qry){
+    console.log(qry);
      var $ = new DomHelper();
     var el = $.getById(this.id);
     if (!$.isHidden($.parent(el))) {
