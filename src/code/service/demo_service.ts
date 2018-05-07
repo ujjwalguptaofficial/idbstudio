@@ -34,7 +34,7 @@ export class DemoService extends BaseService {
             }
         };
         filesList.forEach((file) => {
-            const url = `/assets/demo_database/${file}.json`;
+            const url = `assets/demo_database/${file}.json`;
             Axios.get(url).then((response) => {
                 switch (file) {
                     case filesList[4]:

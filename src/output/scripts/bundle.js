@@ -11354,7 +11354,7 @@ var MainService = /** @class */ (function (_super) {
         return new Promise(function (resolve, reject) {
             // console.log('api:' + api + 'option:' + option);
             _this.connection[api](option).then(function (qryResult) {
-                console.log(qryResult);
+                // console.log(qryResult);
                 var idbResult = {
                     timeTaken: (performance.now() - startTime) / 1000,
                     result: qryResult
@@ -13469,7 +13469,7 @@ var DemoService = /** @class */ (function (_super) {
             }
         };
         filesList.forEach(function (file) {
-            var url = "/assets/demo_database/" + file + ".json";
+            var url = "assets/demo_database/" + file + ".json";
             axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(url).then(function (response) {
                 switch (file) {
                     case filesList[4]:
