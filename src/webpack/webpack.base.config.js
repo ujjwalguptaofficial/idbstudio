@@ -3,6 +3,7 @@ const SmartBannerPlugin = require('smart-banner-webpack-plugin');
 const banner = require('../license');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = [{
     name: "jsstore",
@@ -79,7 +80,7 @@ module.exports = [{
             },
             {
                 test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-                use: 'url-loader?limit=10000&mimetype=application/octet-stream'
+                use: 'url-loader?limit=10000&name=fonts/[name][hash].[ext]&mimetype=application/octet-stream'
             },
             {
                 test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
@@ -95,11 +96,6 @@ module.exports = [{
     resolve: {
         extensions: ['.js', '.ts', '.vue']
     },
-    // resolveLoader: {
-    //     alias: {
-    //         'vue-loader': require.resolve('vue-loader/lib/plugin')
-    //     }
-    // },
     plugins: [
         new SmartBannerPlugin(banner),
         new VueLoaderPlugin(),
@@ -114,6 +110,10 @@ module.exports = [{
                 removeScriptTypeAttributes: true,
                 removeStyleLinkTypeAttributes: true
             }
-        })
+        }),
+        new CopyPlugin([{
+            from: './code/assets/',
+            to: 'assets/'
+        }])
     ]
 }];

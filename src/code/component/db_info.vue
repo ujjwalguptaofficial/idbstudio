@@ -109,6 +109,8 @@ export default class DbInfo extends Vue {
 .table-name {
   font-size: 20px;
   font-family: ABeeZee;
+  padding-bottom: 5px;
+  display: inline-block;
 }
 .column-name {
   font-size: 15px;

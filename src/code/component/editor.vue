@@ -51,7 +51,6 @@ export default class Editor extends Vue {
   }
 
   setQry(qry){
-    console.log(qry);
      var $ = new DomHelper();
     var el = $.getById(this.id);
     if (!$.isHidden($.parent(el))) {

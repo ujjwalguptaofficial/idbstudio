@@ -2,14 +2,17 @@
   "name": "idbstudio",
   "version": "1.0.0",
   "scripts": {
-    "build": "tslint code/**/*.ts && node fuse.config.js",
+    "lint": "tslint code/**/*.ts",
     "webpack:dev": "webpack --config webpack/webpack.dev.config.js",
+    "webpack:prod": "webpack --config webpack/webpack.prod.config.js",
+    "build": "npm run lint && npm run webpack:dev",
+    "deploy": "npm run lint && npm run webpack:prod",
     "start": "webpack-dev-server --progress --colors --inline --content-base build"
   },
   "devDependencies": {
+    "copy-webpack-plugin": "^4.5.1",
     "css-loader": "^0.28.11",
     "file-loader": "^1.1.11",
-    "fuse-box": "^3.2.2",
     "html-webpack-plugin": "^3.2.0",
     "node-sass": "^4.8.1",
     "opn": "^5.2.0",

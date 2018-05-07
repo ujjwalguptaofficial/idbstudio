@@ -25,7 +25,7 @@ import DbInfo from "./db_info.vue";
 import QueryExecutor from "./query_executor.vue";
 import Start from "./start.vue";
 import { vueEvent } from "../common_var";
-import "../assets/css/common.css";
+import "../css/common.css";
 
 declare var ace;
 ace.config.set("workerPath", "/assets/scripts");

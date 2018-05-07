@@ -6,7 +6,7 @@ module.exports = [
     merge(baseConfig[0], {
         devtool: 'source-map',
         output: {
-            path: path.join(__dirname, "../dist"),
+            path: path.join(__dirname, "../output"),
             publicPath: '',
             filename: "scripts/bundle.js"
         }
