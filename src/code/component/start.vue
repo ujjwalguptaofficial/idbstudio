@@ -26,6 +26,7 @@ import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import { DemoService } from "../service/demo_service";
 import { vueEvent } from "../common_var";
+import { Util } from "../util";
 
 @Component
 export default class Start extends Vue {
@@ -47,9 +48,24 @@ export default class Start extends Vue {
     });
   }
 
+  setDbNameFromQryString(dbList: string[]) {
+    var dbName = Util.getParameterByName("db");
+    if (dbName != null && dbName.length > 0) {
+      dbName = decodeURI(dbName);
+      const index = dbList.findIndex(qry => qry === dbName);
+      console.log(index);
+      if (index >= 0) {
+        console.log(dbName);
+        this.selectedDb = dbName;
+        this.connectDb();
+      }
+    }
+  }
+
   getDbList() {
     var demoServiceInstance = new DemoService();
     demoServiceInstance.getDbList().then(list => {
+      this.setDbNameFromQryString(list);
       this.dbList = list;
     });
   }

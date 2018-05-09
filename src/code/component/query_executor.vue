@@ -61,6 +61,7 @@ import { QueryChecker } from "../helpers/query_checker";
 import { IResult } from "../interfaces/result";
 import { DomHelper } from "../helpers/dom_helper";
 import { Util } from "../util";
+import { DATA_TYPE } from "jsstore";
 
 @Component({
   components: {
@@ -125,7 +126,7 @@ export default class QueryExecutor extends Vue {
   }
 
   createNewTab() {
-    ++this.tabCount; 
+    ++this.tabCount;
   }
 
   save() {
@@ -168,7 +169,10 @@ export default class QueryExecutor extends Vue {
         .executeQry(queryCheckerInstance.api, queryCheckerInstance.option)
         .then(qryResult => {
           this.showResultInfo = true;
-          this.resultCount = qryResult.result.length;
+          this.resultCount =
+            Util.getType(qryResult.result) === DATA_TYPE.Array
+              ? qryResult.result.length
+              : 0;
           this.timeTaken = qryResult.timeTaken.toString();
           vueEvent.$emit("on_qry_result", qryResult.result);
         })

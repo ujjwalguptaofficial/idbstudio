@@ -1,5 +1,5 @@
 /*!
- * @license :idbstudio - V1.0.0 - 07/05/2018
+ * @license :idbstudio - V1.0.0 - 09/05/2018
  * https://github.com/ujjwalguptaofficial/JsStore
  * Copyright (c) 2018 @Ujjwal Gupta; Licensed undefined
  */
@@ -13344,6 +13344,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue_property_decorator__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _service_demo_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(72);
 /* harmony import */ var _common_var__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(19);
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(51);
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -13360,6 +13361,7 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -13388,10 +13390,24 @@ var Start = /** @class */ (function (_super) {
             }
         });
     };
+    Start.prototype.setDbNameFromQryString = function (dbList) {
+        var dbName = _util__WEBPACK_IMPORTED_MODULE_4__["Util"].getParameterByName("db");
+        if (dbName != null && dbName.length > 0) {
+            dbName = decodeURI(dbName);
+            var index = dbList.findIndex(function (qry) { return qry === dbName; });
+            console.log(index);
+            if (index >= 0) {
+                console.log(dbName);
+                this.selectedDb = dbName;
+                this.connectDb();
+            }
+        }
+    };
     Start.prototype.getDbList = function () {
         var _this = this;
         var demoServiceInstance = new _service_demo_service__WEBPACK_IMPORTED_MODULE_2__["DemoService"]();
         demoServiceInstance.getDbList().then(function (list) {
+            _this.setDbNameFromQryString(list);
             _this.dbList = list;
         });
     };
