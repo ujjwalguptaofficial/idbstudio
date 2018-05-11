@@ -8,7 +8,7 @@ module.exports = [
         output: {
             path: path.join(__dirname, "../../dist"),
             publicPath: '',
-            filename: "scripts/bundle.js"
+            filename: "scripts/bundle.[hash].js"
         },
         mode: 'production'
     })

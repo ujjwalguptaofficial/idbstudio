@@ -53,9 +53,9 @@ export default class Start extends Vue {
     if (dbName != null && dbName.length > 0) {
       dbName = decodeURI(dbName);
       const index = dbList.findIndex(qry => qry === dbName);
-      console.log(index);
+      // console.log(index);
       if (index >= 0) {
-        console.log(dbName);
+        // console.log(dbName);
         this.selectedDb = dbName;
         this.connectDb();
       }

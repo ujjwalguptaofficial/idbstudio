@@ -28,8 +28,8 @@ import { vueEvent } from "../common_var";
 import "../css/common.css";
 
 declare var ace;
-ace.config.set("workerPath", "/assets/scripts");
-ace.config.set("themePath", "/assets/scripts");
+ace.config.set("workerPath", "assets/scripts");
+ace.config.set("themePath", "assets/scripts");
 
 @Component({
   components: {

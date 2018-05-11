@@ -3,7 +3,7 @@ import { ServiceHelper } from './service_helper';
 export class BaseService {
 
     constructor() {
-        this.connection.setLogStatus(true);
+        // this.connection.setLogStatus(true);
     }
 
     public openDb(dbName: string) {

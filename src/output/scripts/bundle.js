@@ -1,5 +1,5 @@
 /*!
- * @license :idbstudio - V1.0.0 - 09/05/2018
+ * @license :idbstudio - V1.0.1 - 11/05/2018
  * https://github.com/ujjwalguptaofficial/JsStore
  * Copyright (c) 2018 @Ujjwal Gupta; Licensed undefined
  */
@@ -8765,8 +8765,8 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 
 
 
-ace.config.set("workerPath", "/assets/scripts");
-ace.config.set("themePath", "/assets/scripts");
+ace.config.set("workerPath", "assets/scripts");
+ace.config.set("themePath", "assets/scripts");
 var Main = /** @class */ (function (_super) {
     __extends(Main, _super);
     function Main() {
@@ -11381,6 +11381,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var BaseService = /** @class */ (function () {
     function BaseService() {
+        // this.connection.setLogStatus(true);
     }
     BaseService.prototype.openDb = function (dbName) {
         return this.connection.openDb(dbName);
@@ -11433,7 +11434,7 @@ var ServiceHelper = /** @class */ (function () {
 /***/ (function(module, exports) {
 
 /*!
- * @license :jsstore - V2.0.0 - 04/05/2018
+ * @license :jsstore - V2.0.0 - 10/05/2018
  * https://github.com/ujjwalguptaofficial/JsStore
  * Copyright (c) 2018 @Ujjwal Gupta; Licensed MIT
  */
@@ -11518,7 +11519,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _instance__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Instance", function() { return _instance__WEBPACK_IMPORTED_MODULE_0__["Instance"]; });
 
-/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
+/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ERROR_TYPE", function() { return _enums__WEBPACK_IMPORTED_MODULE_1__["ERROR_TYPE"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "WORKER_STATUS", function() { return _enums__WEBPACK_IMPORTED_MODULE_1__["WORKER_STATUS"]; });
@@ -11526,6 +11527,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "DATA_TYPE", function() { return _enums__WEBPACK_IMPORTED_MODULE_1__["DATA_TYPE"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "COL_OPTION", function() { return _enums__WEBPACK_IMPORTED_MODULE_1__["COL_OPTION"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "API", function() { return _enums__WEBPACK_IMPORTED_MODULE_1__["API"]; });
 
 /* harmony import */ var _config__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Config", function() { return _config__WEBPACK_IMPORTED_MODULE_2__["Config"]; });
@@ -11550,8 +11553,9 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Instance", function() { return Instance; });
-/* harmony import */ var _instance_helper__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
-/* harmony import */ var _config__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
+/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
+/* harmony import */ var _instance_helper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
+/* harmony import */ var _config__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -11562,6 +11566,7 @@ var __extends = (undefined && undefined.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
 
 
 var Instance = /** @class */ (function (_super) {
@@ -11578,7 +11583,7 @@ var Instance = /** @class */ (function (_super) {
      */
     Instance.prototype.openDb = function (dbName) {
         return this.pushApi({
-            name: 'open_db',
+            name: _enums__WEBPACK_IMPORTED_MODULE_0__["API"].OpenDb,
             query: dbName
         });
     };
@@ -11591,7 +11596,7 @@ var Instance = /** @class */ (function (_super) {
      */
     Instance.prototype.createDb = function (dataBase) {
         return this.pushApi({
-            name: 'create_db',
+            name: _enums__WEBPACK_IMPORTED_MODULE_0__["API"].CreateDb,
             query: dataBase
         });
     };
@@ -11603,7 +11608,7 @@ var Instance = /** @class */ (function (_super) {
      */
     Instance.prototype.dropDb = function () {
         return this.pushApi({
-            name: 'drop_db',
+            name: _enums__WEBPACK_IMPORTED_MODULE_0__["API"].DropDb,
             query: null
         });
     };
@@ -11617,7 +11622,7 @@ var Instance = /** @class */ (function (_super) {
      */
     Instance.prototype.select = function (query) {
         return this.pushApi({
-            name: 'select',
+            name: _enums__WEBPACK_IMPORTED_MODULE_0__["API"].Select,
             query: query
         });
     };
@@ -11630,7 +11635,7 @@ var Instance = /** @class */ (function (_super) {
      */
     Instance.prototype.count = function (query) {
         return this.pushApi({
-            name: 'count',
+            name: _enums__WEBPACK_IMPORTED_MODULE_0__["API"].Count,
             query: query
         });
     };
@@ -11643,7 +11648,7 @@ var Instance = /** @class */ (function (_super) {
      */
     Instance.prototype.insert = function (query) {
         return this.pushApi({
-            name: 'insert',
+            name: _enums__WEBPACK_IMPORTED_MODULE_0__["API"].Insert,
             query: query
         });
     };
@@ -11656,7 +11661,7 @@ var Instance = /** @class */ (function (_super) {
      */
     Instance.prototype.update = function (query) {
         return this.pushApi({
-            name: 'update',
+            name: _enums__WEBPACK_IMPORTED_MODULE_0__["API"].Update,
             query: query
         });
     };
@@ -11669,7 +11674,7 @@ var Instance = /** @class */ (function (_super) {
      */
     Instance.prototype.remove = function (query) {
         return this.pushApi({
-            name: 'remove',
+            name: _enums__WEBPACK_IMPORTED_MODULE_0__["API"].Remove,
             query: query
         });
     };
@@ -11682,7 +11687,7 @@ var Instance = /** @class */ (function (_super) {
      */
     Instance.prototype.clear = function (tableName) {
         return this.pushApi({
-            name: 'clear',
+            name: _enums__WEBPACK_IMPORTED_MODULE_0__["API"].Clear,
             query: tableName
         });
     };
@@ -11695,7 +11700,7 @@ var Instance = /** @class */ (function (_super) {
      */
     Instance.prototype.bulkInsert = function (query) {
         return this.pushApi({
-            name: 'bulk_insert',
+            name: _enums__WEBPACK_IMPORTED_MODULE_0__["API"].BulkInsert,
             query: query
         });
     };
@@ -11716,7 +11721,7 @@ var Instance = /** @class */ (function (_super) {
         };
         return new Promise(function (resolve, reject) {
             _this.pushApi({
-                name: 'export_json',
+                name: _enums__WEBPACK_IMPORTED_MODULE_0__["API"].ExportJson,
                 query: query
             }).then(function (url) {
                 onSuccess(url);
@@ -11733,10 +11738,10 @@ var Instance = /** @class */ (function (_super) {
      * @memberof Instance
      */
     Instance.prototype.setLogStatus = function (status) {
-        _config__WEBPACK_IMPORTED_MODULE_1__["Config"]._isLogEnabled = status ? status : _config__WEBPACK_IMPORTED_MODULE_1__["Config"]._isLogEnabled;
+        _config__WEBPACK_IMPORTED_MODULE_2__["Config"]._isLogEnabled = status ? status : _config__WEBPACK_IMPORTED_MODULE_2__["Config"]._isLogEnabled;
         this.pushApi({
-            name: 'enable_log',
-            query: _config__WEBPACK_IMPORTED_MODULE_1__["Config"]._isLogEnabled
+            name: _enums__WEBPACK_IMPORTED_MODULE_0__["API"].ChangeLogStatus,
+            query: _config__WEBPACK_IMPORTED_MODULE_2__["Config"]._isLogEnabled
         });
     };
     /**
@@ -11748,7 +11753,7 @@ var Instance = /** @class */ (function (_super) {
      */
     Instance.prototype.getDbVersion = function (dbName) {
         return this.pushApi({
-            name: 'get_db_version',
+            name: _enums__WEBPACK_IMPORTED_MODULE_0__["API"].GetDbVersion,
             query: dbName
         });
     };
@@ -11761,7 +11766,7 @@ var Instance = /** @class */ (function (_super) {
      */
     Instance.prototype.isDbExist = function (dbInfo) {
         return this.pushApi({
-            name: 'is_db_exist',
+            name: _enums__WEBPACK_IMPORTED_MODULE_0__["API"].IsDbExist,
             query: dbInfo
         });
     };
@@ -11773,7 +11778,7 @@ var Instance = /** @class */ (function (_super) {
      */
     Instance.prototype.getDbList = function () {
         return this.pushApi({
-            name: 'get_db_list',
+            name: _enums__WEBPACK_IMPORTED_MODULE_0__["API"].GetDbList,
             query: null
         });
     };
@@ -11786,12 +11791,41 @@ var Instance = /** @class */ (function (_super) {
      */
     Instance.prototype.getDbSchema = function (dbName) {
         return this.pushApi({
-            name: 'get_db_schema',
+            name: _enums__WEBPACK_IMPORTED_MODULE_0__["API"].GetDbSchema,
             query: dbName
         });
     };
+    /**
+     * get the value from keystore table
+     *
+     * @param {string} key
+     * @returns
+     * @memberof Instance
+     */
+    Instance.prototype.get = function (key) {
+        return this.pushApi({
+            name: _enums__WEBPACK_IMPORTED_MODULE_0__["API"].Get,
+            query: key
+        });
+    };
+    /**
+     * set the value in keystore table
+     *
+     * @param {string} key
+     * @param {*} value
+     * @returns
+     * @memberof Instance
+     */
+    Instance.prototype.set = function (key, value) {
+        return this.pushApi({
+            name: _enums__WEBPACK_IMPORTED_MODULE_0__["API"].Set,
+            query: {
+                key: key, value: value
+            }
+        });
+    };
     return Instance;
-}(_instance_helper__WEBPACK_IMPORTED_MODULE_0__["InstanceHelper"]));
+}(_instance_helper__WEBPACK_IMPORTED_MODULE_1__["InstanceHelper"]));
 
 
 
@@ -11801,9 +11835,72 @@ var Instance = /** @class */ (function (_super) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ERROR_TYPE", function() { return ERROR_TYPE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WORKER_STATUS", function() { return WORKER_STATUS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DATA_TYPE", function() { return DATA_TYPE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "COL_OPTION", function() { return COL_OPTION; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "API", function() { return API; });
+var ERROR_TYPE;
+(function (ERROR_TYPE) {
+    ERROR_TYPE["WorkerNotSupplied"] = "worker_not_supplied";
+    ERROR_TYPE["IndexedDbUndefined"] = "indexeddb_undefined";
+})(ERROR_TYPE || (ERROR_TYPE = {}));
+var WORKER_STATUS;
+(function (WORKER_STATUS) {
+    WORKER_STATUS["Registered"] = "registerd";
+    WORKER_STATUS["Failed"] = "failed";
+    WORKER_STATUS["NotStarted"] = "not_started";
+})(WORKER_STATUS || (WORKER_STATUS = {}));
+var DATA_TYPE;
+(function (DATA_TYPE) {
+    DATA_TYPE["String"] = "string";
+    DATA_TYPE["Object"] = "object";
+    DATA_TYPE["Array"] = "array";
+    DATA_TYPE["Number"] = "number";
+    DATA_TYPE["Boolean"] = "boolean";
+    DATA_TYPE["Null"] = "null";
+    DATA_TYPE["DateTime"] = "date_time";
+})(DATA_TYPE || (DATA_TYPE = {}));
+var COL_OPTION;
+(function (COL_OPTION) {
+    COL_OPTION["PrimaryKey"] = "primary_key";
+    COL_OPTION["AutoIncrement"] = "auto_increment";
+    COL_OPTION["Unique"] = "unique";
+    COL_OPTION["NotNull"] = "not_null";
+    COL_OPTION["MultiEntry"] = "multi_entry";
+})(COL_OPTION || (COL_OPTION = {}));
+var API;
+(function (API) {
+    API["CreateDb"] = "create_db";
+    API["IsDbExist"] = "is_db_exist";
+    API["GetDbVersion"] = "get_db_version";
+    API["GetDbList"] = "get_db_list";
+    API["Get"] = "get";
+    API["Set"] = "set";
+    API["Select"] = "select";
+    API["Insert"] = "insert";
+    API["Update"] = "update";
+    API["Remove"] = "remove";
+    API["GetDbSchema"] = "get_db_schema";
+    API["OpenDb"] = "open_db";
+    API["Clear"] = "clear";
+    API["DropDb"] = "drop_db";
+    API["Count"] = "count";
+    API["BulkInsert"] = "bulk_insert";
+    API["ExportJson"] = "export_json";
+    API["ChangeLogStatus"] = "change_log_status";
+})(API || (API = {}));
+
+
+/***/ }),
+/* 3 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "InstanceHelper", function() { return InstanceHelper; });
-/* harmony import */ var _log_helper__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3);
-/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
+/* harmony import */ var _log_helper__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4);
+/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
 
 
 var InstanceHelper = /** @class */ (function () {
@@ -11812,12 +11909,15 @@ var InstanceHelper = /** @class */ (function () {
         this.requestQueue_ = [];
         this.isCodeExecuting_ = false;
         this.whiteListApi_ = [
-            "create_db",
-            "is_db_exist",
-            "get_db_version",
-            "get_db_list",
-            "open_db",
-            "get_db_schema"
+            _enums__WEBPACK_IMPORTED_MODULE_1__["API"].CreateDb,
+            _enums__WEBPACK_IMPORTED_MODULE_1__["API"].IsDbExist,
+            _enums__WEBPACK_IMPORTED_MODULE_1__["API"].GetDbVersion,
+            _enums__WEBPACK_IMPORTED_MODULE_1__["API"].GetDbList,
+            _enums__WEBPACK_IMPORTED_MODULE_1__["API"].OpenDb,
+            _enums__WEBPACK_IMPORTED_MODULE_1__["API"].GetDbSchema,
+            _enums__WEBPACK_IMPORTED_MODULE_1__["API"].Get,
+            _enums__WEBPACK_IMPORTED_MODULE_1__["API"].Set,
+            _enums__WEBPACK_IMPORTED_MODULE_1__["API"].ChangeLogStatus
         ];
         if (worker) {
             this.worker_ = worker;
@@ -11907,13 +12007,13 @@ var InstanceHelper = /** @class */ (function () {
 
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LogHelper", function() { return LogHelper; });
-/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4);
+/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
 /* harmony import */ var _config__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 
 
@@ -11962,47 +12062,6 @@ var LogHelper = /** @class */ (function () {
     return LogHelper;
 }());
 
-
-
-/***/ }),
-/* 4 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ERROR_TYPE", function() { return ERROR_TYPE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WORKER_STATUS", function() { return WORKER_STATUS; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DATA_TYPE", function() { return DATA_TYPE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "COL_OPTION", function() { return COL_OPTION; });
-var ERROR_TYPE;
-(function (ERROR_TYPE) {
-    ERROR_TYPE["WorkerNotSupplied"] = "worker_not_supplied";
-    ERROR_TYPE["IndexedDbUndefined"] = "indexeddb_undefined";
-})(ERROR_TYPE || (ERROR_TYPE = {}));
-var WORKER_STATUS;
-(function (WORKER_STATUS) {
-    WORKER_STATUS["Registered"] = "registerd";
-    WORKER_STATUS["Failed"] = "failed";
-    WORKER_STATUS["NotStarted"] = "not_started";
-})(WORKER_STATUS || (WORKER_STATUS = {}));
-var DATA_TYPE;
-(function (DATA_TYPE) {
-    DATA_TYPE["String"] = "string";
-    DATA_TYPE["Object"] = "object";
-    DATA_TYPE["Array"] = "array";
-    DATA_TYPE["Number"] = "number";
-    DATA_TYPE["Boolean"] = "boolean";
-    DATA_TYPE["Null"] = "null";
-    DATA_TYPE["DateTime"] = "date_time";
-})(DATA_TYPE || (DATA_TYPE = {}));
-var COL_OPTION;
-(function (COL_OPTION) {
-    COL_OPTION["PrimaryKey"] = "primary_key";
-    COL_OPTION["AutoIncrement"] = "auto_increment";
-    COL_OPTION["Unique"] = "unique";
-    COL_OPTION["NotNull"] = "not_null";
-    COL_OPTION["MultiEntry"] = "multi_entry";
-})(COL_OPTION || (COL_OPTION = {}));
 
 
 /***/ }),
@@ -12058,7 +12117,7 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Column", function() { return Column; });
-/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4);
+/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
 
 var Column = /** @class */ (function () {
     function Column(name) {
@@ -12112,7 +12171,7 @@ var Column = /** @class */ (function () {
 /* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__.p + "scripts/jsstore.worker.3f2da0f115bcdf77f05318a7ce29b474.js";
+module.exports = __webpack_require__.p + "scripts/jsstore.worker.854dfe01381e1c7b79bccc7948aaf7b5.js";
 
 /***/ }),
 /* 37 */
@@ -12370,6 +12429,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _service_main_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(32);
 /* harmony import */ var _helpers_query_checker__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(63);
 /* harmony import */ var _helpers_dom_helper__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(50);
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(51);
+/* harmony import */ var jsstore__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(35);
+/* harmony import */ var jsstore__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(jsstore__WEBPACK_IMPORTED_MODULE_9__);
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -12386,6 +12448,8 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
+
 
 
 
@@ -12483,7 +12547,10 @@ var QueryExecutor = /** @class */ (function (_super) {
                 .executeQry(queryCheckerInstance.api, queryCheckerInstance.option)
                 .then(function (qryResult) {
                 _this.showResultInfo = true;
-                _this.resultCount = qryResult.result.length;
+                _this.resultCount =
+                    _util__WEBPACK_IMPORTED_MODULE_8__["Util"].getType(qryResult.result) === jsstore__WEBPACK_IMPORTED_MODULE_9__["DATA_TYPE"].Array
+                        ? qryResult.result.length
+                        : 0;
                 _this.timeTaken = qryResult.timeTaken.toString();
                 _common_var__WEBPACK_IMPORTED_MODULE_2__["vueEvent"].$emit("on_qry_result", qryResult.result);
             })
@@ -13395,9 +13462,9 @@ var Start = /** @class */ (function (_super) {
         if (dbName != null && dbName.length > 0) {
             dbName = decodeURI(dbName);
             var index = dbList.findIndex(function (qry) { return qry === dbName; });
-            console.log(index);
+            // console.log(index);
             if (index >= 0) {
-                console.log(dbName);
+                // console.log(dbName);
                 this.selectedDb = dbName;
                 this.connectDb();
             }
