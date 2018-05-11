@@ -37,7 +37,7 @@ export default class Editor extends Vue {
     if (this.id === "editor1") {
       const query = Util.getParameterByName("query");
       if (query != null && query.length > 0) {
-        this.setQry(decodeURI(query));
+        this.setQry(query);
       }
     }
   }

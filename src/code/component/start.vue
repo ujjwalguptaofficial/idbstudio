@@ -51,7 +51,6 @@ export default class Start extends Vue {
   setDbNameFromQryString(dbList: string[]) {
     var dbName = Util.getParameterByName("db");
     if (dbName != null && dbName.length > 0) {
-      dbName = decodeURI(dbName);
       const index = dbList.findIndex(qry => qry === dbName);
       // console.log(index);
       if (index >= 0) {

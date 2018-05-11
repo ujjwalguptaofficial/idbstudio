@@ -11381,7 +11381,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var BaseService = /** @class */ (function () {
     function BaseService() {
-        // this.connection.setLogStatus(true);
+        this.connection.setLogStatus(true);
     }
     BaseService.prototype.openDb = function (dbName) {
         return this.connection.openDb(dbName);
@@ -11434,7 +11434,7 @@ var ServiceHelper = /** @class */ (function () {
 /***/ (function(module, exports) {
 
 /*!
- * @license :jsstore - V2.0.0 - 10/05/2018
+ * @license :jsstore - V2.0.2 - 11/05/2018
  * https://github.com/ujjwalguptaofficial/JsStore
  * Copyright (c) 2018 @Ujjwal Gupta; Licensed MIT
  */
@@ -12171,7 +12171,7 @@ var Column = /** @class */ (function () {
 /* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__.p + "scripts/jsstore.worker.854dfe01381e1c7b79bccc7948aaf7b5.js";
+module.exports = __webpack_require__.p + "scripts/jsstore.worker.791372d3769c548ca5f9821bb37d487f.js";
 
 /***/ }),
 /* 37 */
@@ -12725,7 +12725,7 @@ var Editor = /** @class */ (function (_super) {
         if (this.id === "editor1") {
             var query = _util__WEBPACK_IMPORTED_MODULE_4__["Util"].getParameterByName("query");
             if (query != null && query.length > 0) {
-                this.setQry(decodeURI(query));
+                this.setQry(query);
             }
         }
     };
@@ -13460,7 +13460,6 @@ var Start = /** @class */ (function (_super) {
     Start.prototype.setDbNameFromQryString = function (dbList) {
         var dbName = _util__WEBPACK_IMPORTED_MODULE_4__["Util"].getParameterByName("db");
         if (dbName != null && dbName.length > 0) {
-            dbName = decodeURI(dbName);
             var index = dbList.findIndex(function (qry) { return qry === dbName; });
             // console.log(index);
             if (index >= 0) {
