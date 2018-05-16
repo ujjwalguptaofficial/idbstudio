@@ -4,6 +4,7 @@ const banner = require('../license');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
+const webpack = require('webpack');
 
 module.exports = [{
     name: "jsstore",
@@ -114,6 +115,9 @@ module.exports = [{
         new CopyPlugin([{
             from: './code/assets/',
             to: 'assets/'
-        }])
+        }]),
+        // new webpack.optimize.CommonsChunkPlugin({
+        //     name: 'common' // Specify the common bundle's name.
+        // })
     ]
 }];

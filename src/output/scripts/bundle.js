@@ -1,5 +1,5 @@
 /*!
- * @license :idbstudio - V1.0.1 - 11/05/2018
+ * @license :idbstudio - V1.0.2 - 16/05/2018
  * https://github.com/ujjwalguptaofficial/JsStore
  * Copyright (c) 2018 @Ujjwal Gupta; Licensed undefined
  */
@@ -11434,7 +11434,7 @@ var ServiceHelper = /** @class */ (function () {
 /***/ (function(module, exports) {
 
 /*!
- * @license :jsstore - V2.0.2 - 11/05/2018
+ * @license :jsstore - V2.0.5 - 16/05/2018
  * https://github.com/ujjwalguptaofficial/JsStore
  * Copyright (c) 2018 @Ujjwal Gupta; Licensed MIT
  */
@@ -12171,7 +12171,7 @@ var Column = /** @class */ (function () {
 /* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__.p + "scripts/jsstore.worker.791372d3769c548ca5f9821bb37d487f.js";
+module.exports = __webpack_require__.p + "scripts/jsstore.worker.d039a16af5f55b1dd1f95d4a294027c7.js";
 
 /***/ }),
 /* 37 */
@@ -13551,7 +13551,7 @@ var DemoService = /** @class */ (function (_super) {
             }
         };
         filesList.forEach(function (file) {
-            var url = "assets/demo_database/" + file + ".json";
+            var url = "assets/demo_database/" + file + ".json?v=1";
             axios__WEBPACK_IMPORTED_MODULE_2___default.a.get(url).then(function (response) {
                 switch (file) {
                     case filesList[4]:
@@ -13616,9 +13616,11 @@ var DemoService = /** @class */ (function (_super) {
                 new jsstore__WEBPACK_IMPORTED_MODULE_1__["Column"]('birthDate').options([jsstore__WEBPACK_IMPORTED_MODULE_1__["COL_OPTION"].NotNull]).setDataType(jsstore__WEBPACK_IMPORTED_MODULE_1__["DATA_TYPE"].DateTime),
                 new jsstore__WEBPACK_IMPORTED_MODULE_1__["Column"]('photo').options([jsstore__WEBPACK_IMPORTED_MODULE_1__["COL_OPTION"].NotNull]).setDataType(jsstore__WEBPACK_IMPORTED_MODULE_1__["DATA_TYPE"].String),
                 new jsstore__WEBPACK_IMPORTED_MODULE_1__["Column"]('notes').setDataType(jsstore__WEBPACK_IMPORTED_MODULE_1__["DATA_TYPE"].String),
+                new jsstore__WEBPACK_IMPORTED_MODULE_1__["Column"]('state').options([jsstore__WEBPACK_IMPORTED_MODULE_1__["COL_OPTION"].NotNull]).setDataType(jsstore__WEBPACK_IMPORTED_MODULE_1__["DATA_TYPE"].String),
+                new jsstore__WEBPACK_IMPORTED_MODULE_1__["Column"]('jobSuspendedFlag').options([jsstore__WEBPACK_IMPORTED_MODULE_1__["COL_OPTION"].NotNull]).setDataType(jsstore__WEBPACK_IMPORTED_MODULE_1__["DATA_TYPE"].Number)
             ]
         };
-        var order_details = {
+        var orderDetails = {
             name: 'OrderDetails',
             columns: [
                 new jsstore__WEBPACK_IMPORTED_MODULE_1__["Column"]('orderDetailId').options([jsstore__WEBPACK_IMPORTED_MODULE_1__["COL_OPTION"].PrimaryKey, jsstore__WEBPACK_IMPORTED_MODULE_1__["COL_OPTION"].AutoIncrement]),
@@ -13675,7 +13677,7 @@ var DemoService = /** @class */ (function (_super) {
                 customers,
                 categories,
                 employees,
-                order_details,
+                orderDetails,
                 orders,
                 products,
                 shippers,

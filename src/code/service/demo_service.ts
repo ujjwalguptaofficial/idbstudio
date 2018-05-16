@@ -34,7 +34,7 @@ export class DemoService extends BaseService {
             }
         };
         filesList.forEach((file) => {
-            const url = `assets/demo_database/${file}.json`;
+            const url = `assets/demo_database/${file}.json?v=1`;
             Axios.get(url).then((response) => {
                 switch (file) {
                     case filesList[4]:
@@ -105,10 +105,12 @@ export class DemoService extends BaseService {
                 new Column('birthDate').options([COL_OPTION.NotNull]).setDataType(DATA_TYPE.DateTime),
                 new Column('photo').options([COL_OPTION.NotNull]).setDataType(DATA_TYPE.String),
                 new Column('notes').setDataType(DATA_TYPE.String),
+                new Column('state').options([COL_OPTION.NotNull]).setDataType(DATA_TYPE.String),
+                new Column('jobSuspendedFlag').options([COL_OPTION.NotNull]).setDataType(DATA_TYPE.Number)
             ]
         };
 
-        var order_details: ITable = {
+        var orderDetails: ITable = {
             name: 'OrderDetails',
             columns: [
                 new Column('orderDetailId').options([COL_OPTION.PrimaryKey, COL_OPTION.AutoIncrement]),
@@ -170,7 +172,7 @@ export class DemoService extends BaseService {
                 customers,
                 categories,
                 employees,
-                order_details,
+                orderDetails,
                 orders,
                 products,
                 shippers,
