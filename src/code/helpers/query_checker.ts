@@ -1,4 +1,4 @@
-import { API } from "jsstore";
+import { API } from "../enum";
 
 export class QueryChecker {
   query: string;
