@@ -1,3 +1,5 @@
+import { API } from "jsstore";
+
 export class QueryChecker {
   query: string;
   errMessage: string = "";
@@ -9,7 +11,6 @@ export class QueryChecker {
   }
 
   isQryValid() {
-    
     const notAllowedKeywords = ["Instance", "then", "catch"];
     notAllowedKeywords.every((item) => {
       if (this.query.indexOf(item) >= 0) {
@@ -20,19 +21,19 @@ export class QueryChecker {
     });
 
     if (this.errMessage.length === 0) {
-      const api = this.query.substring(0, this.query.indexOf("("));
+      const api: API = this.query.substring(0, this.query.indexOf("(")) as API;
       var option: string | null = "";
       const allowedApi = [
-        "select",
-        "insert",
-        "remove",
-        "update",
-        "isDbExist",
-        "clear",
-        "count",
-        "dropDb",
-        "bulkInsert",
-        "exportJson"
+        API.Select,
+        API.Insert,
+        API.Remove,
+        API.Update,
+        API.IsDbExist,
+        API.Clear,
+        API.Count,
+        API.DropDb,
+        API.BulkInsert,
+        API.ExportJson
       ];
       if (allowedApi.indexOf(api) >= 0) {
         option = this.query.substring(this.query.indexOf("(") + 1, this.query.lastIndexOf(")"));
@@ -43,23 +44,23 @@ export class QueryChecker {
           option = null;
         }
         switch (api) {
-          case "select":
-          case "insert":
-          case "remove":
-          case "count":
-          case "update":
-          case "bulkInsert":
-          case "exportJson":
+          case API.Select:
+          case API.Insert:
+          case API.Remove:
+          case API.Count:
+          case API.Update:
+          case API.BulkInsert:
+          case API.ExportJson:
             if (typeof option !== "object") {
               this.errMessage = "invalid syntax, please take a look at doc for api - '" + api + "'";
             }
             break;
-          case "clear":
+          case API.Clear:
             if (typeof option !== "string") {
               this.errMessage = "invalid syntax, please take a look at doc for api - '" + api + "'";
             }
             break;
-          case "isDbExist":
+          case API.IsDbExist:
             if (typeof option !== "string" || typeof option !== "object") {
               this.errMessage = "invalid syntax, please take a look at doc for api - '" + api + "'";
             }

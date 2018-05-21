@@ -1,5 +1,5 @@
 /*!
- * @license :idbstudio - V1.0.2 - 16/05/2018
+ * @license :idbstudio - V1.0.2 - 21/05/2018
  * https://github.com/ujjwalguptaofficial/JsStore
  * Copyright (c) 2018 @Ujjwal Gupta; Licensed undefined
  */
@@ -11434,7 +11434,7 @@ var ServiceHelper = /** @class */ (function () {
 /***/ (function(module, exports) {
 
 /*!
- * @license :jsstore - V2.0.5 - 16/05/2018
+ * @license :jsstore - V2.0.5 - 21/05/2018
  * https://github.com/ujjwalguptaofficial/JsStore
  * Copyright (c) 2018 @Ujjwal Gupta; Licensed MIT
  */
@@ -12171,7 +12171,7 @@ var Column = /** @class */ (function () {
 /* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__.p + "scripts/jsstore.worker.d039a16af5f55b1dd1f95d4a294027c7.js";
+module.exports = __webpack_require__.p + "scripts/jsstore.worker.6f12b9571063617eeb83def5d3e5944b.js";
 
 /***/ }),
 /* 37 */
@@ -13103,6 +13103,9 @@ exports.push([module.i, "\n#divResult {\n  overflow-y: scroll;\n  overflow-x: hi
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "QueryChecker", function() { return QueryChecker; });
+/* harmony import */ var jsstore__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(35);
+/* harmony import */ var jsstore__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jsstore__WEBPACK_IMPORTED_MODULE_0__);
+
 var QueryChecker = /** @class */ (function () {
     function QueryChecker(query) {
         this.errMessage = "";
@@ -13123,16 +13126,16 @@ var QueryChecker = /** @class */ (function () {
             var api = this.query.substring(0, this.query.indexOf("("));
             var option = "";
             var allowedApi = [
-                "select",
-                "insert",
-                "remove",
-                "update",
-                "isDbExist",
-                "clear",
-                "count",
-                "dropDb",
-                "bulkInsert",
-                "exportJson"
+                jsstore__WEBPACK_IMPORTED_MODULE_0__["API"].Select,
+                jsstore__WEBPACK_IMPORTED_MODULE_0__["API"].Insert,
+                jsstore__WEBPACK_IMPORTED_MODULE_0__["API"].Remove,
+                jsstore__WEBPACK_IMPORTED_MODULE_0__["API"].Update,
+                jsstore__WEBPACK_IMPORTED_MODULE_0__["API"].IsDbExist,
+                jsstore__WEBPACK_IMPORTED_MODULE_0__["API"].Clear,
+                jsstore__WEBPACK_IMPORTED_MODULE_0__["API"].Count,
+                jsstore__WEBPACK_IMPORTED_MODULE_0__["API"].DropDb,
+                jsstore__WEBPACK_IMPORTED_MODULE_0__["API"].BulkInsert,
+                jsstore__WEBPACK_IMPORTED_MODULE_0__["API"].ExportJson
             ];
             if (allowedApi.indexOf(api) >= 0) {
                 option = this.query.substring(this.query.indexOf("(") + 1, this.query.lastIndexOf(")"));
@@ -13143,23 +13146,23 @@ var QueryChecker = /** @class */ (function () {
                     option = null;
                 }
                 switch (api) {
-                    case "select":
-                    case "insert":
-                    case "remove":
-                    case "count":
-                    case "update":
-                    case "bulkInsert":
-                    case "exportJson":
+                    case jsstore__WEBPACK_IMPORTED_MODULE_0__["API"].Select:
+                    case jsstore__WEBPACK_IMPORTED_MODULE_0__["API"].Insert:
+                    case jsstore__WEBPACK_IMPORTED_MODULE_0__["API"].Remove:
+                    case jsstore__WEBPACK_IMPORTED_MODULE_0__["API"].Count:
+                    case jsstore__WEBPACK_IMPORTED_MODULE_0__["API"].Update:
+                    case jsstore__WEBPACK_IMPORTED_MODULE_0__["API"].BulkInsert:
+                    case jsstore__WEBPACK_IMPORTED_MODULE_0__["API"].ExportJson:
                         if (typeof option !== "object") {
                             this.errMessage = "invalid syntax, please take a look at doc for api - '" + api + "'";
                         }
                         break;
-                    case "clear":
+                    case jsstore__WEBPACK_IMPORTED_MODULE_0__["API"].Clear:
                         if (typeof option !== "string") {
                             this.errMessage = "invalid syntax, please take a look at doc for api - '" + api + "'";
                         }
                         break;
-                    case "isDbExist":
+                    case jsstore__WEBPACK_IMPORTED_MODULE_0__["API"].IsDbExist:
                         if (typeof option !== "string" || typeof option !== "object") {
                             this.errMessage = "invalid syntax, please take a look at doc for api - '" + api + "'";
                         }
