@@ -5,11 +5,10 @@ export class MainService extends BaseService {
         super();
     }
 
-    public executeQry(api: string, option: object): Promise<IResult> {
-        var startTime = performance.now();
+    public executeQry(query: string): Promise<IResult> {
         return new Promise((resolve, reject) => {
-            // console.log('api:' + api + 'option:' + option);
-            this.connection[api](option).then(qryResult => {
+            var startTime = performance.now();
+            this.evaluateQry_(query).then(qryResult => {
                 // console.log(qryResult);
                 const idbResult: IResult = {
                     timeTaken: (performance.now() - startTime) / 1000,
@@ -19,6 +18,21 @@ export class MainService extends BaseService {
             }).catch(err => {
                 reject(err);
             });
+            // console.log('api:' + api + 'option:' + option);
+            // this.connection[api](option).then(qryResult => {
+            //     // console.log(qryResult);
+            //     const idbResult: IResult = {
+            //         timeTaken: (performance.now() - startTime) / 1000,
+            //         result: qryResult
+            //     };
+            //     resolve(idbResult);
+            // }).catch(err => {
+            //     reject(err);
+            // });
         });
+    }
+
+    private evaluateQry_(query: string) {
+        return eval(query);
     }
 }

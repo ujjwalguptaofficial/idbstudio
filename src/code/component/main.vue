@@ -55,6 +55,7 @@ export default class Main extends Vue {
     vueEvent.$on("on_error", errMessage => {
       alert(errMessage);
     });
+
     vueEvent.$on("page_loaded", dbName => {
       this.selectedDb = dbName;
       this.togglePageLoadedStatus();

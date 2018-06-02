@@ -71,7 +71,7 @@ export default class DbInfo extends Vue {
   dbInfo: IDataBase = {
     tables: []
   } as any;
-  selectedDb!:string;
+  selectedDb!: string;
   dbList: string[] = [];
 
   constructor() {
@@ -79,7 +79,7 @@ export default class DbInfo extends Vue {
     this.catchEvent();
   }
 
-  mounted(){
+  mounted() {
     this.setDbInfo();
   }
 
@@ -92,11 +92,13 @@ export default class DbInfo extends Vue {
     mainService.getDbList().then(list => {
       this.dbList = list;
     });
-    vueEvent.$emit('db_info_loaded');
+    vueEvent.$emit("db_info_loaded");
   }
 
   catchEvent() {
-   
+    vueEvent.$on("get_current_db", () => {
+      vueEvent.$emit("take_current_db", this.selectedDb);
+    });
   }
 }
 </script>

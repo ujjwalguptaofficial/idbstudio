@@ -16,10 +16,16 @@
         </b-button>
       </b-button-group>
       <input type="file" id="inputFileOpener" class="hide" accept='.js' @change="onFileOpened"/>
-      <b-button variant="success" @click="executeQry" class="float-right">
-          Execute
-          <i class="fas fa-play"></i>
+      <b-button-group class="float-right">
+        <b-button variant="success" @click="executeQry">
+            Execute
+            <i class="fas fa-play"></i>
         </b-button>
+        <b-button variant="success" @click="getLink">
+            Get Link
+            <i class="fas fa-link"></i>
+        </b-button>
+      </b-button-group>
     </div>
     <b-card no-body id="divEditorContainer">
       <b-tabs card>
@@ -47,6 +53,7 @@
         </table>
       </div>
     </transition>
+    <component v-bind:is="currentModalComponent"></component>
   </div>
 </template>
 
@@ -57,19 +64,22 @@ import { vueEvent } from "../common_var";
 import Editor from "./editor.vue";
 import QueryResult from "./qry_result.vue";
 import { MainService } from "../service/main_service";
-import { QueryChecker } from "../helpers/query_checker";
+import { QueryHelper } from "../helpers/query_helper";
 import { IResult } from "../interfaces/result";
 import { DomHelper } from "../helpers/dom_helper";
 import { Util } from "../util";
 import { DATA_TYPE } from "jsstore";
+import QueryLink from "./query_link.vue";
 
 @Component({
   components: {
+    QueryLink,
     Editor,
     QueryResult
   }
 })
 export default class QueryExecutor extends Vue {
+  currentModalComponent = "";
   tabCount = 0;
   timeTaken = "";
   resultCount: number | string = "";
@@ -78,6 +88,7 @@ export default class QueryExecutor extends Vue {
   resultContainerHeight;
   isResultVisible = false;
   isQueryExecuting = false;
+  isSaveBtnClicked = false;
 
   constructor() {
     super();
@@ -131,6 +142,7 @@ export default class QueryExecutor extends Vue {
 
   save() {
     this.isQueryExecuting = false;
+    this.isSaveBtnClicked = true;
     this.fireGetQry();
   }
 
@@ -163,10 +175,10 @@ export default class QueryExecutor extends Vue {
   }
 
   evaluateAndShowResult(qry: string) {
-    var queryCheckerInstance = new QueryChecker(qry);
-    if (queryCheckerInstance.isQryValid()) {
+    var queryHelperInstance = new QueryHelper(qry);
+    if (queryHelperInstance.isQryValid()) {
       new MainService()
-        .executeQry(queryCheckerInstance.api, queryCheckerInstance.option)
+        .executeQry(queryHelperInstance.getQuery())
         .then(qryResult => {
           this.showResultInfo = true;
           this.resultCount =
@@ -181,15 +193,17 @@ export default class QueryExecutor extends Vue {
           vueEvent.$emit("on_error", err.message);
         });
     } else {
-      vueEvent.$emit("on_error", queryCheckerInstance.errMessage);
+      vueEvent.$emit("on_error", queryHelperInstance.errMessage);
     }
   }
 
   takeQuery(qry: string) {
     if (this.isQueryExecuting) {
       this.evaluateAndShowResult(qry);
-    } else {
+    } else if (this.isSaveBtnClicked) {
       this.saveQuery(qry);
+    } else {
+      this.showLinkModal(qry);
     }
   }
 
@@ -203,6 +217,20 @@ export default class QueryExecutor extends Vue {
     vueEvent.$on("get_editor_height", () => {
       vueEvent.$emit("set_editor_height", this.editorHeight);
     });
+  }
+
+  showLinkModal(qry: string) {
+    qry = encodeURIComponent(qry);
+    setTimeout(() => {
+      vueEvent.$emit("show_get_link_modal", qry);
+    }, 200);
+  }
+
+  getLink() {
+    this.currentModalComponent = "QueryLink";
+    this.isQueryExecuting = false;
+    this.isSaveBtnClicked = false;
+    this.fireGetQry();
   }
 }
 </script>
