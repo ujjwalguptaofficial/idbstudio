@@ -42,7 +42,6 @@
     "bootstrap": "^4.1.1",
     "bootstrap-vue": "^2.0.0-rc.2",
     "jsstore": "^2.0.6",
-    "vue": "^2.5.13",
-    "vue-clipboard": "0.0.1"
+    "vue": "^2.5.13"
   }
 }

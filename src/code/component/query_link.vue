@@ -1,17 +1,11 @@
 <template>
     <div>
-      <b-modal ref="modalGetLink" title="IDBStudio" ok-only>
-        <p>
-          Append this string to IDBStudio link -
-        </p>
+      <b-modal no-enforce-focus @shown="shown" id="divLinkModal" ref="modalGetLink" title="IDBStudio">
           <p class="my-4" id="linkContent">
-          <b-form-input type="text" v-model="txtLink"></b-form-input>
+            <b-form-input type="text" id="txtLink" v-model="link"></b-form-input>
           </p>
           <div slot="modal-footer" class="w-100">
-            <b-btn size="md" class="float-right" variant="primary" 
-             v-clipboard:copy="txtLink"
-      v-clipboard:success="onCopy"
-      v-clipboard:error="onCopyError">
+            <b-btn size="md" class="btn-copy float-right" variant="primary" @click="copy">
               Copy
             </b-btn>
           </div>
@@ -23,28 +17,30 @@ import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import { vueEvent } from "../common_var";
 import { DomHelper } from "../helpers/dom_helper";
+declare var ClipboardJS;
 
 @Component
 export default class QueryLink extends Vue {
-  txtLink = "";
+  link = "";
   constructor() {
     super();
     this.catchEvents();
   }
 
   showModal(qry: string) {
-    this.txtLink = qry;
+    this.link = qry;
     vueEvent.$emit("get_current_db");
   }
 
   onGetDb(dbName: string) {
-    this.txtLink = `?db=${dbName}&query=${this.txtLink}`;
     (this.$refs.modalGetLink as any).show();
+    this.link = `${window.location.origin}?db=${dbName}&query=${this.link}`;
   }
 
-  onCopy() {
-    // var $ = new DomHelper();
-    // $.copyToClipboard($.getById("linkContent").innerText);
+  copy() {
+    var $ = new DomHelper();
+    ($.qry("#txtLink")! as HTMLInputElement).select();
+    document.execCommand("copy");
     (this.$refs.modalGetLink as any).hide();
   }
 

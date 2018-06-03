@@ -1,5 +1,5 @@
 /*!
- * @license :idbstudio - V1.0.4 - 02/06/2018
+ * @license :idbstudio - V1.0.4 - 03/06/2018
  * https://github.com/ujjwalguptaofficial/JsStore
  * Copyright (c) 2018 @Ujjwal Gupta; Licensed undefined
  */
@@ -87,9 +87,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var bootstrap_dist_css_bootstrap_min_css__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(bootstrap_dist_css_bootstrap_min_css__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var bootstrap_vue_dist_bootstrap_vue_min_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(287);
 /* harmony import */ var bootstrap_vue_dist_bootstrap_vue_min_css__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(bootstrap_vue_dist_bootstrap_vue_min_css__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var vue_clipboard__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(289);
-/* harmony import */ var vue_clipboard__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(vue_clipboard__WEBPACK_IMPORTED_MODULE_5__);
-
 
 
 
@@ -97,8 +94,6 @@ __webpack_require__.r(__webpack_exports__);
 
 // Configure vue setting
 vue__WEBPACK_IMPORTED_MODULE_0__["default"].use(bootstrap_vue__WEBPACK_IMPORTED_MODULE_2__["default"]);
-vue__WEBPACK_IMPORTED_MODULE_0__["default"].use(vue_clipboard__WEBPACK_IMPORTED_MODULE_5___default.a);
-vue__WEBPACK_IMPORTED_MODULE_0__["default"].config.keyCodes.f5 = 116;
 // Initiate vue app
 var vue_app = new vue__WEBPACK_IMPORTED_MODULE_0__["default"]({
     el: '#app',
@@ -13321,24 +13316,28 @@ var render = function() {
     [
       _c(
         "b-modal",
-        { ref: "modalGetLink", attrs: { title: "IDBStudio", "ok-only": "" } },
+        {
+          ref: "modalGetLink",
+          attrs: {
+            "no-enforce-focus": "",
+            id: "divLinkModal",
+            title: "IDBStudio"
+          },
+          on: { shown: _vm.shown }
+        },
         [
-          _c("p", [
-            _vm._v("\n      Append this string to IDBStudio link -\n    ")
-          ]),
-          _vm._v(" "),
           _c(
             "p",
             { staticClass: "my-4", attrs: { id: "linkContent" } },
             [
               _c("b-form-input", {
-                attrs: { type: "text" },
+                attrs: { type: "text", id: "txtLink" },
                 model: {
-                  value: _vm.txtLink,
+                  value: _vm.link,
                   callback: function($$v) {
-                    _vm.txtLink = $$v
+                    _vm.link = $$v
                   },
-                  expression: "txtLink"
+                  expression: "link"
                 }
               })
             ],
@@ -13356,31 +13355,9 @@ var render = function() {
               _c(
                 "b-btn",
                 {
-                  directives: [
-                    {
-                      name: "clipboard",
-                      rawName: "v-clipboard:copy",
-                      value: _vm.txtLink,
-                      expression: "txtLink",
-                      arg: "copy"
-                    },
-                    {
-                      name: "clipboard",
-                      rawName: "v-clipboard:success",
-                      value: _vm.onCopy,
-                      expression: "onCopy",
-                      arg: "success"
-                    },
-                    {
-                      name: "clipboard",
-                      rawName: "v-clipboard:error",
-                      value: _vm.onCopyError,
-                      expression: "onCopyError",
-                      arg: "error"
-                    }
-                  ],
-                  staticClass: "float-right",
-                  attrs: { size: "md", variant: "primary" }
+                  staticClass: "btn-copy float-right",
+                  attrs: { size: "md", variant: "primary" },
+                  on: { click: _vm.copy }
                 },
                 [_vm._v("\n          Copy\n        ")]
               )
@@ -13417,6 +13394,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(11);
 /* harmony import */ var vue_property_decorator__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _common_var__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(19);
+/* harmony import */ var _helpers_dom_helper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(50);
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -13436,25 +13414,27 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 
 
 
+
 var QueryLink = /** @class */ (function (_super) {
     __extends(QueryLink, _super);
     function QueryLink() {
         var _this = _super.call(this) || this;
-        _this.txtLink = "";
+        _this.link = "";
         _this.catchEvents();
         return _this;
     }
     QueryLink.prototype.showModal = function (qry) {
-        this.txtLink = qry;
+        this.link = qry;
         _common_var__WEBPACK_IMPORTED_MODULE_2__["vueEvent"].$emit("get_current_db");
     };
     QueryLink.prototype.onGetDb = function (dbName) {
-        this.txtLink = "?db=" + dbName + "&query=" + this.txtLink;
         this.$refs.modalGetLink.show();
+        this.link = window.location.origin + "?db=" + dbName + "&query=" + this.link;
     };
-    QueryLink.prototype.onCopy = function () {
-        // var $ = new DomHelper();
-        // $.copyToClipboard($.getById("linkContent").innerText);
+    QueryLink.prototype.copy = function () {
+        var $ = new _helpers_dom_helper__WEBPACK_IMPORTED_MODULE_3__["DomHelper"]();
+        $.qry("#txtLink").select();
+        document.execCommand("copy");
         this.$refs.modalGetLink.hide();
     };
     QueryLink.prototype.onCopyError = function () {
@@ -34829,145 +34809,6 @@ exports = module.exports = __webpack_require__(23)(false);
 exports.push([module.i, ".input-group>.input-group-append:last-child>.b-dropdown:not(:last-child):not(.dropdown-toggle)>.btn,.input-group>.input-group-append:not(:last-child)>.b-dropdown>.btn,.input-group>.input-group-prepend>.b-dropdown>.btn{border-top-right-radius:0;border-bottom-right-radius:0}.input-group>.input-group-append>.b-dropdown>.btn,.input-group>.input-group-prepend:first-child>.b-dropdown:not(:first-child)>.btn,.input-group>.input-group-prepend:not(:first-child)>.b-dropdown>.btn{border-top-left-radius:0;border-bottom-left-radius:0}input.form-control[type=range],input.form-control[type=color]{height:2.25rem}input.form-control.form-control-sm[type=range],input.form-control.form-control-sm[type=color]{height:1.9375rem}input.form-control.form-control-lg[type=range],input.form-control.form-control-lg[type=color]{height:3rem}input.form-control[type=color]{padding:.25rem}input.form-control.form-control-sm[type=color]{padding:.125rem}table.b-table.b-table-fixed{table-layout:fixed}table.b-table[aria-busy=false]{opacity:1}table.b-table[aria-busy=true]{opacity:.6}table.b-table>tfoot>tr>th,table.b-table>thead>tr>th{position:relative}table.b-table>tfoot>tr>th.sorting,table.b-table>thead>tr>th.sorting{padding-right:1.5em;cursor:pointer}table.b-table>tfoot>tr>th.sorting::after,table.b-table>tfoot>tr>th.sorting::before,table.b-table>thead>tr>th.sorting::after,table.b-table>thead>tr>th.sorting::before{position:absolute;bottom:0;display:block;opacity:.4;padding-bottom:inherit;font-size:inherit;line-height:180%}table.b-table>tfoot>tr>th.sorting::before,table.b-table>thead>tr>th.sorting::before{right:.75em;content:'\\2191'}table.b-table>tfoot>tr>th.sorting::after,table.b-table>thead>tr>th.sorting::after{right:.25em;content:'\\2193'}table.b-table>tfoot>tr>th.sorting_asc::after,table.b-table>tfoot>tr>th.sorting_desc::before,table.b-table>thead>tr>th.sorting_asc::after,table.b-table>thead>tr>th.sorting_desc::before{opacity:1}table.b-table.b-table-stacked{width:100%}table.b-table.b-table-stacked,table.b-table.b-table-stacked>caption,table.b-table.b-table-stacked>tbody,table.b-table.b-table-stacked>tbody>tr,table.b-table.b-table-stacked>tbody>tr>td,table.b-table.b-table-stacked>tbody>tr>th{display:block}table.b-table.b-table-stacked>tbody>tr.b-table-bottom-row,table.b-table.b-table-stacked>tbody>tr.b-table-top-row,table.b-table.b-table-stacked>tfoot,table.b-table.b-table-stacked>thead{display:none}table.b-table.b-table-stacked>tbody>tr>:first-child{border-top-width:.4rem}table.b-table.b-table-stacked>tbody>tr>[data-label]{display:grid;grid-template-columns:40% auto;grid-gap:.25rem 1rem}table.b-table.b-table-stacked>tbody>tr>[data-label]::before{content:attr(data-label);display:inline;text-align:right;overflow-wrap:break-word;font-weight:700;font-style:normal}@media all and (max-width:575.99px){table.b-table.b-table-stacked-sm{width:100%}table.b-table.b-table-stacked-sm,table.b-table.b-table-stacked-sm>caption,table.b-table.b-table-stacked-sm>tbody,table.b-table.b-table-stacked-sm>tbody>tr,table.b-table.b-table-stacked-sm>tbody>tr>td,table.b-table.b-table-stacked-sm>tbody>tr>th{display:block}table.b-table.b-table-stacked-sm>tbody>tr.b-table-bottom-row,table.b-table.b-table-stacked-sm>tbody>tr.b-table-top-row,table.b-table.b-table-stacked-sm>tfoot,table.b-table.b-table-stacked-sm>thead{display:none}table.b-table.b-table-stacked-sm>tbody>tr>:first-child{border-top-width:.4rem}table.b-table.b-table-stacked-sm>tbody>tr>[data-label]{display:grid;grid-template-columns:40% auto;grid-gap:.25rem 1rem}table.b-table.b-table-stacked-sm>tbody>tr>[data-label]::before{content:attr(data-label);display:inline;text-align:right;overflow-wrap:break-word;font-weight:700;font-style:normal}}@media all and (max-width:767.99px){table.b-table.b-table-stacked-md{width:100%}table.b-table.b-table-stacked-md,table.b-table.b-table-stacked-md>caption,table.b-table.b-table-stacked-md>tbody,table.b-table.b-table-stacked-md>tbody>tr,table.b-table.b-table-stacked-md>tbody>tr>td,table.b-table.b-table-stacked-md>tbody>tr>th{display:block}table.b-table.b-table-stacked-md>tbody>tr.b-table-bottom-row,table.b-table.b-table-stacked-md>tbody>tr.b-table-top-row,table.b-table.b-table-stacked-md>tfoot,table.b-table.b-table-stacked-md>thead{display:none}table.b-table.b-table-stacked-md>tbody>tr>:first-child{border-top-width:.4rem}table.b-table.b-table-stacked-md>tbody>tr>[data-label]{display:grid;grid-template-columns:40% auto;grid-gap:.25rem 1rem}table.b-table.b-table-stacked-md>tbody>tr>[data-label]::before{content:attr(data-label);display:inline;text-align:right;overflow-wrap:break-word;font-weight:700;font-style:normal}}@media all and (max-width:991.99px){table.b-table.b-table-stacked-lg{width:100%}table.b-table.b-table-stacked-lg,table.b-table.b-table-stacked-lg>caption,table.b-table.b-table-stacked-lg>tbody,table.b-table.b-table-stacked-lg>tbody>tr,table.b-table.b-table-stacked-lg>tbody>tr>td,table.b-table.b-table-stacked-lg>tbody>tr>th{display:block}table.b-table.b-table-stacked-lg>tbody>tr.b-table-bottom-row,table.b-table.b-table-stacked-lg>tbody>tr.b-table-top-row,table.b-table.b-table-stacked-lg>tfoot,table.b-table.b-table-stacked-lg>thead{display:none}table.b-table.b-table-stacked-lg>tbody>tr>:first-child{border-top-width:.4rem}table.b-table.b-table-stacked-lg>tbody>tr>[data-label]{display:grid;grid-template-columns:40% auto;grid-gap:.25rem 1rem}table.b-table.b-table-stacked-lg>tbody>tr>[data-label]::before{content:attr(data-label);display:inline;text-align:right;overflow-wrap:break-word;font-weight:700;font-style:normal}}@media all and (max-width:1199.99px){table.b-table.b-table-stacked-xl{width:100%}table.b-table.b-table-stacked-xl,table.b-table.b-table-stacked-xl>caption,table.b-table.b-table-stacked-xl>tbody,table.b-table.b-table-stacked-xl>tbody>tr,table.b-table.b-table-stacked-xl>tbody>tr>td,table.b-table.b-table-stacked-xl>tbody>tr>th{display:block}table.b-table.b-table-stacked-xl>tbody>tr.b-table-bottom-row,table.b-table.b-table-stacked-xl>tbody>tr.b-table-top-row,table.b-table.b-table-stacked-xl>tfoot,table.b-table.b-table-stacked-xl>thead{display:none}table.b-table.b-table-stacked-xl>tbody>tr>:first-child{border-top-width:.4rem}table.b-table.b-table-stacked-xl>tbody>tr>[data-label]{display:grid;grid-template-columns:40% auto;grid-gap:.25rem 1rem}table.b-table.b-table-stacked-xl>tbody>tr>[data-label]::before{content:attr(data-label);display:inline;text-align:right;overflow-wrap:break-word;font-weight:700;font-style:normal}}table.b-table>tbody>tr.b-table-details>td{border-top:none}", ""]);
 
 // exports
-
-
-/***/ }),
-/* 289 */
-/***/ (function(module, exports, __webpack_require__) {
-
-;(function() {
-  var vueClipboard = {}
-
-  vueClipboard.install = function(Vue) {
-    Vue.directive('clipboard', {
-      params: ['success', 'error'],
-      acceptStatement: true,
-      bind: function() {
-        //bind callback
-
-        this.arg = this.arg === 'cut' ? 'cut' : 'copy'
-        Vue.util.on(this.el, 'click', this.handler.bind(this))
-      },
-
-      update: function(data) {
-        this.text = data
-      },
-
-      unbind: function() {
-        Vue.util.off(this.el, 'click', this.handler)
-        this.removeFake()
-      },
-
-      handler: function() {
-        this.selectFake(this.text)
-        if (this.arg === 'cut') {
-          this.vm[this.expression] = ''
-        }
-      },
-
-      /**
-       * Creates a fake textarea element, sets its value from `text` property,
-       * and makes a selection on it.
-       */
-
-      selectFake: function(text) {
-        var isRTL = document.documentElement.getAttribute('dir') == 'rtl'
-
-        this.removeFake()
-
-        this.fakeHandler = document.body.addEventListener('click', this.removeFake.bind(this))
-
-        this.fakeElem = document.createElement('textarea')
-        // Prevent zooming on iOS
-        this.fakeElem.style.fontSize = '12pt'
-        // Reset box model
-        this.fakeElem.style.border = '0'
-        this.fakeElem.style.padding = '0'
-        this.fakeElem.style.margin = '0'
-        // Move element out of screen horizontally
-        this.fakeElem.style.position = 'fixed'
-        this.fakeElem.style[isRTL ? 'right' : 'left'] = '-9999px'
-        // Move element to the same position vertically
-        this.fakeElem.style.top = (window.pageYOffset || document.documentElement.scrollTop) + 'px'
-        this.fakeElem.setAttribute('readonly', '')
-        this.fakeElem.value = text
-
-        document.body.appendChild(this.fakeElem)
-
-        this.selectedText = select(this.fakeElem)
-
-        this.copyText()
-      },
-
-      /**
-       * Only removes the fake element after another click event, that way
-       * a user can hit `Ctrl+C` to copy because selection still exists.
-       */
-      removeFake: function() {
-        if (this.fakeHandler) {
-          document.body.removeEventListener('click')
-          this.fakeHandler = null
-        }
-
-        if (this.fakeElem) {
-          document.body.removeChild(this.fakeElem)
-          this.fakeElem = null
-        }
-      },
-
-      /**
-       * Executes the copy operation based on the current selection.
-       */
-      copyText: function() {
-        var succeeded
-        try {
-          succeeded = document.execCommand('copy')
-        } catch (err) {
-          succeeded = false
-        }
-        this.handleResult(succeeded)
-      },
-      handleResult: function(succeeded) {
-        if (succeeded) {
-          this.params.success && this.params.success()
-        } else {
-          this.params.error && this.params.error()
-        }
-      }
-    })
-  }
-
-  function select(element) {
-    var selectedText
-
-    if (element.nodeName === 'INPUT' || element.nodeName === 'TEXTAREA') {
-      element.focus()
-      element.setSelectionRange(0, element.value.length)
-
-      selectedText = element.value
-    } else {
-      if (element.hasAttribute('contenteditable')) {
-        element.focus()
-      }
-
-      var selection = window.getSelection()
-      var range = document.createRange()
-
-      range.selectNodeContents(element)
-      selection.removeAllRanges()
-      selection.addRange(range)
-
-      selectedText = selection.toString()
-    }
-
-    return selectedText
-  }
-
-  if (true) {
-    module.exports = vueClipboard
-  } else {}
-
-})()
 
 
 /***/ })
