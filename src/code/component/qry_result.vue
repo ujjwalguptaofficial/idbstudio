@@ -1,6 +1,7 @@
 <template>
   <div id="divResult" class="hide">
-    <table v-html="resultInnerHtml" class="table"></table>
+    <table v-show="errorMessage.length==0" v-html="resultInnerHtml" class="table"></table>
+    <span v-show="errorMessage.length>0" style="color:red;">{{errorMessage}}</span>
   </div>
 </template>
 
@@ -14,6 +15,7 @@ import { DATA_TYPE } from "jsstore";
 @Component
 export default class QueryResult extends Vue {
   resultInnerHtml = "";
+  errorMessage = "";
   constructor() {
     super();
     this.catchEvents();
@@ -59,33 +61,37 @@ export default class QueryResult extends Vue {
         this.resultInnerHtml = result;
         break;
       default:
-        alert("invalid result");
+        this.resultInnerHtml = JSON.stringify(result);
     }
+  }
+
+  printError(error) {
+    this.errorMessage = JSON.stringify(error);
   }
 
   catchEvents() {
     vueEvent.$on("on_qry_result", this.printResult);
+    vueEvent.$on("on_qry_error", this.printError);
   }
 }
 </script>
 <style lang="scss">
-#divResult
-{
-    overflow-y: scroll;
-    overflow-x: hidden;
-    min-height:200px;
-    width: 99%;
-    left: 5px;
-    position: relative;
-    right: 5px;
-    background-color: white;
+#divResult {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  min-height: 200px;
+  width: 99%;
+  left: 5px;
+  position: relative;
+  right: 5px;
+  background-color: white;
 
-    .table tr td, .table tr th{
-     border:1px inset;
-     text-align:center;
-    }
+  .table tr td,
+  .table tr th {
+    border: 1px inset;
+    text-align: center;
+  }
 }
-
 </style>
 
 

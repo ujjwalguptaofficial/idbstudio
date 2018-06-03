@@ -1,5 +1,5 @@
 /*!
- * @license :idbstudio - V1.0.4 - 03/06/2018
+ * @license :idbstudio - V1.1.0 - 03/06/2018
  * https://github.com/ujjwalguptaofficial/JsStore
  * Copyright (c) 2018 @Ujjwal Gupta; Licensed undefined
  */
@@ -11365,17 +11365,6 @@ var MainService = /** @class */ (function (_super) {
             }).catch(function (err) {
                 reject(err);
             });
-            // console.log('api:' + api + 'option:' + option);
-            // this.connection[api](option).then(qryResult => {
-            //     // console.log(qryResult);
-            //     const idbResult: IResult = {
-            //         timeTaken: (performance.now() - startTime) / 1000,
-            //         result: qryResult
-            //     };
-            //     resolve(idbResult);
-            // }).catch(err => {
-            //     reject(err);
-            // });
         });
     };
     MainService.prototype.evaluateQry_ = function (query) {
@@ -12581,21 +12570,26 @@ var QueryExecutor = /** @class */ (function (_super) {
         var _this = this;
         var queryHelperInstance = new _helpers_query_helper__WEBPACK_IMPORTED_MODULE_6__["QueryHelper"](qry);
         if (queryHelperInstance.isQryValid()) {
-            new _service_main_service__WEBPACK_IMPORTED_MODULE_5__["MainService"]()
-                .executeQry(queryHelperInstance.getQuery())
-                .then(function (qryResult) {
-                _this.showResultInfo = true;
-                _this.resultCount =
-                    _util__WEBPACK_IMPORTED_MODULE_8__["Util"].getType(qryResult.result) === jsstore__WEBPACK_IMPORTED_MODULE_9__["DATA_TYPE"].Array
-                        ? qryResult.result.length
-                        : 0;
-                _this.timeTaken = qryResult.timeTaken.toString();
-                _common_var__WEBPACK_IMPORTED_MODULE_2__["vueEvent"].$emit("on_qry_result", qryResult.result);
-            })
-                .catch(function (err) {
-                console.log(err);
-                _common_var__WEBPACK_IMPORTED_MODULE_2__["vueEvent"].$emit("on_error", err.message);
-            });
+            var query = queryHelperInstance.getQuery();
+            if (queryHelperInstance.errMessage.length == 0) {
+                new _service_main_service__WEBPACK_IMPORTED_MODULE_5__["MainService"]()
+                    .executeQry(query)
+                    .then(function (qryResult) {
+                    _this.showResultInfo = true;
+                    _this.resultCount =
+                        _util__WEBPACK_IMPORTED_MODULE_8__["Util"].getType(qryResult.result) === jsstore__WEBPACK_IMPORTED_MODULE_9__["DATA_TYPE"].Array
+                            ? qryResult.result.length
+                            : 0;
+                    _this.timeTaken = qryResult.timeTaken.toString();
+                    _common_var__WEBPACK_IMPORTED_MODULE_2__["vueEvent"].$emit("on_qry_result", qryResult.result);
+                })
+                    .catch(function (err) {
+                    _common_var__WEBPACK_IMPORTED_MODULE_2__["vueEvent"].$emit("on_qry_error", err);
+                });
+            }
+            else {
+                _common_var__WEBPACK_IMPORTED_MODULE_2__["vueEvent"].$emit("on_error", queryHelperInstance.errMessage);
+            }
         }
         else {
             _common_var__WEBPACK_IMPORTED_MODULE_2__["vueEvent"].$emit("on_error", queryHelperInstance.errMessage);
@@ -13007,9 +13001,33 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "hide", attrs: { id: "divResult" } }, [
     _c("table", {
+      directives: [
+        {
+          name: "show",
+          rawName: "v-show",
+          value: _vm.errorMessage.length == 0,
+          expression: "errorMessage.length==0"
+        }
+      ],
       staticClass: "table",
       domProps: { innerHTML: _vm._s(_vm.resultInnerHtml) }
-    })
+    }),
+    _vm._v(" "),
+    _c(
+      "span",
+      {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.errorMessage.length > 0,
+            expression: "errorMessage.length>0"
+          }
+        ],
+        staticStyle: { color: "red" }
+      },
+      [_vm._v(_vm._s(_vm.errorMessage))]
+    )
   ])
 }
 var staticRenderFns = []
@@ -13065,6 +13083,7 @@ var QueryResult = /** @class */ (function (_super) {
     function QueryResult() {
         var _this = _super.call(this) || this;
         _this.resultInnerHtml = "";
+        _this.errorMessage = "";
         _this.catchEvents();
         return _this;
     }
@@ -13106,11 +13125,15 @@ var QueryResult = /** @class */ (function (_super) {
                 this.resultInnerHtml = result;
                 break;
             default:
-                alert("invalid result");
+                this.resultInnerHtml = JSON.stringify(result);
         }
+    };
+    QueryResult.prototype.printError = function (error) {
+        this.errorMessage = JSON.stringify(error);
     };
     QueryResult.prototype.catchEvents = function () {
         _common_var__WEBPACK_IMPORTED_MODULE_2__["vueEvent"].$on("on_qry_result", this.printResult);
+        _common_var__WEBPACK_IMPORTED_MODULE_2__["vueEvent"].$on("on_qry_error", this.printError);
     };
     QueryResult = __decorate([
         vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__["Component"]
@@ -13156,7 +13179,7 @@ exports = module.exports = __webpack_require__(23)(false);
 
 
 // module
-exports.push([module.i, "\n#divResult {\n  overflow-y: scroll;\n  overflow-x: hidden;\n  min-height: 200px;\n  width: 99%;\n  left: 5px;\n  position: relative;\n  right: 5px;\n  background-color: white;\n}\n#divResult .table tr td, #divResult .table tr th {\n    border: 1px inset;\n    text-align: center;\n}\n", ""]);
+exports.push([module.i, "\n#divResult {\n  overflow-y: scroll;\n  overflow-x: hidden;\n  min-height: 200px;\n  width: 99%;\n  left: 5px;\n  position: relative;\n  right: 5px;\n  background-color: white;\n}\n#divResult .table tr td,\n  #divResult .table tr th {\n    border: 1px inset;\n    text-align: center;\n}\n", ""]);
 
 // exports
 
@@ -13178,15 +13201,19 @@ var QueryHelper = /** @class */ (function () {
     QueryHelper.prototype.getQuery = function () {
         var _this = this;
         var qry;
+        var isAnyApiFound = false;
         this.allowedApi.every(function (api) {
             var index = _this.query.indexOf(api);
             if (index >= 0) {
+                isAnyApiFound = true;
                 _this.query = _this.query.substring(0, index) + "this.connection.\n                " + _this.query.substring(index, _this.query.length);
                 return false;
             }
             return true;
         });
-        console.log(this.query);
+        if (!isAnyApiFound) {
+            this.errMessage = "No valid api was found";
+        }
         return this.query;
     };
     Object.defineProperty(QueryHelper.prototype, "allowedApi", {

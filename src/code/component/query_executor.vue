@@ -177,21 +177,25 @@ export default class QueryExecutor extends Vue {
   evaluateAndShowResult(qry: string) {
     var queryHelperInstance = new QueryHelper(qry);
     if (queryHelperInstance.isQryValid()) {
-      new MainService()
-        .executeQry(queryHelperInstance.getQuery())
-        .then(qryResult => {
-          this.showResultInfo = true;
-          this.resultCount =
-            Util.getType(qryResult.result) === DATA_TYPE.Array
-              ? qryResult.result.length
-              : 0;
-          this.timeTaken = qryResult.timeTaken.toString();
-          vueEvent.$emit("on_qry_result", qryResult.result);
-        })
-        .catch(function(err) {
-          console.log(err);
-          vueEvent.$emit("on_error", err.message);
-        });
+      const query = queryHelperInstance.getQuery();
+      if (queryHelperInstance.errMessage.length == 0) {
+        new MainService()
+          .executeQry(query)
+          .then(qryResult => {
+            this.showResultInfo = true;
+            this.resultCount =
+              Util.getType(qryResult.result) === DATA_TYPE.Array
+                ? qryResult.result.length
+                : 0;
+            this.timeTaken = qryResult.timeTaken.toString();
+            vueEvent.$emit("on_qry_result", qryResult.result);
+          })
+          .catch(function(err) {
+           vueEvent.$emit("on_qry_error", err);
+          });
+      } else {
+        vueEvent.$emit("on_error", queryHelperInstance.errMessage);
+      }
     } else {
       vueEvent.$emit("on_error", queryHelperInstance.errMessage);
     }

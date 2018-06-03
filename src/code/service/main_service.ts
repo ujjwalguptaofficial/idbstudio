@@ -18,17 +18,6 @@ export class MainService extends BaseService {
             }).catch(err => {
                 reject(err);
             });
-            // console.log('api:' + api + 'option:' + option);
-            // this.connection[api](option).then(qryResult => {
-            //     // console.log(qryResult);
-            //     const idbResult: IResult = {
-            //         timeTaken: (performance.now() - startTime) / 1000,
-            //         result: qryResult
-            //     };
-            //     resolve(idbResult);
-            // }).catch(err => {
-            //     reject(err);
-            // });
         });
     }
 
