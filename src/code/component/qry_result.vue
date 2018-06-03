@@ -22,6 +22,7 @@ export default class QueryResult extends Vue {
   }
 
   printResult(result) {
+    this.errorMessage = "";
     var resultType = Util.getType(result);
     switch (resultType) {
       case DATA_TYPE.Array:

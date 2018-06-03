@@ -1,6 +1,6 @@
 {
   "name": "idbstudio",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "scripts": {
     "lint": "tslint code/**/*.ts",
     "webpack:dev": "webpack --config webpack/webpack.dev.config.js",
