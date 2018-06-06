@@ -1,6 +1,6 @@
 {
   "name": "idbstudio",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "scripts": {
     "lint": "tslint code/**/*.ts",
     "webpack:dev": "webpack --config webpack/webpack.dev.config.js",
@@ -41,7 +41,7 @@
     "axios": "^0.18.0",
     "bootstrap": "^4.1.1",
     "bootstrap-vue": "^2.0.0-rc.2",
-    "jsstore": "^2.0.6",
+    "jsstore": "^2.1.0",
     "vue": "^2.5.13"
   }
 }

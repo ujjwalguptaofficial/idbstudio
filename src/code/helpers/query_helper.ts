@@ -10,15 +10,13 @@ export class QueryHelper {
     getQuery() {
         var qry;
         var isAnyApiFound = false;
-        this.allowedApi.every((api) => {
+        this.allowedApi.forEach((api) => {
             const index = this.query.indexOf(api);
             if (index >= 0) {
                 isAnyApiFound = true;
                 this.query = `${this.query.substring(0, index)}this.connection.
                 ${this.query.substring(index, this.query.length)}`;
-                return false;
             }
-            return true;
         });
         if (!isAnyApiFound) {
             this.errMessage = "No valid api was found";

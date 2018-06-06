@@ -1,5 +1,5 @@
 /*!
- * @license :idbstudio - V1.1.0 - 03/06/2018
+ * @license :idbstudio - V1.1.1 - 06/06/2018
  * https://github.com/ujjwalguptaofficial/JsStore
  * Copyright (c) 2018 @Ujjwal Gupta; Licensed undefined
  */
@@ -10387,6 +10387,7 @@ var render = function() {
           {
             attrs: {
               title: "fork on github",
+              target: "_blank",
               href: "https://github.com/ujjwalguptaofficial/idbstudio/fork"
             }
           },
@@ -10429,7 +10430,12 @@ var staticRenderFns = [
     return _c("li", [
       _c(
         "a",
-        { attrs: { href: "https://github.com/ujjwalguptaofficial/idbstudio" } },
+        {
+          attrs: {
+            target: "_blank",
+            href: "https://github.com/ujjwalguptaofficial/idbstudio"
+          }
+        },
         [_c("i", { staticClass: "fas fa-star" }), _vm._v(" Star")]
       )
     ])
@@ -11439,7 +11445,7 @@ var ServiceHelper = /** @class */ (function () {
 /***/ (function(module, exports) {
 
 /*!
- * @license :jsstore - V2.0.6 - 21/05/2018
+ * @license :jsstore - V2.1.0 - 03/06/2018
  * https://github.com/ujjwalguptaofficial/JsStore
  * Copyright (c) 2018 @Ujjwal Gupta; Licensed MIT
  */
@@ -11829,6 +11835,18 @@ var Instance = /** @class */ (function (_super) {
             }
         });
     };
+    /**
+     * terminate the connection
+     *
+     * @returns
+     * @memberof Instance
+     */
+    Instance.prototype.terminate = function () {
+        return this.pushApi({
+            name: _enums__WEBPACK_IMPORTED_MODULE_0__["API"].Terminate,
+            query: null
+        });
+    };
     return Instance;
 }(_instance_helper__WEBPACK_IMPORTED_MODULE_1__["InstanceHelper"]));
 
@@ -11894,6 +11912,7 @@ var API;
     API["BulkInsert"] = "bulk_insert";
     API["ExportJson"] = "export_json";
     API["ChangeLogStatus"] = "change_log_status";
+    API["Terminate"] = "terminate";
 })(API || (API = {}));
 
 
@@ -11922,7 +11941,8 @@ var InstanceHelper = /** @class */ (function () {
             _enums__WEBPACK_IMPORTED_MODULE_1__["API"].GetDbSchema,
             _enums__WEBPACK_IMPORTED_MODULE_1__["API"].Get,
             _enums__WEBPACK_IMPORTED_MODULE_1__["API"].Set,
-            _enums__WEBPACK_IMPORTED_MODULE_1__["API"].ChangeLogStatus
+            _enums__WEBPACK_IMPORTED_MODULE_1__["API"].ChangeLogStatus,
+            _enums__WEBPACK_IMPORTED_MODULE_1__["API"].Terminate
         ];
         if (worker) {
             this.worker_ = worker;
@@ -11982,29 +12002,31 @@ var InstanceHelper = /** @class */ (function () {
                 this.sendRequestToWorker_(this.requestQueue_[0]);
                 return;
             }
-            var allowedQueryIndex_1 = -1;
-            this.requestQueue_.every(function (item, index) {
-                if (_this.whiteListApi_.indexOf(item.name) >= 0) {
-                    allowedQueryIndex_1 = index;
-                    return false;
-                }
-                return true;
-            });
+            var allowedQueryIndex = this.requestQueue_.findIndex(function (item) { return _this.whiteListApi_.indexOf(item.name) >= 0; });
             // shift allowed query to zeroth index
-            if (allowedQueryIndex_1 >= 0) {
-                this.requestQueue_.splice(0, 0, this.requestQueue_.splice(allowedQueryIndex_1, 1)[0]);
+            if (allowedQueryIndex >= 0) {
+                this.requestQueue_.splice(0, 0, this.requestQueue_.splice(allowedQueryIndex, 1)[0]);
                 this.sendRequestToWorker_(this.requestQueue_[0]);
             }
         }
     };
-    InstanceHelper.prototype.sendRequestToWorker_ = function (firstRequest) {
+    InstanceHelper.prototype.sendRequestToWorker_ = function (request) {
         this.isCodeExecuting_ = true;
-        var request = {
-            name: firstRequest.name,
-            query: firstRequest.query
-        };
-        _log_helper__WEBPACK_IMPORTED_MODULE_0__["LogHelper"].log("request executing : " + firstRequest.name);
-        this.worker_.postMessage(request);
+        _log_helper__WEBPACK_IMPORTED_MODULE_0__["LogHelper"].log("request executing : " + request.name);
+        if (request.name === _enums__WEBPACK_IMPORTED_MODULE_1__["API"].Terminate) {
+            this.worker_.terminate();
+            this.isDbOpened_ = false;
+            this.processFinishedQuery_({
+                returnedValue: null
+            });
+        }
+        else {
+            var requestForWorker = {
+                name: request.name,
+                query: request.query
+            };
+            this.worker_.postMessage(requestForWorker);
+        }
     };
     return InstanceHelper;
 }());
@@ -12176,7 +12198,7 @@ var Column = /** @class */ (function () {
 /* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__.p + "scripts/jsstore.worker.c9e432643e4a769459a294092ab26a5a.js";
+module.exports = __webpack_require__.p + "scripts/jsstore.worker.4bf42a1dec1b5527f6b6d2a995bbc6a6.js";
 
 /***/ }),
 /* 37 */
@@ -13088,6 +13110,7 @@ var QueryResult = /** @class */ (function (_super) {
         return _this;
     }
     QueryResult.prototype.printResult = function (result) {
+        this.errorMessage = "";
         var resultType = _util__WEBPACK_IMPORTED_MODULE_3__["Util"].getType(result);
         switch (resultType) {
             case jsstore__WEBPACK_IMPORTED_MODULE_4__["DATA_TYPE"].Array:
@@ -13202,14 +13225,12 @@ var QueryHelper = /** @class */ (function () {
         var _this = this;
         var qry;
         var isAnyApiFound = false;
-        this.allowedApi.every(function (api) {
+        this.allowedApi.forEach(function (api) {
             var index = _this.query.indexOf(api);
             if (index >= 0) {
                 isAnyApiFound = true;
                 _this.query = _this.query.substring(0, index) + "this.connection.\n                " + _this.query.substring(index, _this.query.length);
-                return false;
             }
-            return true;
         });
         if (!isAnyApiFound) {
             this.errMessage = "No valid api was found";
@@ -13456,7 +13477,7 @@ var QueryLink = /** @class */ (function (_super) {
     };
     QueryLink.prototype.onGetDb = function (dbName) {
         this.$refs.modalGetLink.show();
-        this.link = window.location.origin + "?db=" + dbName + "&query=" + this.link;
+        this.link = "" + location.origin + location.pathname + "?db=" + dbName + "&query=" + this.link;
     };
     QueryLink.prototype.copy = function () {
         var $ = new _helpers_dom_helper__WEBPACK_IMPORTED_MODULE_3__["DomHelper"]();

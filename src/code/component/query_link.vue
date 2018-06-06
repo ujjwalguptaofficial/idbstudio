@@ -34,7 +34,9 @@ export default class QueryLink extends Vue {
 
   onGetDb(dbName: string) {
     (this.$refs.modalGetLink as any).show();
-    this.link = `${window.location.origin}?db=${dbName}&query=${this.link}`;
+    this.link = `${location.origin}${location.pathname}?db=${dbName}&query=${
+      this.link
+    }`;
   }
 
   copy() {
