@@ -8,7 +8,7 @@ const webpack = require('webpack');
 
 module.exports = [{
     name: "jsstore",
-    entry: "./code/index.ts",
+    entry: "./src/code/index.ts",
     module: {
         rules: [{
                 test: /\.ts$/,
@@ -103,7 +103,7 @@ module.exports = [{
         new HtmlWebpackPlugin({
             cache: true,
             hash: true,
-            template: './code/index.html',
+            template: './src/code/index.html',
             minify: {
                 collapseWhitespace: true,
                 removeComments: true,
@@ -113,7 +113,7 @@ module.exports = [{
             }
         }),
         new CopyPlugin([{
-            from: './code/assets/',
+            from: './src/code/assets/',
             to: 'assets/'
         }]),
         // new webpack.optimize.CommonsChunkPlugin({

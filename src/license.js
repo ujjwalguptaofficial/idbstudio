@@ -1,4 +1,4 @@
-const package = require('./package.json');
+const package = require('../package.json');
 var today = new Date();
 var dd = today.getDate();
 var mm = today.getMonth() + 1; //January is 0!
@@ -12,5 +12,5 @@ if (mm < 10) {
 var today = dd + '/' + mm + '/' + yyyy;
 
 exports.banner = `@license :${package.name} - V${package.version} - ${today}
-https://github.com/ujjwalguptaofficial/JsStore
+https://github.com/ujjwalguptaofficial/idbstudio
 Copyright (c) ${yyyy} @Ujjwal Gupta; Licensed ${package.license}`;
