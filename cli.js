@@ -12,7 +12,7 @@ option('-f --folder [folderName]', 'Take the folder name', 'idbstudio').
 parse(process.argv);
 
 if (program.start) {
-    console.log('starting IDBStudio');
+    console.log('Starting IDBStudio');
     express.initExpress(program.port);
 } else if (program.generate) {
     const timer = loader.start('Generating...');
