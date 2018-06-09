@@ -119,6 +119,7 @@ export default class QueryExecutor extends Vue {
       vueEvent.$emit("set_qry", text);
     };
     reader.readAsText(input.files[0]);
+    event.target.value = null;
   }
 
   open() {
@@ -191,7 +192,7 @@ export default class QueryExecutor extends Vue {
             vueEvent.$emit("on_qry_result", qryResult.result);
           })
           .catch(function(err) {
-           vueEvent.$emit("on_qry_error", err);
+            vueEvent.$emit("on_qry_error", err);
           });
       } else {
         vueEvent.$emit("on_error", queryHelperInstance.errMessage);

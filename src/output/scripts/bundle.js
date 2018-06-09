@@ -11362,7 +11362,7 @@ var MainService = /** @class */ (function (_super) {
         return new Promise(function (resolve, reject) {
             var startTime = performance.now();
             _this.evaluateQry_(query).then(function (qryResult) {
-                console.log(qryResult);
+                // console.log(qryResult);
                 var idbResult = {
                     timeTaken: (performance.now() - startTime) / 1000,
                     result: qryResult
@@ -11445,7 +11445,7 @@ var ServiceHelper = /** @class */ (function () {
 /***/ (function(module, exports) {
 
 /*!
- * @license :jsstore - V2.1.0 - 03/06/2018
+ * @license :jsstore - V2.1.2 - 09/06/2018
  * https://github.com/ujjwalguptaofficial/JsStore
  * Copyright (c) 2018 @Ujjwal Gupta; Licensed MIT
  */
@@ -11749,10 +11749,10 @@ var Instance = /** @class */ (function (_super) {
      * @memberof Instance
      */
     Instance.prototype.setLogStatus = function (status) {
-        _config__WEBPACK_IMPORTED_MODULE_2__["Config"]._isLogEnabled = status ? status : _config__WEBPACK_IMPORTED_MODULE_2__["Config"]._isLogEnabled;
+        _config__WEBPACK_IMPORTED_MODULE_2__["Config"].isLogEnabled = status ? status : _config__WEBPACK_IMPORTED_MODULE_2__["Config"].isLogEnabled;
         this.pushApi({
             name: _enums__WEBPACK_IMPORTED_MODULE_0__["API"].ChangeLogStatus,
-            query: _config__WEBPACK_IMPORTED_MODULE_2__["Config"]._isLogEnabled
+            query: _config__WEBPACK_IMPORTED_MODULE_2__["Config"].isLogEnabled
         });
     };
     /**
@@ -11925,6 +11925,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "InstanceHelper", function() { return InstanceHelper; });
 /* harmony import */ var _log_helper__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4);
 /* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
+/* harmony import */ var _config__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
+
 
 
 var InstanceHelper = /** @class */ (function () {
@@ -11949,8 +11951,8 @@ var InstanceHelper = /** @class */ (function () {
             this.worker_.onmessage = this.onMessageFromWorker_.bind(this);
         }
         else {
-            var err = new _log_helper__WEBPACK_IMPORTED_MODULE_0__["LogHelper"](_enums__WEBPACK_IMPORTED_MODULE_1__["ERROR_TYPE"].WorkerNotSupplied);
-            err.throw();
+            _config__WEBPACK_IMPORTED_MODULE_2__["Config"].isRuningInWorker = false;
+            this.queryExecutor_ = new JsStoreWorker.QueryExecutor(this.processFinishedQuery_.bind(this));
         }
     }
     InstanceHelper.prototype.onMessageFromWorker_ = function (msg) {
@@ -12014,7 +12016,9 @@ var InstanceHelper = /** @class */ (function () {
         this.isCodeExecuting_ = true;
         _log_helper__WEBPACK_IMPORTED_MODULE_0__["LogHelper"].log("request executing : " + request.name);
         if (request.name === _enums__WEBPACK_IMPORTED_MODULE_1__["API"].Terminate) {
-            this.worker_.terminate();
+            if (_config__WEBPACK_IMPORTED_MODULE_2__["Config"].isRuningInWorker === true) {
+                this.worker_.terminate();
+            }
             this.isDbOpened_ = false;
             this.processFinishedQuery_({
                 returnedValue: null
@@ -12025,7 +12029,12 @@ var InstanceHelper = /** @class */ (function () {
                 name: request.name,
                 query: request.query
             };
-            this.worker_.postMessage(requestForWorker);
+            if (_config__WEBPACK_IMPORTED_MODULE_2__["Config"].isRuningInWorker === true) {
+                this.worker_.postMessage(requestForWorker);
+            }
+            else {
+                this.queryExecutor_.checkConnectionAndExecuteLogic(requestForWorker);
+            }
         }
     };
     return InstanceHelper;
@@ -12055,7 +12064,7 @@ var LogHelper = /** @class */ (function () {
         throw this.get();
     };
     LogHelper.log = function (msg) {
-        if (_config__WEBPACK_IMPORTED_MODULE_1__["Config"]._isLogEnabled) {
+        if (_config__WEBPACK_IMPORTED_MODULE_1__["Config"].isLogEnabled) {
             console.log(msg);
         }
     };
@@ -12101,7 +12110,8 @@ __webpack_require__.r(__webpack_exports__);
 var Config = /** @class */ (function () {
     function Config() {
     }
-    Config._isLogEnabled = false;
+    Config.isLogEnabled = false;
+    Config.isRuningInWorker = true;
     return Config;
 }());
 
@@ -12121,7 +12131,7 @@ __webpack_require__.r(__webpack_exports__);
  *
  */
 var enableLog = function () {
-    _config__WEBPACK_IMPORTED_MODULE_0__["Config"]._isLogEnabled = true;
+    _config__WEBPACK_IMPORTED_MODULE_0__["Config"].isLogEnabled = true;
 };
 
 
@@ -12198,7 +12208,7 @@ var Column = /** @class */ (function () {
 /* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__.p + "scripts/jsstore.worker.4bf42a1dec1b5527f6b6d2a995bbc6a6.js";
+module.exports = __webpack_require__.p + "scripts/jsstore.worker.4cea64730bbba118bc099e3d7edddf15.js";
 
 /***/ }),
 /* 37 */
@@ -12541,6 +12551,7 @@ var QueryExecutor = /** @class */ (function (_super) {
             _common_var__WEBPACK_IMPORTED_MODULE_2__["vueEvent"].$emit("set_qry", text);
         };
         reader.readAsText(input.files[0]);
+        event.target.value = null;
     };
     QueryExecutor.prototype.open = function () {
         var $ = new _helpers_dom_helper__WEBPACK_IMPORTED_MODULE_7__["DomHelper"]();
@@ -12809,6 +12820,7 @@ var Editor = /** @class */ (function (_super) {
     Editor.prototype.setQry = function (qry) {
         var $ = new _helpers_dom_helper__WEBPACK_IMPORTED_MODULE_3__["DomHelper"]();
         var el = $.getById(this.id);
+        // debugger;
         if (!$.isHidden($.parent(el))) {
             this.editor.setValue(qry);
         }
@@ -13226,6 +13238,7 @@ var QueryHelper = /** @class */ (function () {
         var qry;
         var isAnyApiFound = false;
         this.allowedApi.forEach(function (api) {
+            // every api call will have a open paranthesis after
             var index = _this.query.indexOf(api + "(");
             if (index >= 0) {
                 isAnyApiFound = true;
