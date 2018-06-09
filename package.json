@@ -1,6 +1,12 @@
 {
   "name": "idbstudio",
   "version": "1.2.0",
+  "keywords": [
+    "idbstudio",
+    "jsstore",
+    "indexeddb",
+    "indexeddb-tool"
+  ],
   "bin": {
     "idbstudio": "./cli.js"
   },

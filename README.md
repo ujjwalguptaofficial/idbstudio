@@ -1,4 +1,6 @@
-# IDBStudio
+[![npm version](https://badge.fury.io/js/idbstudio.svg)](https://badge.fury.io/js/idbstudio)
+
+# Overview
 
 IDBStudio is a cli tool for indexeddb library jsstore. It helps users to execute , debug and learn jsstore query. 
 
