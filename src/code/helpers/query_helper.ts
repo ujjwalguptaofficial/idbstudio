@@ -11,7 +11,8 @@ export class QueryHelper {
         var qry;
         var isAnyApiFound = false;
         this.allowedApi.forEach((api) => {
-            const index = this.query.indexOf(api);
+            // every api call will have a open paranthesis after
+            const index = this.query.indexOf(api + "(");
             if (index >= 0) {
                 isAnyApiFound = true;
                 this.query = `${this.query.substring(0, index)}this.connection.

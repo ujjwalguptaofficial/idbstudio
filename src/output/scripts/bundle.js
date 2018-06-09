@@ -1,5 +1,5 @@
 /*!
- * @license :idbstudio - V1.1.1 - 06/06/2018
+ * @license :idbstudio - V1.1.2 - 09/06/2018
  * https://github.com/ujjwalguptaofficial/JsStore
  * Copyright (c) 2018 @Ujjwal Gupta; Licensed undefined
  */
@@ -11362,7 +11362,7 @@ var MainService = /** @class */ (function (_super) {
         return new Promise(function (resolve, reject) {
             var startTime = performance.now();
             _this.evaluateQry_(query).then(function (qryResult) {
-                // console.log(qryResult);
+                console.log(qryResult);
                 var idbResult = {
                     timeTaken: (performance.now() - startTime) / 1000,
                     result: qryResult
@@ -13226,7 +13226,7 @@ var QueryHelper = /** @class */ (function () {
         var qry;
         var isAnyApiFound = false;
         this.allowedApi.forEach(function (api) {
-            var index = _this.query.indexOf(api);
+            var index = _this.query.indexOf(api + "(");
             if (index >= 0) {
                 isAnyApiFound = true;
                 _this.query = _this.query.substring(0, index) + "this.connection.\n                " + _this.query.substring(index, _this.query.length);
