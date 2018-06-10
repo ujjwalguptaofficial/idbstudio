@@ -8740,6 +8740,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _common_var__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(19);
 /* harmony import */ var _css_common_css__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(109);
 /* harmony import */ var _css_common_css__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_css_common_css__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(52);
+/* harmony import */ var jsstore__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(35);
+/* harmony import */ var jsstore__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(jsstore__WEBPACK_IMPORTED_MODULE_9__);
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -8764,6 +8767,8 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 
 
 
+
+
 ace.config.set("workerPath", "assets/scripts");
 ace.config.set("themePath", "assets/scripts");
 var Main = /** @class */ (function (_super) {
@@ -8772,8 +8777,15 @@ var Main = /** @class */ (function (_super) {
         var _this = _super.call(this) || this;
         _this.isPageLoaded = false;
         _this.catchEvent();
+        _this.setLogFromUrl();
         return _this;
     }
+    Main.prototype.setLogFromUrl = function () {
+        var log = _util__WEBPACK_IMPORTED_MODULE_8__["Util"].getParameterByName("log");
+        if (!_util__WEBPACK_IMPORTED_MODULE_8__["Util"].isNull(log)) {
+            jsstore__WEBPACK_IMPORTED_MODULE_9__["Config"].isLogEnabled = log == "1" ? true : false;
+        }
+    };
     Main.prototype.togglePageLoadedStatus = function () {
         this.isPageLoaded = !this.isPageLoaded;
     };
@@ -11402,6 +11414,8 @@ var DbInfo = /** @class */ (function (_super) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MainService", function() { return MainService; });
 /* harmony import */ var _base_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(33);
+/* harmony import */ var jsstore__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(35);
+/* harmony import */ var jsstore__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(jsstore__WEBPACK_IMPORTED_MODULE_1__);
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -11413,6 +11427,7 @@ var __extends = (undefined && undefined.__extends) || (function () {
     };
 })();
 
+
 var MainService = /** @class */ (function (_super) {
     __extends(MainService, _super);
     function MainService() {
@@ -11420,15 +11435,20 @@ var MainService = /** @class */ (function (_super) {
     }
     MainService.prototype.executeQry = function (query) {
         var _this = this;
+        if (jsstore__WEBPACK_IMPORTED_MODULE_1__["Config"].isLogEnabled === true) {
+            console.log("qry from service - " + query);
+        }
         return new Promise(function (resolve, reject) {
             var startTime = performance.now();
             _this.evaluateQry_(query).then(function (qryResult) {
-                // console.log(qryResult);
                 var idbResult = {
                     timeTaken: (performance.now() - startTime) / 1000,
                     result: qryResult
                 };
                 resolve(idbResult);
+                if (jsstore__WEBPACK_IMPORTED_MODULE_1__["Config"].isLogEnabled === true) {
+                    console.log("result from service evaluated");
+                }
             }).catch(function (err) {
                 reject(err);
             });
@@ -11450,10 +11470,13 @@ var MainService = /** @class */ (function (_super) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BaseService", function() { return BaseService; });
 /* harmony import */ var _service_helper__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(34);
+/* harmony import */ var jsstore__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(35);
+/* harmony import */ var jsstore__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(jsstore__WEBPACK_IMPORTED_MODULE_1__);
+
 
 var BaseService = /** @class */ (function () {
     function BaseService() {
-        this.connection.setLogStatus(true);
+        this.connection.setLogStatus(jsstore__WEBPACK_IMPORTED_MODULE_1__["Config"].isLogEnabled);
     }
     BaseService.prototype.openDb = function (dbName) {
         return this.connection.openDb(dbName);
@@ -12997,6 +13020,9 @@ var Util = /** @class */ (function () {
         }
         return decodeURIComponent(results[2].replace(/\+/g, " "));
     };
+    Util.isNull = function (value) {
+        return value == null || value.length == 0;
+    };
     return Util;
 }());
 
@@ -13854,7 +13880,7 @@ var Start = /** @class */ (function (_super) {
     };
     Start.prototype.setDbNameFromQryString = function (dbList) {
         var dbName = _util__WEBPACK_IMPORTED_MODULE_4__["Util"].getParameterByName("db");
-        if (dbName != null && dbName.length > 0) {
+        if (!_util__WEBPACK_IMPORTED_MODULE_4__["Util"].isNull(dbName)) {
             var index = dbList.findIndex(function (qry) { return qry === dbName; });
             // console.log(index);
             if (index >= 0) {

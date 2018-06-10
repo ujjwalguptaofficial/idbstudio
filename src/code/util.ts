@@ -25,4 +25,8 @@ export class Util {
         if (!results[2]) { return ''; }
         return decodeURIComponent(results[2].replace(/\+/g, " "));
     }
+
+    static isNull(value: null | string) {
+        return value == null || value.length == 0;
+    }
 }

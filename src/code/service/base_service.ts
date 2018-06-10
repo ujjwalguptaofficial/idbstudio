@@ -1,9 +1,10 @@
 
 import { ServiceHelper } from './service_helper';
+import { Config } from 'jsstore';
 export class BaseService {
 
     constructor() {
-        this.connection.setLogStatus(true);
+        this.connection.setLogStatus(Config.isLogEnabled);
     }
 
     public openDb(dbName: string) {

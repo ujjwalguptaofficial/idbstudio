@@ -26,6 +26,8 @@ import QueryExecutor from "./query_executor.vue";
 import Start from "./start.vue";
 import { vueEvent } from "../common_var";
 import "../css/common.css";
+import { Util } from "../util";
+import { Config } from "jsstore";
 
 declare var ace;
 ace.config.set("workerPath", "assets/scripts");
@@ -45,6 +47,14 @@ export default class Main extends Vue {
   constructor() {
     super();
     this.catchEvent();
+    this.setLogFromUrl();
+  }
+
+  setLogFromUrl() {
+    var log = Util.getParameterByName("log");
+    if (!Util.isNull(log)) {
+      Config.isLogEnabled = log == "1" ? true : false;
+    }
   }
 
   togglePageLoadedStatus() {
