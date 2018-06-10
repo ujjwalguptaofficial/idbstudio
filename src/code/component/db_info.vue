@@ -10,7 +10,8 @@
       <tbody>
         <tr v-for="table in dbInfo.tables" :key="table.name">
           <td>
-            <span v-b-toggle="table.name" class="table-name">{{table.name}}
+            <span @contextmenu.prevent="$refs.ctxMenu.open($event, {table: table.name})" v-b-toggle="table.name" class="table-name">
+              {{table.name}}
               <i class="fas fa-plus"></i>
             </span>
             <b-collapse v-bind:id="table.name" class="ml-4">
@@ -51,6 +52,12 @@
       </tbody>
       <tfoot></tfoot>
     </table>
+    <context-menu id="context-menu" ref="ctxMenu"
+             @ctx-open="onCtxOpen" @ctx-cancel="onCtxOff">
+            <li class="ctx-item" @click="select100">Select 100 Record</li>
+            <li class="ctx-item" @click="countTotal">Count Total Record</li>
+            <li class="ctx-item" @click="exportJson">Export As Json</li>
+    </context-menu>
   </div>
 </template>
 
@@ -61,10 +68,14 @@ import { MainService } from "../service/main_service";
 import { IFormSelect } from "../interfaces/form_select";
 import { IDataBase } from "jsstore";
 import { vueEvent } from "../common_var";
+import contextMenu from "vue-context-menu";
 
 @Component({
   props: {
     selectedDb: String
+  },
+  components: {
+    contextMenu
   }
 })
 export default class DbInfo extends Vue {
@@ -73,6 +84,7 @@ export default class DbInfo extends Vue {
   } as any;
   selectedDb!: string;
   dbList: string[] = [];
+  menuData = {};
 
   constructor() {
     super();
@@ -81,6 +93,14 @@ export default class DbInfo extends Vue {
 
   mounted() {
     this.setDbInfo();
+  }
+
+  onCtxOpen(value) {
+    this.menuData = value;
+  }
+
+  onCtxOff() {
+    this.menuData = {};
   }
 
   setDbInfo() {
@@ -100,6 +120,31 @@ export default class DbInfo extends Vue {
       vueEvent.$emit("take_current_db", this.selectedDb);
     });
   }
+
+  select100() {
+    var table = (this.menuData as any).table;
+    var qry = `select({
+      from:'${table}',
+      limit:100\n})`;
+    vueEvent.$emit("set_qry", qry);
+    vueEvent.$emit("run_qry");
+  }
+
+  countTotal() {
+    var table = (this.menuData as any).table;
+    var qry = `count({
+      from:'${table}'\n})`;
+    vueEvent.$emit("set_qry", qry);
+    vueEvent.$emit("run_qry");
+  }
+
+  exportJson(){
+    var table = (this.menuData as any).table;
+    var qry = `exportJson({
+      from:'${table}'\n})`;
+    vueEvent.$emit("set_qry", qry);
+    vueEvent.$emit("run_qry");
+  }
 }
 </script>
 <style lang="scss" scoped>
@@ -113,6 +158,7 @@ export default class DbInfo extends Vue {
   font-family: ABeeZee;
   padding-bottom: 5px;
   display: inline-block;
+  cursor: pointer;
 }
 .column-name {
   font-size: 15px;

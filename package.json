@@ -1,6 +1,16 @@
 {
   "name": "idbstudio",
   "version": "1.2.1",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ujjwalguptaofficial/idbstudio.git"
+  },
+  "author": "Ujjwal Gupta",
+  "license": "APACHE-2.0",
+  "bugs": {
+    "url": "https://github.com/ujjwalguptaofficial/idbstudio/issues"
+  },
+  "homepage": "https://github.com/ujjwalguptaofficial/idbstudio#readme",
   "keywords": [
     "idbstudio",
     "jsstore",
@@ -55,6 +65,7 @@
     "fs-extra": "^6.0.1",
     "jsstore": "^2.1.2",
     "loading-indicator": "^2.0.0",
-    "vue": "^2.5.13"
+    "vue": "^2.5.13",
+    "vue-context-menu": "^2.0.6"
   }
 }

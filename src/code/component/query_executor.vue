@@ -217,11 +217,13 @@ export default class QueryExecutor extends Vue {
   }
 
   catchEvents() {
-    vueEvent.$on("db_info_loaded", this.createNewTab);
-    vueEvent.$on("take_qry", this.takeQuery);
-    vueEvent.$on("get_editor_height", () => {
-      vueEvent.$emit("set_editor_height", this.editorHeight);
-    });
+    vueEvent
+      .$on("db_info_loaded", this.createNewTab)
+      .$on("take_qry", this.takeQuery)
+      .$on("get_editor_height", () => {
+        vueEvent.$emit("set_editor_height", this.editorHeight);
+      })
+      .$on("run_qry", this.executeQry);
   }
 
   showLinkModal(qry: string) {
