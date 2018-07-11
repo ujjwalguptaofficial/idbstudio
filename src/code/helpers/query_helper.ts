@@ -7,7 +7,7 @@ export class QueryHelper {
         this.query = query;
     }
 
-    getQuery() {
+    validateAndModifyQry() {
         var qry;
         var isAnyApiFound = false;
         this.allowedApi.forEach((api) => {
@@ -15,14 +15,14 @@ export class QueryHelper {
             const index = this.query.indexOf(api + "(");
             if (index >= 0) {
                 isAnyApiFound = true;
-                this.query = `${this.query.substring(0, index)}this.connection.
+                this.query = `${this.query.substring(0, index)}con.
                 ${this.query.substring(index, this.query.length)}`;
             }
         });
         if (!isAnyApiFound) {
             this.errMessage = "No valid api was found";
         }
-        return this.query;
+        return !this.errMessage.length;
     }
 
     get allowedApi() {
@@ -36,19 +36,19 @@ export class QueryHelper {
             API.Count,
             API.DropDb,
             API.BulkInsert,
-            API.ExportJson
+            API.ExportJson,
+            API.Transaction
         ];
     }
 
-    isQryValid() {
-        const notAllowedKeywords = ["Instance", "then", "catch"];
-        notAllowedKeywords.every((item) => {
-            if (this.query.indexOf(item) >= 0) {
-                this.errMessage = `keyword: '${item}' is not allowed, only write code for api call`;
-                return false;
-            }
+    private isQryValid_() {
+        const fn = eval(this.query);
+        if (typeof fn.then === 'function') {
             return true;
-        });
-        return !this.errMessage.length;
+        }
+        else {
+            this.errMessage = "The query should return a promise";
+        }
+        return false;
     }
 } 

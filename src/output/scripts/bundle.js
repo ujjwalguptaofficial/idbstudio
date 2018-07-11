@@ -1,5 +1,5 @@
 /*!
- * @license :idbstudio - V1.2.1 - 10/06/2018
+ * @license :idbstudio - V1.2.2 - 11/07/2018
  * https://github.com/ujjwalguptaofficial/idbstudio
  * Copyright (c) 2018 @Ujjwal Gupta; Licensed APACHE-2.0
  */
@@ -11438,6 +11438,7 @@ var MainService = /** @class */ (function (_super) {
         if (jsstore__WEBPACK_IMPORTED_MODULE_1__["Config"].isLogEnabled === true) {
             console.log("qry from service - " + query);
         }
+        var con = this.connection;
         return new Promise(function (resolve, reject) {
             var startTime = performance.now();
             _this.evaluateQry_(query).then(function (qryResult) {
@@ -11511,17 +11512,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ServiceHelper", function() { return ServiceHelper; });
 /* harmony import */ var jsstore__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(35);
 /* harmony import */ var jsstore__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jsstore__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var file_loader_name_scripts_name_hash_js_jsstore_dist_jsstore_worker_min_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(36);
-/* harmony import */ var file_loader_name_scripts_name_hash_js_jsstore_dist_jsstore_worker_min_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(file_loader_name_scripts_name_hash_js_jsstore_dist_jsstore_worker_min_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var file_loader_name_scripts_name_hash_js_jsstore_dist_jsstore_worker_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(36);
+/* harmony import */ var file_loader_name_scripts_name_hash_js_jsstore_dist_jsstore_worker_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(file_loader_name_scripts_name_hash_js_jsstore_dist_jsstore_worker_js__WEBPACK_IMPORTED_MODULE_1__);
 
 
 var ServiceHelper = /** @class */ (function () {
     function ServiceHelper() {
     }
-    ServiceHelper.idbCon = new jsstore__WEBPACK_IMPORTED_MODULE_0__["Instance"](new Worker(file_loader_name_scripts_name_hash_js_jsstore_dist_jsstore_worker_min_js__WEBPACK_IMPORTED_MODULE_1__));
+    ServiceHelper.idbCon = new jsstore__WEBPACK_IMPORTED_MODULE_0__["Instance"](new Worker(file_loader_name_scripts_name_hash_js_jsstore_dist_jsstore_worker_js__WEBPACK_IMPORTED_MODULE_1__));
     return ServiceHelper;
 }());
 
+window.con = ServiceHelper.idbCon;
 
 
 /***/ }),
@@ -11529,7 +11531,7 @@ var ServiceHelper = /** @class */ (function () {
 /***/ (function(module, exports) {
 
 /*!
- * @license :jsstore - V2.1.2 - 09/06/2018
+ * @license :jsstore - V2.2.1 - 01/07/2018
  * https://github.com/ujjwalguptaofficial/JsStore
  * Copyright (c) 2018 @Ujjwal Gupta; Licensed MIT
  */
@@ -11931,6 +11933,20 @@ var Instance = /** @class */ (function (_super) {
             query: null
         });
     };
+    /**
+     * execute the transaction
+     *
+     * @param {ITranscationQry} query
+     * @returns
+     * @memberof Instance
+     */
+    Instance.prototype.transaction = function (query) {
+        query.logic = query.logic.toString();
+        return this.pushApi({
+            name: _enums__WEBPACK_IMPORTED_MODULE_0__["API"].Transaction,
+            query: query
+        });
+    };
     return Instance;
 }(_instance_helper__WEBPACK_IMPORTED_MODULE_1__["InstanceHelper"]));
 
@@ -11997,6 +12013,7 @@ var API;
     API["ExportJson"] = "export_json";
     API["ChangeLogStatus"] = "change_log_status";
     API["Terminate"] = "terminate";
+    API["Transaction"] = "transaction";
 })(API || (API = {}));
 
 
@@ -12292,7 +12309,7 @@ var Column = /** @class */ (function () {
 /* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__.p + "scripts/jsstore.worker.min.86e3c8e8ff529b5eaee0edee0e771a2b.js";
+module.exports = __webpack_require__.p + "scripts/jsstore.worker.4048421cf4853f428aa9a85486d71967.js";
 
 /***/ }),
 /* 37 */
@@ -12692,27 +12709,22 @@ var QueryExecutor = /** @class */ (function (_super) {
     QueryExecutor.prototype.evaluateAndShowResult = function (qry) {
         var _this = this;
         var queryHelperInstance = new _helpers_query_helper__WEBPACK_IMPORTED_MODULE_6__["QueryHelper"](qry);
-        if (queryHelperInstance.isQryValid()) {
-            var query = queryHelperInstance.getQuery();
-            if (queryHelperInstance.errMessage.length == 0) {
-                new _service_main_service__WEBPACK_IMPORTED_MODULE_5__["MainService"]()
-                    .executeQry(query)
-                    .then(function (qryResult) {
-                    _this.showResultInfo = true;
-                    _this.resultCount =
-                        _util__WEBPACK_IMPORTED_MODULE_8__["Util"].getType(qryResult.result) === jsstore__WEBPACK_IMPORTED_MODULE_9__["DATA_TYPE"].Array
-                            ? qryResult.result.length
-                            : 0;
-                    _this.timeTaken = qryResult.timeTaken.toString();
-                    _common_var__WEBPACK_IMPORTED_MODULE_2__["vueEvent"].$emit("on_qry_result", qryResult.result);
-                })
-                    .catch(function (err) {
-                    _common_var__WEBPACK_IMPORTED_MODULE_2__["vueEvent"].$emit("on_qry_error", err);
-                });
-            }
-            else {
-                _common_var__WEBPACK_IMPORTED_MODULE_2__["vueEvent"].$emit("on_error", queryHelperInstance.errMessage);
-            }
+        if (queryHelperInstance.validateAndModifyQry()) {
+            var query = queryHelperInstance.query;
+            new _service_main_service__WEBPACK_IMPORTED_MODULE_5__["MainService"]()
+                .executeQry(query)
+                .then(function (qryResult) {
+                _this.showResultInfo = true;
+                _this.resultCount =
+                    _util__WEBPACK_IMPORTED_MODULE_8__["Util"].getType(qryResult.result) === jsstore__WEBPACK_IMPORTED_MODULE_9__["DATA_TYPE"].Array
+                        ? qryResult.result.length
+                        : 0;
+                _this.timeTaken = qryResult.timeTaken.toString();
+                _common_var__WEBPACK_IMPORTED_MODULE_2__["vueEvent"].$emit("on_qry_result", qryResult.result);
+            })
+                .catch(function (err) {
+                _common_var__WEBPACK_IMPORTED_MODULE_2__["vueEvent"].$emit("on_qry_error", err);
+            });
         }
         else {
             _common_var__WEBPACK_IMPORTED_MODULE_2__["vueEvent"].$emit("on_error", queryHelperInstance.errMessage);
@@ -13328,7 +13340,7 @@ var QueryHelper = /** @class */ (function () {
         this.errMessage = "";
         this.query = query;
     }
-    QueryHelper.prototype.getQuery = function () {
+    QueryHelper.prototype.validateAndModifyQry = function () {
         var _this = this;
         var qry;
         var isAnyApiFound = false;
@@ -13337,13 +13349,13 @@ var QueryHelper = /** @class */ (function () {
             var index = _this.query.indexOf(api + "(");
             if (index >= 0) {
                 isAnyApiFound = true;
-                _this.query = _this.query.substring(0, index) + "this.connection.\n                " + _this.query.substring(index, _this.query.length);
+                _this.query = _this.query.substring(0, index) + "con.\n                " + _this.query.substring(index, _this.query.length);
             }
         });
         if (!isAnyApiFound) {
             this.errMessage = "No valid api was found";
         }
-        return this.query;
+        return !this.errMessage.length;
     };
     Object.defineProperty(QueryHelper.prototype, "allowedApi", {
         get: function () {
@@ -13357,23 +13369,22 @@ var QueryHelper = /** @class */ (function () {
                 _enum__WEBPACK_IMPORTED_MODULE_0__["API"].Count,
                 _enum__WEBPACK_IMPORTED_MODULE_0__["API"].DropDb,
                 _enum__WEBPACK_IMPORTED_MODULE_0__["API"].BulkInsert,
-                _enum__WEBPACK_IMPORTED_MODULE_0__["API"].ExportJson
+                _enum__WEBPACK_IMPORTED_MODULE_0__["API"].ExportJson,
+                _enum__WEBPACK_IMPORTED_MODULE_0__["API"].Transaction
             ];
         },
         enumerable: true,
         configurable: true
     });
-    QueryHelper.prototype.isQryValid = function () {
-        var _this = this;
-        var notAllowedKeywords = ["Instance", "then", "catch"];
-        notAllowedKeywords.every(function (item) {
-            if (_this.query.indexOf(item) >= 0) {
-                _this.errMessage = "keyword: '" + item + "' is not allowed, only write code for api call";
-                return false;
-            }
+    QueryHelper.prototype.isQryValid_ = function () {
+        var fn = eval(this.query);
+        if (typeof fn.then === 'function') {
             return true;
-        });
-        return !this.errMessage.length;
+        }
+        else {
+            this.errMessage = "The query should return a promise";
+        }
+        return false;
     };
     return QueryHelper;
 }());
@@ -13407,6 +13418,7 @@ var API;
     API["BulkInsert"] = "bulkInsert";
     API["ExportJson"] = "exportJson";
     API["ChangeLogStatus"] = "changeLogStatus";
+    API["Transaction"] = "transaction";
 })(API || (API = {}));
 
 

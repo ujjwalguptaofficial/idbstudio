@@ -10,6 +10,7 @@ export class MainService extends BaseService {
         if (Config.isLogEnabled === true) {
             console.log("qry from service - " + query);
         }
+        const con = this.connection;
         return new Promise((resolve, reject) => {
             var startTime = performance.now();
             this.evaluateQry_(query).then(qryResult => {
