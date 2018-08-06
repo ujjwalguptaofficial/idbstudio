@@ -10,6 +10,7 @@ import { Component } from "vue-property-decorator";
 import { vueEvent } from "../common_var";
 import { DomHelper } from "../helpers/dom_helper";
 import { Util } from "../util";
+import { js_beautify } from "js-beautify";
 
 declare var ace;
 @Component({
@@ -29,11 +30,15 @@ export default class Editor extends Vue {
     this.editor = ace.edit(this.id);
     this.editor.setTheme("ace/theme/eclipse");
     this.editor.session.setMode("ace/mode/javascript");
+    this.editor.onPaste = value => {
+      value = js_beautify(value);
+      this.editor.setValue(value);
+    };
   }
 
   mounted() {
     this.createEditor();
-    vueEvent.$emit('get_editor_height');
+    vueEvent.$emit("get_editor_height");
     if (this.id === "editor1") {
       const query = Util.getParameterByName("query");
       if (query != null && query.length > 0) {
@@ -50,7 +55,7 @@ export default class Editor extends Vue {
     }
   }
 
-  setQry(qry){
+  setQry(qry) {
     const $ = new DomHelper();
     const el = $.getById(this.id);
     // debugger;
@@ -59,15 +64,15 @@ export default class Editor extends Vue {
     }
   }
 
-  setHeight(height){
+  setHeight(height) {
     var $ = new DomHelper();
-    $.getById(this.id).style.height = height+'px';
+    $.getById(this.id).style.height = height + "px";
   }
 
   catchEvent() {
     vueEvent.$on("get_qry", this.getQry);
-    vueEvent.$on('set_editor_height',this.setHeight);
-    vueEvent.$on('set_qry',this.setQry);
+    vueEvent.$on("set_editor_height", this.setHeight);
+    vueEvent.$on("set_qry", this.setQry);
   }
 }
 </script>

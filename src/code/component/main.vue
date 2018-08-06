@@ -6,7 +6,7 @@
     <Menu></Menu>
     <div style="border-top:5px solid #777adb;width: 100%;"></div>
     <div class="col-sm-3">
-      <DbInfo v-bind:selectedDb="selectedDb"></DbInfo>
+      <DbInfo v-bind:db="selectedDb"></DbInfo>
     </div>
     <div class="col" id="divQueryExecutorContainer">
       <QueryExecutor></QueryExecutor>

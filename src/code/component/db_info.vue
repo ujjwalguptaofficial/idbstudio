@@ -1,9 +1,9 @@
 <template>
   <div>
     <!-- <div >{{dbInfo.name}}</div> -->
-  <b-form-select v-model="selectedDb" class="mb-3 db-list">
+    <b-form-select v-model="selectedDb" class="mb-3 db-list" @change.native="onDbChange">
       <option value="null">--Select Database--</option>
-      <option v-for="db in dbList" :key="db"  :value="db">{{db}}</option>
+      <option v-for="db in dbList" :key="db" :value="db">{{db}}</option>
     </b-form-select>
     <table>
       <thead></thead>
@@ -52,11 +52,10 @@
       </tbody>
       <tfoot></tfoot>
     </table>
-    <context-menu id="context-menu" ref="ctxMenu"
-             @ctx-open="onCtxOpen" @ctx-cancel="onCtxOff">
-            <li class="ctx-item" @click="select100">Select 100 Record</li>
-            <li class="ctx-item" @click="countTotal">Count Total Record</li>
-            <li class="ctx-item" @click="exportJson">Export As Json</li>
+    <context-menu id="context-menu" ref="ctxMenu" @ctx-open="onCtxOpen" @ctx-cancel="onCtxOff">
+      <li class="ctx-item" @click="select100">Select 100 Record</li>
+      <li class="ctx-item" @click="countTotal">Count Total Record</li>
+      <li class="ctx-item" @click="exportJson">Export As Json</li>
     </context-menu>
   </div>
 </template>
@@ -72,7 +71,7 @@ import contextMenu from "vue-context-menu";
 
 @Component({
   props: {
-    selectedDb: String
+    db: String
   },
   components: {
     contextMenu
@@ -82,7 +81,8 @@ export default class DbInfo extends Vue {
   dbInfo: IDataBase = {
     tables: []
   } as any;
-  selectedDb!: string;
+  db!: string;
+  selectedDb: string = "";
   dbList: string[] = [];
   menuData = {};
 
@@ -91,8 +91,13 @@ export default class DbInfo extends Vue {
     this.catchEvent();
   }
 
+  // set selectedDb(value) {
+  //   this.selectedDb = value;
+  // }
+
   mounted() {
-    this.setDbInfo();
+    this.selectedDb = this.db;
+    this.setDbInfo(true);
   }
 
   onCtxOpen(value) {
@@ -103,7 +108,8 @@ export default class DbInfo extends Vue {
     this.menuData = {};
   }
 
-  setDbInfo() {
+  setDbInfo(isFirstLoad: Boolean) {
+    // debugger;
     var mainService = new MainService();
     mainService.openDb(this.selectedDb);
     mainService.getDbSchema(this.selectedDb).then(result => {
@@ -112,7 +118,9 @@ export default class DbInfo extends Vue {
     mainService.getDbList().then(list => {
       this.dbList = list;
     });
-    vueEvent.$emit("db_info_loaded");
+    if (isFirstLoad === true) {
+      vueEvent.$emit("db_info_loaded");
+    }
   }
 
   catchEvent() {
@@ -138,12 +146,21 @@ export default class DbInfo extends Vue {
     vueEvent.$emit("run_qry");
   }
 
-  exportJson(){
+  exportJson() {
     var table = (this.menuData as any).table;
     var qry = `exportJson({
       from:'${table}'\n})`;
     vueEvent.$emit("set_qry", qry);
     vueEvent.$emit("run_qry");
+  }
+
+  onDbChange() {
+    setTimeout(() => {
+      console.log(this.selectedDb);
+      if (this.selectedDb != "null") {
+        this.setDbInfo(false);
+      }
+    }, 50);
   }
 }
 </script>
