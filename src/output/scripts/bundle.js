@@ -1,5 +1,5 @@
 /*!
- * @license :idbstudio - V1.3.0 - 06/08/2018
+ * @license :idbstudio - V1.3.1 - 06/08/2018
  * https://github.com/ujjwalguptaofficial/idbstudio
  * Copyright (c) 2018 @Ujjwal Gupta; Licensed APACHE-2.0
  */
@@ -11502,7 +11502,6 @@ var BaseService = /** @class */ (function () {
         this.connection.setLogStatus(jsstore__WEBPACK_IMPORTED_MODULE_1__["Config"].isLogEnabled);
     }
     BaseService.prototype.openDb = function (dbName) {
-        console.log(dbName);
         return this.connection.openDb(dbName);
     };
     BaseService.prototype.getDbSchema = function (dbName) {
@@ -11554,7 +11553,7 @@ window.con = ServiceHelper.idbCon;
 /***/ (function(module, exports) {
 
 /*!
- * @license :jsstore - V2.2.1 - 01/07/2018
+ * @license :jsstore - V2.3.0 - 02/08/2018
  * https://github.com/ujjwalguptaofficial/JsStore
  * Copyright (c) 2018 @Ujjwal Gupta; Licensed MIT
  */
@@ -12332,7 +12331,7 @@ var Column = /** @class */ (function () {
 /* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__.p + "scripts/jsstore.worker.4048421cf4853f428aa9a85486d71967.js";
+module.exports = __webpack_require__.p + "scripts/jsstore.worker.7e6184f7eaa96e410b9fae7833da357d.js";
 
 /***/ }),
 /* 37 */
@@ -12501,7 +12500,7 @@ var render = function() {
                   on: { click: _vm.executeQry }
                 },
                 [
-                  _vm._v("\n          Execute\n          "),
+                  _vm._v("\n        Execute\n        "),
                   _c("i", { staticClass: "fas fa-play" })
                 ]
               ),
@@ -12510,7 +12509,7 @@ var render = function() {
                 "b-button",
                 { attrs: { variant: "success" }, on: { click: _vm.getLink } },
                 [
-                  _vm._v("\n          Get Link\n          "),
+                  _vm._v("\n        Get Link\n        "),
                   _c("i", { staticClass: "fas fa-link" })
                 ]
               )
@@ -12866,7 +12865,22 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "idb-editor", attrs: { id: _vm.id } })
+  return _c("div", {
+    staticClass: "idb-editor",
+    attrs: { id: _vm.id },
+    on: {
+      paste: _vm.onPaste,
+      keyup: function($event) {
+        if (!("button" in $event) && $event.keyCode !== 13) {
+          return null
+        }
+        if (!$event.ctrlKey) {
+          return null
+        }
+        return _vm.formatQuery($event)
+      }
+    }
+  })
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -12926,14 +12940,12 @@ var Editor = /** @class */ (function (_super) {
         return _this;
     }
     Editor.prototype.createEditor = function () {
-        var _this = this;
         this.editor = ace.edit(this.id);
         this.editor.setTheme("ace/theme/eclipse");
         this.editor.session.setMode("ace/mode/javascript");
-        this.editor.onPaste = function (value) {
-            value = Object(js_beautify__WEBPACK_IMPORTED_MODULE_5__["js_beautify"])(value);
-            _this.editor.setValue(value);
-        };
+    };
+    Editor.prototype.onPaste = function () {
+        setTimeout(this.formatQuery, 10);
     };
     Editor.prototype.mounted = function () {
         this.createEditor();
@@ -12952,11 +12964,13 @@ var Editor = /** @class */ (function (_super) {
             _common_var__WEBPACK_IMPORTED_MODULE_2__["vueEvent"].$emit("take_qry", this.editor.getValue());
         }
     };
-    Editor.prototype.setQry = function (qry) {
+    Editor.prototype.isEditorActive = function () {
         var $ = new _helpers_dom_helper__WEBPACK_IMPORTED_MODULE_3__["DomHelper"]();
         var el = $.getById(this.id);
-        // debugger;
-        if (!$.isHidden($.parent(el))) {
+        return !$.isHidden($.parent(el));
+    };
+    Editor.prototype.setQry = function (qry) {
+        if (this.isEditorActive() === true) {
             this.editor.setValue(qry);
         }
     };
@@ -12964,10 +12978,16 @@ var Editor = /** @class */ (function (_super) {
         var $ = new _helpers_dom_helper__WEBPACK_IMPORTED_MODULE_3__["DomHelper"]();
         $.getById(this.id).style.height = height + "px";
     };
+    Editor.prototype.formatQuery = function () {
+        var value = this.editor.getValue();
+        value = Object(js_beautify__WEBPACK_IMPORTED_MODULE_5__["js_beautify"])(value);
+        this.editor.setValue(value);
+    };
     Editor.prototype.catchEvent = function () {
         _common_var__WEBPACK_IMPORTED_MODULE_2__["vueEvent"].$on("get_qry", this.getQry);
         _common_var__WEBPACK_IMPORTED_MODULE_2__["vueEvent"].$on("set_editor_height", this.setHeight);
         _common_var__WEBPACK_IMPORTED_MODULE_2__["vueEvent"].$on("set_qry", this.setQry);
+        _common_var__WEBPACK_IMPORTED_MODULE_2__["vueEvent"].$on("format_qry", this.formatQuery);
     };
     Editor = __decorate([
         Object(vue_property_decorator__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -19009,7 +19029,7 @@ exports = module.exports = __webpack_require__(23)(false);
 
 
 // module
-exports.push([module.i, "\n#divQueryExecutor[data-v-2e964aa2] {\n  margin-top: 10px;\n  background-color: #f1f1f1;\n  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;\n}\n#divResultInfo[data-v-2e964aa2] {\n  height: 50px;\n  position: absolute;\n  bottom: 0px;\n  background: inherit;\n  z-index: 100;\n  width: 97%;\n}\ntable[data-v-2e964aa2] {\n  height: inherit;\n  width: 100%;\n}\ntable tr td[data-v-2e964aa2] {\n  padding-left: 20px;\n}\ntable tr td[data-v-2e964aa2]:last-child {\n  text-align: right;\n  padding-right: 20px;\n  padding-left: 50px;\n}\n.fade-enter-active[data-v-2e964aa2],\n.fade-leave-active[data-v-2e964aa2] {\n  transition: opacity 0.5s;\n  bottom: 0px;\n}\n.fade-enter[data-v-2e964aa2],\n.fade-leave-to[data-v-2e964aa2] {\n  opacity: 0;\n  bottom: -100px;\n}\n", ""]);
+exports.push([module.i, "\n#divQueryExecutor[data-v-2e964aa2] {\n  margin-top: 10px;\n  background-color: #f1f1f1;\n  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;\n}\n#divResultInfo[data-v-2e964aa2] {\n  height: 50px;\n  position: absolute;\n  bottom: 0px;\n  background: inherit;\n  z-index: 100;\n  width: 97%;\n}\ntable[data-v-2e964aa2] {\n  height: inherit;\n  width: 100%;\n}\ntable tr td[data-v-2e964aa2] {\n  padding-left: 20px;\n}\ntable tr td[data-v-2e964aa2]:last-child {\n  text-align: right;\n  padding-right: 20px;\n  padding-left: 50px;\n}\n.fade-enter-active[data-v-2e964aa2],\n.fade-leave-active[data-v-2e964aa2] {\n  transition: opacity 0.5s;\n  bottom: 0px;\n}\n.fade-enter[data-v-2e964aa2],\n.fade-leave-to[data-v-2e964aa2] {\n  opacity: 0;\n  bottom: -100px;\n}\n.card-body[data-v-2e964aa2] {\n  padding-top: 2px;\n  padding-left: 0px;\n}\n", ""]);
 
 // exports
 

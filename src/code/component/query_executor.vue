@@ -15,15 +15,15 @@
           <i class="fas fa-save"></i>
         </b-button>
       </b-button-group>
-      <input type="file" id="inputFileOpener" class="hide" accept='.js' @change="onFileOpened"/>
+      <input type="file" id="inputFileOpener" class="hide" accept='.js' @change="onFileOpened" />
       <b-button-group class="float-right">
         <b-button variant="success" @click="executeQry">
-            Execute
-            <i class="fas fa-play"></i>
+          Execute
+          <i class="fas fa-play"></i>
         </b-button>
         <b-button variant="success" @click="getLink">
-            Get Link
-            <i class="fas fa-link"></i>
+          Get Link
+          <i class="fas fa-link"></i>
         </b-button>
       </b-button-group>
     </div>
@@ -272,6 +272,10 @@ table tr td:last-child {
 .fade-leave-to {
   opacity: 0;
   bottom: -100px;
+}
+.card-body {
+  padding-top: 2px;
+  padding-left: 0px;
 }
 </style>
 

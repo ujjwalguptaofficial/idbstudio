@@ -8,7 +8,6 @@ export class BaseService {
     }
 
     public openDb(dbName: string) {
-        console.log(dbName);
         return this.connection.openDb(dbName);
     }
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="idb-editor" v-bind:id="id">
+  <div class="idb-editor" v-bind:id="id" @paste="onPaste" @keyup.ctrl.13="formatQuery">
 
   </div>
 </template>
@@ -30,10 +30,10 @@ export default class Editor extends Vue {
     this.editor = ace.edit(this.id);
     this.editor.setTheme("ace/theme/eclipse");
     this.editor.session.setMode("ace/mode/javascript");
-    this.editor.onPaste = value => {
-      value = js_beautify(value);
-      this.editor.setValue(value);
-    };
+  }
+
+  onPaste() {
+    setTimeout(this.formatQuery, 10);
   }
 
   mounted() {
@@ -55,11 +55,14 @@ export default class Editor extends Vue {
     }
   }
 
-  setQry(qry) {
+  isEditorActive() {
     const $ = new DomHelper();
     const el = $.getById(this.id);
-    // debugger;
-    if (!$.isHidden($.parent(el))) {
+    return !$.isHidden($.parent(el));
+  }
+
+  setQry(qry) {
+    if (this.isEditorActive() === true) {
       this.editor.setValue(qry);
     }
   }
@@ -69,10 +72,17 @@ export default class Editor extends Vue {
     $.getById(this.id).style.height = height + "px";
   }
 
+  formatQuery() {
+    var value: string = this.editor.getValue();
+    value = js_beautify(value);
+    this.editor.setValue(value);
+  }
+
   catchEvent() {
     vueEvent.$on("get_qry", this.getQry);
     vueEvent.$on("set_editor_height", this.setHeight);
     vueEvent.$on("set_qry", this.setQry);
+    vueEvent.$on("format_qry", this.formatQuery);
   }
 }
 </script>
