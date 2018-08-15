@@ -1,5 +1,5 @@
 /*!
- * @license :idbstudio - V1.3.1 - 06/08/2018
+ * @license :idbstudio - V1.3.1 - 15/08/2018
  * https://github.com/ujjwalguptaofficial/idbstudio
  * Copyright (c) 2018 @Ujjwal Gupta; Licensed APACHE-2.0
  */
@@ -11553,7 +11553,7 @@ window.con = ServiceHelper.idbCon;
 /***/ (function(module, exports) {
 
 /*!
- * @license :jsstore - V2.3.0 - 02/08/2018
+ * @license :jsstore - V2.3.4 - 15/08/2018
  * https://github.com/ujjwalguptaofficial/JsStore
  * Copyright (c) 2018 @Ujjwal Gupta; Licensed MIT
  */
@@ -12331,7 +12331,7 @@ var Column = /** @class */ (function () {
 /* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__.p + "scripts/jsstore.worker.7e6184f7eaa96e410b9fae7833da357d.js";
+module.exports = __webpack_require__.p + "scripts/jsstore.worker.d1e7dd6284d6fbd375b1c60e329ca4e6.js";
 
 /***/ }),
 /* 37 */
