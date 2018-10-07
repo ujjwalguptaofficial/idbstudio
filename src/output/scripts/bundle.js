@@ -1,5 +1,5 @@
 /*!
- * @license :idbstudio - V1.3.3 - 13/09/2018
+ * @license :idbstudio - V1.3.5 - 07/10/2018
  * https://github.com/ujjwalguptaofficial/idbstudio
  * Copyright (c) 2018 @Ujjwal Gupta; Licensed APACHE-2.0
  */
@@ -102,11 +102,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var bootstrap_dist_css_bootstrap_min_css__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(bootstrap_dist_css_bootstrap_min_css__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var bootstrap_vue_dist_bootstrap_vue_min_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(294);
 /* harmony import */ var bootstrap_vue_dist_bootstrap_vue_min_css__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(bootstrap_vue_dist_bootstrap_vue_min_css__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _ie_polyfill_index__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(296);
 
 
 
 
 
+
+//add polyfill
+Object(_ie_polyfill_index__WEBPACK_IMPORTED_MODULE_5__["addPolyfill"])();
 // Configure vue setting
 vue__WEBPACK_IMPORTED_MODULE_0__["default"].use(bootstrap_vue__WEBPACK_IMPORTED_MODULE_2__["default"]);
 // Initiate vue app
@@ -11545,14 +11549,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ServiceHelper", function() { return ServiceHelper; });
 /* harmony import */ var jsstore__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(35);
 /* harmony import */ var jsstore__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jsstore__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var file_loader_name_scripts_name_hash_js_jsstore_dist_jsstore_worker_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(36);
-/* harmony import */ var file_loader_name_scripts_name_hash_js_jsstore_dist_jsstore_worker_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(file_loader_name_scripts_name_hash_js_jsstore_dist_jsstore_worker_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var file_loader_name_scripts_name_hash_js_jsstore_dist_jsstore_worker_ie_min_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(36);
+/* harmony import */ var file_loader_name_scripts_name_hash_js_jsstore_dist_jsstore_worker_ie_min_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(file_loader_name_scripts_name_hash_js_jsstore_dist_jsstore_worker_ie_min_js__WEBPACK_IMPORTED_MODULE_1__);
 
 
 var ServiceHelper = /** @class */ (function () {
     function ServiceHelper() {
     }
-    ServiceHelper.idbCon = new jsstore__WEBPACK_IMPORTED_MODULE_0__["Instance"](new Worker(file_loader_name_scripts_name_hash_js_jsstore_dist_jsstore_worker_js__WEBPACK_IMPORTED_MODULE_1__));
+    ServiceHelper.idbCon = new jsstore__WEBPACK_IMPORTED_MODULE_0__["Instance"](new Worker(file_loader_name_scripts_name_hash_js_jsstore_dist_jsstore_worker_ie_min_js__WEBPACK_IMPORTED_MODULE_1__));
     return ServiceHelper;
 }());
 
@@ -11564,7 +11568,7 @@ window.con = ServiceHelper.idbCon;
 /***/ (function(module, exports) {
 
 /*!
- * @license :jsstore - V2.4.1 - 11/09/2018
+ * @license :jsstore - V2.4.2 - 06/10/2018
  * https://github.com/ujjwalguptaofficial/JsStore
  * Copyright (c) 2018 @Ujjwal Gupta; Licensed MIT
  */
@@ -12357,7 +12361,7 @@ var Column = /** @class */ (function () {
 /* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__.p + "scripts/jsstore.worker.8960cc5f5e1e46a30d957aa11552d826.js";
+module.exports = __webpack_require__.p + "scripts/jsstore.worker.ie.min.9af347af34c6bcca7b5d2538958f72a1.js";
 
 /***/ }),
 /* 37 */
@@ -40472,6 +40476,121 @@ exports = module.exports = __webpack_require__(23)(false);
 exports.push([module.i, ".fade-enter-active,.fade-leave-active{transition:opacity .15s linear}.fade-enter,.fade-leave-to{opacity:0}.input-group>.input-group-append:last-child>.b-dropdown:not(:last-child):not(.dropdown-toggle)>.btn,.input-group>.input-group-append:not(:last-child)>.b-dropdown>.btn,.input-group>.input-group-prepend>.b-dropdown>.btn{border-top-right-radius:0;border-bottom-right-radius:0}.input-group>.input-group-append>.b-dropdown>.btn,.input-group>.input-group-prepend:first-child>.b-dropdown:not(:first-child)>.btn,.input-group>.input-group-prepend:not(:first-child)>.b-dropdown>.btn{border-top-left-radius:0;border-bottom-left-radius:0}input.form-control[type=range],input.form-control[type=color]{height:2.25rem}input.form-control.form-control-sm[type=range],input.form-control.form-control-sm[type=color]{height:1.9375rem}input.form-control.form-control-lg[type=range],input.form-control.form-control-lg[type=color]{height:3rem}input.form-control[type=color]{padding:.25rem}input.form-control.form-control-sm[type=color]{padding:.125rem}table.b-table.b-table-fixed{table-layout:fixed}table.b-table[aria-busy=false]{opacity:1}table.b-table[aria-busy=true]{opacity:.6}table.b-table>tfoot>tr>th,table.b-table>thead>tr>th{position:relative}table.b-table>tfoot>tr>th.sorting,table.b-table>thead>tr>th.sorting{padding-right:1.5em;cursor:pointer}table.b-table>tfoot>tr>th.sorting::after,table.b-table>tfoot>tr>th.sorting::before,table.b-table>thead>tr>th.sorting::after,table.b-table>thead>tr>th.sorting::before{position:absolute;bottom:0;display:block;opacity:.4;padding-bottom:inherit;font-size:inherit;line-height:180%}table.b-table>tfoot>tr>th.sorting::before,table.b-table>thead>tr>th.sorting::before{right:.75em;content:'\\2191'}table.b-table>tfoot>tr>th.sorting::after,table.b-table>thead>tr>th.sorting::after{right:.25em;content:'\\2193'}table.b-table>tfoot>tr>th.sorting_asc::after,table.b-table>tfoot>tr>th.sorting_desc::before,table.b-table>thead>tr>th.sorting_asc::after,table.b-table>thead>tr>th.sorting_desc::before{opacity:1}table.b-table.b-table-stacked{width:100%}table.b-table.b-table-stacked,table.b-table.b-table-stacked>caption,table.b-table.b-table-stacked>tbody,table.b-table.b-table-stacked>tbody>tr,table.b-table.b-table-stacked>tbody>tr>td,table.b-table.b-table-stacked>tbody>tr>th{display:block}table.b-table.b-table-stacked>tbody>tr.b-table-bottom-row,table.b-table.b-table-stacked>tbody>tr.b-table-top-row,table.b-table.b-table-stacked>tfoot,table.b-table.b-table-stacked>thead{display:none}table.b-table.b-table-stacked>tbody>tr>:first-child{border-top-width:.4rem}table.b-table.b-table-stacked>tbody>tr>[data-label]{display:grid;grid-template-columns:40% auto;grid-gap:.25rem 1rem}table.b-table.b-table-stacked>tbody>tr>[data-label]::before{content:attr(data-label);display:inline;text-align:right;overflow-wrap:break-word;font-weight:700;font-style:normal}@media all and (max-width:575.99px){table.b-table.b-table-stacked-sm{width:100%}table.b-table.b-table-stacked-sm,table.b-table.b-table-stacked-sm>caption,table.b-table.b-table-stacked-sm>tbody,table.b-table.b-table-stacked-sm>tbody>tr,table.b-table.b-table-stacked-sm>tbody>tr>td,table.b-table.b-table-stacked-sm>tbody>tr>th{display:block}table.b-table.b-table-stacked-sm>tbody>tr.b-table-bottom-row,table.b-table.b-table-stacked-sm>tbody>tr.b-table-top-row,table.b-table.b-table-stacked-sm>tfoot,table.b-table.b-table-stacked-sm>thead{display:none}table.b-table.b-table-stacked-sm>tbody>tr>:first-child{border-top-width:.4rem}table.b-table.b-table-stacked-sm>tbody>tr>[data-label]{display:grid;grid-template-columns:40% auto;grid-gap:.25rem 1rem}table.b-table.b-table-stacked-sm>tbody>tr>[data-label]::before{content:attr(data-label);display:inline;text-align:right;overflow-wrap:break-word;font-weight:700;font-style:normal}}@media all and (max-width:767.99px){table.b-table.b-table-stacked-md{width:100%}table.b-table.b-table-stacked-md,table.b-table.b-table-stacked-md>caption,table.b-table.b-table-stacked-md>tbody,table.b-table.b-table-stacked-md>tbody>tr,table.b-table.b-table-stacked-md>tbody>tr>td,table.b-table.b-table-stacked-md>tbody>tr>th{display:block}table.b-table.b-table-stacked-md>tbody>tr.b-table-bottom-row,table.b-table.b-table-stacked-md>tbody>tr.b-table-top-row,table.b-table.b-table-stacked-md>tfoot,table.b-table.b-table-stacked-md>thead{display:none}table.b-table.b-table-stacked-md>tbody>tr>:first-child{border-top-width:.4rem}table.b-table.b-table-stacked-md>tbody>tr>[data-label]{display:grid;grid-template-columns:40% auto;grid-gap:.25rem 1rem}table.b-table.b-table-stacked-md>tbody>tr>[data-label]::before{content:attr(data-label);display:inline;text-align:right;overflow-wrap:break-word;font-weight:700;font-style:normal}}@media all and (max-width:991.99px){table.b-table.b-table-stacked-lg{width:100%}table.b-table.b-table-stacked-lg,table.b-table.b-table-stacked-lg>caption,table.b-table.b-table-stacked-lg>tbody,table.b-table.b-table-stacked-lg>tbody>tr,table.b-table.b-table-stacked-lg>tbody>tr>td,table.b-table.b-table-stacked-lg>tbody>tr>th{display:block}table.b-table.b-table-stacked-lg>tbody>tr.b-table-bottom-row,table.b-table.b-table-stacked-lg>tbody>tr.b-table-top-row,table.b-table.b-table-stacked-lg>tfoot,table.b-table.b-table-stacked-lg>thead{display:none}table.b-table.b-table-stacked-lg>tbody>tr>:first-child{border-top-width:.4rem}table.b-table.b-table-stacked-lg>tbody>tr>[data-label]{display:grid;grid-template-columns:40% auto;grid-gap:.25rem 1rem}table.b-table.b-table-stacked-lg>tbody>tr>[data-label]::before{content:attr(data-label);display:inline;text-align:right;overflow-wrap:break-word;font-weight:700;font-style:normal}}@media all and (max-width:1199.99px){table.b-table.b-table-stacked-xl{width:100%}table.b-table.b-table-stacked-xl,table.b-table.b-table-stacked-xl>caption,table.b-table.b-table-stacked-xl>tbody,table.b-table.b-table-stacked-xl>tbody>tr,table.b-table.b-table-stacked-xl>tbody>tr>td,table.b-table.b-table-stacked-xl>tbody>tr>th{display:block}table.b-table.b-table-stacked-xl>tbody>tr.b-table-bottom-row,table.b-table.b-table-stacked-xl>tbody>tr.b-table-top-row,table.b-table.b-table-stacked-xl>tfoot,table.b-table.b-table-stacked-xl>thead{display:none}table.b-table.b-table-stacked-xl>tbody>tr>:first-child{border-top-width:.4rem}table.b-table.b-table-stacked-xl>tbody>tr>[data-label]{display:grid;grid-template-columns:40% auto;grid-gap:.25rem 1rem}table.b-table.b-table-stacked-xl>tbody>tr>[data-label]::before{content:attr(data-label);display:inline;text-align:right;overflow-wrap:break-word;font-weight:700;font-style:normal}}table.b-table>tbody>tr.b-table-details>td{border-top:none}", ""]);
 
 // exports
+
+
+/***/ }),
+/* 296 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addPolyfill", function() { return addPolyfill; });
+/* harmony import */ var _find__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(297);
+/* harmony import */ var _find_index__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(298);
+
+
+var addPolyfill = function () {
+    Object(_find__WEBPACK_IMPORTED_MODULE_0__["addFind"])();
+    Object(_find_index__WEBPACK_IMPORTED_MODULE_1__["addFindIndex"])();
+};
+
+
+/***/ }),
+/* 297 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addFind", function() { return addFind; });
+var addFind = function () {
+    if (!Array.prototype.find) {
+        Object.defineProperty(Array.prototype, 'find', {
+            value: function (predicate) {
+                // 1. Let O be ? ToObject(this value).
+                if (this == null) {
+                    throw new TypeError('"this" is null or not defined');
+                }
+                var o = Object(this);
+                // 2. Let len be ? ToLength(? Get(O, "length")).
+                var len = o.length >>> 0;
+                // 3. If IsCallable(predicate) is false, throw a TypeError exception.
+                if (typeof predicate !== 'function') {
+                    throw new TypeError('predicate must be a function');
+                }
+                // 4. If thisArg was supplied, let T be thisArg; else let T be undefined.
+                var thisArg = arguments[1];
+                // 5. Let k be 0.
+                var k = 0;
+                // 6. Repeat, while k < len
+                while (k < len) {
+                    // a. Let Pk be ! ToString(k).
+                    // b. Let kValue be ? Get(O, Pk).
+                    // c. Let testResult be ToBoolean(? Call(predicate, T, « kValue, k, O »)).
+                    // d. If testResult is true, return kValue.
+                    var kValue = o[k];
+                    if (predicate.call(thisArg, kValue, k, o)) {
+                        return kValue;
+                    }
+                    // e. Increase k by 1.
+                    k++;
+                }
+                // 7. Return undefined.
+                return undefined;
+            },
+            configurable: true,
+            writable: true
+        });
+    }
+};
+
+
+/***/ }),
+/* 298 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addFindIndex", function() { return addFindIndex; });
+var addFindIndex = function () {
+    if (!Array.prototype.findIndex) {
+        Object.defineProperty(Array.prototype, 'findIndex', {
+            value: function (predicate) {
+                // 1. Let O be ? ToObject(this value).
+                if (this == null) {
+                    throw new TypeError('"this" is null or not defined');
+                }
+                var o = Object(this);
+                // 2. Let len be ? ToLength(? Get(O, "length")).
+                var len = o.length >>> 0;
+                // 3. If IsCallable(predicate) is false, throw a TypeError exception.
+                if (typeof predicate !== 'function') {
+                    throw new TypeError('predicate must be a function');
+                }
+                // 4. If thisArg was supplied, let T be thisArg; else let T be undefined.
+                var thisArg = arguments[1];
+                // 5. Let k be 0.
+                var k = 0;
+                // 6. Repeat, while k < len
+                while (k < len) {
+                    // a. Let Pk be ! ToString(k).
+                    // b. Let kValue be ? Get(O, Pk).
+                    // c. Let testResult be ToBoolean(? Call(predicate, T, « kValue, k, O »)).
+                    // d. If testResult is true, return k.
+                    var kValue = o[k];
+                    if (predicate.call(thisArg, kValue, k, o)) {
+                        return k;
+                    }
+                    // e. Increase k by 1.
+                    k++;
+                }
+                // 7. Return -1.
+                return -1;
+            },
+            configurable: true,
+            writable: true
+        });
+    }
+};
 
 
 /***/ })
