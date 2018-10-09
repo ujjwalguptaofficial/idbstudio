@@ -63,7 +63,7 @@
     "express": "^4.16.3",
     "fs-extra": "^6.0.1",
     "js-beautify": "^1.7.5",
-    "jsstore": "^2.4.2",
+    "jsstore": "^2.4.3",
     "loading-indicator": "^2.0.0",
     "vue": "^2.5.17",
     "vue-context-menu": "^2.0.6"
