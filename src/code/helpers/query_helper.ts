@@ -10,6 +10,7 @@ export class QueryHelper {
     validateAndModifyQry() {
         var qry;
         var isAnyApiFound = false;
+        //console.log(this.allowedApi);
         this.allowedApi.forEach((api) => {
             // every api call will have a open paranthesis after
             const index = this.query.indexOf(api + "(");
@@ -37,8 +38,9 @@ export class QueryHelper {
             API.DropDb,
             API.BulkInsert,
             API.ExportJson,
-            API.Transaction
-        ];
+            API.Transaction,
+            API.RunSql
+        ]
     }
 
     private isQryValid_() {

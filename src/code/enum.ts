@@ -17,5 +17,6 @@ export enum API {
     BulkInsert = "bulkInsert",
     ExportJson = "exportJson",
     ChangeLogStatus = "changeLogStatus",
-    Transaction = "transaction"
+    Transaction = "transaction",
+    RunSql = "runSql"
 }
