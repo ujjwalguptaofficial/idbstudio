@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const program = require('commander');
-const express = require('./express');
+const server = require("./server");
 const generate = require('./generate');
 const loader = require('loading-indicator');
 
@@ -13,7 +13,7 @@ parse(process.argv);
 
 if (program.start) {
     console.log('Starting IDBStudio');
-    express.initExpress(program.port);
+    server.initServer(program.port);
 } else if (program.generate) {
     const timer = loader.start('Generating...');
     generate.copy(program.folder).then(() => {
