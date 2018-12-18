@@ -18,13 +18,13 @@ export class App extends Fort {
     }
 }
 
-
+const pathOfDist = path.join(__dirname, "../../dist");
 new App().create({
     port: global.port,
     folders: [{
         alias: "/",
-        path: path.join(process.cwd(), "/dist")
+        path: pathOfDist
     }]
 }).then(() => {
-    console.log(`IDBStudio is runing on port ${port}!`)
+    console.log(`IDBStudio is runing on port ${global.port}!`)
 });
