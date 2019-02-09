@@ -61,22 +61,24 @@ export default class DbInfo extends Vue {
     var qry = `select({
       from:'${table}',
       limit:100\n})`;
-    vueEvent.$emit(EVENTS.SetQuery, qry);
-    vueEvent.$emit(EVENTS.RunQuery);
+    this.setAndRunQuery(qry);
   }
 
   countTotal() {
     var table = (this.menuData as any).table;
     var qry = `count({
       from:'${table}'\n})`;
-    vueEvent.$emit(EVENTS.SetQuery, qry);
-    vueEvent.$emit(EVENTS.RunQuery);
+    this.setAndRunQuery(qry);
   }
 
   exportJson() {
     var table = (this.menuData as any).table;
     var qry = `exportJson({
       from:'${table}'\n})`;
+    this.setAndRunQuery(qry);
+  }
+
+  setAndRunQuery(qry: string) {
     vueEvent.$emit(EVENTS.SetQuery, qry);
     vueEvent.$emit(EVENTS.RunQuery);
   }
