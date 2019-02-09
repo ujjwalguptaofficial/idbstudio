@@ -29,7 +29,7 @@
     <b-card no-body id="divEditorContainer">
         <b-tabs card>
             <b-tab active v-for="(item) in $data.tabCount" :key="'tab'+item" v-bind:title="'Query '+item">
-                <Editor v-bind:id="'editor' + item"></Editor>
+                <Editor v-bind:id="'editor' + item" v-bind:style="{height:height+'px'}"></Editor>
             </b-tab>
         </b-tabs>
     </b-card>

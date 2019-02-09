@@ -31,6 +31,8 @@ export default class QueryExecutor extends Vue {
     isQueryExecuting = false;
     isSaveBtnClicked = false;
 
+    height = 0;
+
     constructor() {
         super();
         this.catchEvents();
@@ -69,7 +71,7 @@ export default class QueryExecutor extends Vue {
     }
 
     fireGetQry() {
-        vueEvent.$emit("get_qry");
+        vueEvent.$emit(EVENTS.GetQuery);
     }
 
     getEditorContainerHeight() {
@@ -113,7 +115,7 @@ export default class QueryExecutor extends Vue {
         var resultContainer = $.qry("#divResult") as HTMLElement;
         resultContainer.style.height = this.resultContainerHeight + "px";
         resultContainer.classList.remove("hide");
-        vueEvent.$emit("set_editor_height", this.editorHeight);
+        this.setEditorHeight();
     }
 
     async evaluateAndShowResult(qry: string) {
@@ -129,14 +131,14 @@ export default class QueryExecutor extends Vue {
                         ? qryResult.result.length
                         : 0;
                 this.timeTaken = qryResult.timeTaken.toString();
-                vueEvent.$emit("on_qry_result", qryResult.result);
+                vueEvent.$emit(EVENTS.OnQueryResult, qryResult.result);
             }
             catch (err) {
-                vueEvent.$emit("on_qry_error", err);
+                vueEvent.$emit(EVENTS.OnQueryError, err);
             }
 
         } else {
-            vueEvent.$emit("on_error", queryHelperInstance.errMessage);
+            vueEvent.$emit(EVENTS.OnError, queryHelperInstance.errMessage);
         }
     }
 
@@ -150,17 +152,15 @@ export default class QueryExecutor extends Vue {
         }
     }
 
-    get editorHeight() {
-        return this.getEditorContainerHeight() - 90;
+    setEditorHeight() {
+        this.height = this.getEditorContainerHeight() - 90;
     }
 
     catchEvents() {
         vueEvent
             .$on(EVENTS.DbInfoLoaded, this.createNewTab)
             .$on(EVENTS.TakeQuery, this.takeQuery)
-            .$on(EVENTS.GetEditorHeight, () => {
-                vueEvent.$emit(EVENTS.SetEditorHeight, this.editorHeight);
-            })
+            .$on(EVENTS.SetEditorHeight, this.setEditorHeight)
             .$on(EVENTS.RunQuery, this.executeQry);
     }
 
