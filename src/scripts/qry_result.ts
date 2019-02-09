@@ -3,6 +3,7 @@ import { Component } from "vue-property-decorator";
 import { vueEvent } from "../common_var";
 import { Util } from "../util";
 import { DATA_TYPE } from "jsstore";
+import { EVENTS } from "../enums/events";
 
 @Component
 export default class QueryResult extends Vue {
@@ -63,7 +64,7 @@ export default class QueryResult extends Vue {
     }
 
     catchEvents() {
-        vueEvent.$on("on_qry_result", this.printResult);
-        vueEvent.$on("on_qry_error", this.printError);
+        vueEvent.$on(EVENTS.OnQueryResult, this.printResult);
+        vueEvent.$on(EVENTS.OnQueryError, this.printError);
     }
 }

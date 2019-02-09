@@ -48,14 +48,14 @@ export default class Editor extends Vue {
         }
     }
 
-    isEditorActive() {
+    get isEditorActive() {
         const $ = new DomHelper();
         const el = $.getById(this.id);
         return !$.isHidden($.parent(el));
     }
 
     setQry(qry) {
-        if (this.isEditorActive() === true) {
+        if (this.isEditorActive === true) {
             this.editor.setValue(qry);
         }
     }

@@ -1,25 +1,24 @@
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import { MainService } from "../service/main_service";
-import { IFormSelect } from "../interfaces/form_select";
 import { IDataBase } from "jsstore";
 import { vueEvent } from "../common_var";
 import contextMenu from "vue-context-menu";
+import { store } from "../store/store";
+import { EVENTS } from "../enums/events";
 
 @Component({
-  props: {
-    db: String
-  },
+
   components: {
     contextMenu
   }
 })
 export default class DbInfo extends Vue {
-  dbInfo: IDataBase = {
-    tables: []
-  } as any;
-  db!: string;
-  selectedDb: string = "";
+  get selectedDb() {
+    return store.state.activeDbName;
+  }
+  dbInfo: IDataBase = { tables: [] } as any;
+
   dbList: string[] = [];
   menuData = {};
 
@@ -27,13 +26,7 @@ export default class DbInfo extends Vue {
     super();
     this.catchEvent();
   }
-
-  // set selectedDb(value) {
-  //   this.selectedDb = value;
-  // }
-
   mounted() {
-    this.selectedDb = this.db;
     this.setDbInfo(true);
   }
 
@@ -46,7 +39,6 @@ export default class DbInfo extends Vue {
   }
 
   setDbInfo(isFirstLoad: Boolean) {
-    // debugger;
     var mainService = new MainService();
     mainService.openDb(this.selectedDb);
     mainService.getDbSchema(this.selectedDb).then(result => {
@@ -56,14 +48,12 @@ export default class DbInfo extends Vue {
       this.dbList = list;
     });
     if (isFirstLoad === true) {
-      vueEvent.$emit("db_info_loaded");
+      vueEvent.$emit(EVENTS.DbInfoLoaded);
     }
   }
 
   catchEvent() {
-    vueEvent.$on("get_current_db", () => {
-      vueEvent.$emit("take_current_db", this.selectedDb);
-    });
+
   }
 
   select100() {
@@ -71,29 +61,28 @@ export default class DbInfo extends Vue {
     var qry = `select({
       from:'${table}',
       limit:100\n})`;
-    vueEvent.$emit("set_qry", qry);
-    vueEvent.$emit("run_qry");
+    vueEvent.$emit(EVENTS.SetQuery, qry);
+    vueEvent.$emit(EVENTS.RunQuery);
   }
 
   countTotal() {
     var table = (this.menuData as any).table;
     var qry = `count({
       from:'${table}'\n})`;
-    vueEvent.$emit("set_qry", qry);
-    vueEvent.$emit("run_qry");
+    vueEvent.$emit(EVENTS.SetQuery, qry);
+    vueEvent.$emit(EVENTS.RunQuery);
   }
 
   exportJson() {
     var table = (this.menuData as any).table;
     var qry = `exportJson({
       from:'${table}'\n})`;
-    vueEvent.$emit("set_qry", qry);
-    vueEvent.$emit("run_qry");
+    vueEvent.$emit(EVENTS.SetQuery, qry);
+    vueEvent.$emit(EVENTS.RunQuery);
   }
 
   onDbChange() {
     setTimeout(() => {
-      console.log(this.selectedDb);
       if (this.selectedDb != "null") {
         this.setDbInfo(false);
       }

@@ -10,6 +10,7 @@ import { DomHelper } from "../helpers/dom_helper";
 import { Util } from "../util";
 import { DATA_TYPE } from "jsstore";
 import QueryLink from "../component/query_link.vue";
+import { EVENTS } from "../enums/events";
 
 @Component({
     components: {
@@ -115,24 +116,25 @@ export default class QueryExecutor extends Vue {
         vueEvent.$emit("set_editor_height", this.editorHeight);
     }
 
-    evaluateAndShowResult(qry: string) {
+    async evaluateAndShowResult(qry: string) {
         var queryHelperInstance = new QueryHelper(qry);
         if (queryHelperInstance.validateAndModifyQry()) {
             const query = queryHelperInstance.query;
-            new MainService()
-                .executeQry(query)
-                .then(qryResult => {
-                    this.showResultInfo = true;
-                    this.resultCount =
-                        Util.getType(qryResult.result) === DATA_TYPE.Array
-                            ? qryResult.result.length
-                            : 0;
-                    this.timeTaken = qryResult.timeTaken.toString();
-                    vueEvent.$emit("on_qry_result", qryResult.result);
-                })
-                .catch(function (err) {
-                    vueEvent.$emit("on_qry_error", err);
-                });
+            try {
+                const qryResult = await new MainService()
+                    .executeQry(query);
+                this.showResultInfo = true;
+                this.resultCount =
+                    Util.getType(qryResult.result) === DATA_TYPE.Array
+                        ? qryResult.result.length
+                        : 0;
+                this.timeTaken = qryResult.timeTaken.toString();
+                vueEvent.$emit("on_qry_result", qryResult.result);
+            }
+            catch (err) {
+                vueEvent.$emit("on_qry_error", err);
+            }
+
         } else {
             vueEvent.$emit("on_error", queryHelperInstance.errMessage);
         }
@@ -154,18 +156,18 @@ export default class QueryExecutor extends Vue {
 
     catchEvents() {
         vueEvent
-            .$on("db_info_loaded", this.createNewTab)
-            .$on("take_qry", this.takeQuery)
-            .$on("get_editor_height", () => {
-                vueEvent.$emit("set_editor_height", this.editorHeight);
+            .$on(EVENTS.DbInfoLoaded, this.createNewTab)
+            .$on(EVENTS.TakeQuery, this.takeQuery)
+            .$on(EVENTS.GetEditorHeight, () => {
+                vueEvent.$emit(EVENTS.SetEditorHeight, this.editorHeight);
             })
-            .$on("run_qry", this.executeQry);
+            .$on(EVENTS.RunQuery, this.executeQry);
     }
 
     showLinkModal(qry: string) {
         qry = encodeURIComponent(qry);
         setTimeout(() => {
-            vueEvent.$emit("show_get_link_modal", qry);
+            vueEvent.$emit(EVENTS.ShowGetLinkModal, qry);
         }, 200);
     }
 

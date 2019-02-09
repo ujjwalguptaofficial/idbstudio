@@ -8,6 +8,8 @@ import { vueEvent } from "../common_var";
 import "../css/common.css";
 import { Util } from "../util";
 import { Config } from "jsstore";
+import { EVENTS } from "../enums/events";
+import { store } from "../store/store";
 
 declare var ace;
 ace.config.set("workerPath", "assets/scripts");
@@ -22,8 +24,11 @@ ace.config.set("themePath", "assets/scripts");
     }
 })
 export default class Main extends Vue {
-    isPageLoaded = false;
-    selectedDb;
+
+    get isPageLoaded() {
+        return store.state.isPageLoaded;
+    }
+
     constructor() {
         super();
         this.catchEvent();
@@ -37,18 +42,9 @@ export default class Main extends Vue {
         }
     }
 
-    togglePageLoadedStatus() {
-        this.isPageLoaded = !this.isPageLoaded;
-    }
-
     private catchEvent() {
-        vueEvent.$on("on_error", errMessage => {
+        vueEvent.$on(EVENTS.OnError, errMessage => {
             alert(errMessage);
-        });
-
-        vueEvent.$on("page_loaded", dbName => {
-            this.selectedDb = dbName;
-            this.togglePageLoadedStatus();
         });
     }
 }

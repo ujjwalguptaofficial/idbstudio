@@ -2,6 +2,8 @@ import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import { vueEvent } from "../common_var";
 import { DomHelper } from "../helpers/dom_helper";
+import { EVENTS } from "../enums/events";
+import { store } from "../store/store";
 declare var ClipboardJS;
 
 @Component
@@ -12,17 +14,18 @@ export default class QueryLink extends Vue {
         this.catchEvents();
     }
 
-    showModal(qry: string) {
-        this.link = qry;
-        vueEvent.$emit("get_current_db");
+    get dbName() {
+        return store.state.activeDbName;
     }
 
-    onGetDb(dbName: string) {
-        (this.$refs.modalGetLink as any).show();
-        this.link = `${location.origin}${location.pathname}?db=${dbName}&query=${
-            this.link
+    showModal(qry: string) {
+        this.link = `${location.origin}${location.pathname}?db=${this.dbName}&query=${
+            qry
             }`;
+        (this.$refs.modalGetLink as any).show();
     }
+
+
 
     copy() {
         var $ = new DomHelper();
@@ -32,11 +35,10 @@ export default class QueryLink extends Vue {
     }
 
     onCopyError() {
-        vueEvent.$emit("on_error", "Failed to copy Link");
+        vueEvent.$emit(EVENTS.OnError, "Failed to copy Link");
     }
 
     catchEvents() {
-        vueEvent.$on("show_get_link_modal", this.showModal);
-        vueEvent.$on("take_current_db", this.onGetDb);
+        vueEvent.$on(EVENTS.ShowGetLinkModal, this.showModal);
     }
 }

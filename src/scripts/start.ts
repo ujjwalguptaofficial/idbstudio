@@ -3,10 +3,20 @@ import { Component } from "vue-property-decorator";
 import { DemoService } from "../service/demo_service";
 import { vueEvent } from "../common_var";
 import { Util } from "../util";
+import { store } from "../store/store";
+import { STORE_MUTATION } from "../enums/store_mutation";
+import { EVENTS } from "../enums/events";
 
 @Component
 export default class Start extends Vue {
-    selectedDb = "null";
+    get selectedDb() {
+        return store.state.activeDbName
+    }
+
+    set selectedDb(value) {
+        store.commit(STORE_MUTATION.SetActiveDb, value);
+    }
+
     dbList: string[] = [];
 
     mounted() {
@@ -47,9 +57,10 @@ export default class Start extends Vue {
 
     connectDb() {
         if (this.selectedDb != "null") {
-            vueEvent.$emit("page_loaded", this.selectedDb);
+            store.commit(STORE_MUTATION.SetPageLoaded, true);
+
         } else {
-            vueEvent.$emit("on_error", "Please select a valid database");
+            vueEvent.$emit(EVENTS.OnError, "Please select a valid database");
         }
     }
 }

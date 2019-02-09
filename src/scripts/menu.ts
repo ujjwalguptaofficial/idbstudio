@@ -1,31 +1,30 @@
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import { vueEvent } from "../common_var";
+import { store } from "../store/store";
+import { EVENTS } from "../enums/events";
 
 @Component
 export default class Menu extends Vue {
-  dbName: string = "";
-  createNewQry() {
-    vueEvent.$emit("open_editor");
+  get dbName() {
+    return store.state.activeDbName;
   }
 
-  setDbName(dbName: string) {
-    this.dbName = dbName;
+  createNewQry() {
+    vueEvent.$emit(EVENTS.OpenEditor);
   }
+
+
 
   catchEvent() {
-    vueEvent.$on("db_selected", (dbName: string) => {
-      console.log(dbName);
-      this.setDbName(dbName);
-    });
+
   }
 
   executeQry() {
-    vueEvent.$emit("execute_qry");
+    vueEvent.$emit(EVENTS.ExecuteQuery);
   }
 
-  constructor() {
-    super();
+  mounted() {
     this.catchEvent();
   }
 }
