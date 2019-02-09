@@ -1,0 +1,4 @@
+<div id="divResult" class="hide">
+    <table v-show="errorMessage.length==0" v-html="resultInnerHtml" class="table"></table>
+    <span v-show="errorMessage.length>0" style="color:red;">{{errorMessage}}</span>
+</div>

@@ -1,0 +1,27 @@
+<div class="start-page">
+    <h1 class="title">IDBStudio</h1>
+    <div v-if="dbList.length==0" class="cssload-preloader">
+        <div class="cssload-preloader-box">
+            <div>L</div>
+            <div>o</div>
+            <div>a</div>
+            <div>d</div>
+            <div>i</div>
+            <div>n</div>
+            <div>g</div>
+        </div>
+    </div>
+    <form class="margin-top-100px" v-if="dbList.length>0">
+        <div class="form-group row">
+            <div style="margin:0 auto;display:inherit;">
+                <div class="mb-2">
+                    <select id="selectDb" class="form-control" v-model="selectedDb">
+                        <option value="null">--Select Database--</option>
+                        <option v-for="db in dbList" :key="db" :value="db">{{db}}</option>
+                    </select>
+                </div>
+                <button type="button" @click="connectDb" class="btn btn-primary mb-2" style="margin-left:50px;padding: 0 30px;">Connect</button>
+            </div>
+        </div>
+    </form>
+</div>

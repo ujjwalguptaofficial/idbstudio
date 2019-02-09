@@ -1,0 +1,12 @@
+<div>
+    <b-modal no-enforce-focus @shown="shown" id="divLinkModal" ref="modalGetLink" title="IDBStudio">
+        <p class="my-4" id="linkContent">
+            <b-form-input type="text" id="txtLink" v-model="link"></b-form-input>
+        </p>
+        <div slot="modal-footer" class="w-100">
+            <b-btn size="md" class="btn-copy float-right" variant="primary" @click="copy">
+                Copy
+            </b-btn>
+        </div>
+    </b-modal>
+</div>

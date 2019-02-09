@@ -1,0 +1,56 @@
+<div id="divQueryExecutor">
+    <div id="divButtonContainer">
+        <b-button-group>
+            <b-button variant="primary" @click="createNewTab">
+                New Query
+                <i class="fas fa-plus-circle"></i>
+            </b-button>
+            <b-button variant="primary" @click="open">
+                Open
+                <i class="fas fa-folder-open"></i>
+            </b-button>
+            <b-button variant="primary" @click="save">
+                Save
+                <i class="fas fa-save"></i>
+            </b-button>
+        </b-button-group>
+        <input type="file" id="inputFileOpener" class="hide" accept='.js' @change="onFileOpened" />
+        <b-button-group class="float-right">
+            <b-button variant="success" @click="executeQry">
+                Execute
+                <i class="fas fa-play"></i>
+            </b-button>
+            <b-button variant="success" @click="getLink">
+                Get Link
+                <i class="fas fa-link"></i>
+            </b-button>
+        </b-button-group>
+    </div>
+    <b-card no-body id="divEditorContainer">
+        <b-tabs card>
+            <b-tab active v-for="(item) in $data.tabCount" :key="'tab'+item" v-bind:title="'Query '+item">
+                <Editor v-bind:id="'editor' + item"></Editor>
+            </b-tab>
+        </b-tabs>
+    </b-card>
+    <QueryResult></QueryResult>
+    <transition name="fade">
+        <div id="divResultInfo" v-if="showResultInfo">
+            <table>
+                <tr>
+                    <td>
+                        <b>No of Record :</b>
+                        <span>{{resultCount}}</span>
+                        <b class="seperator">|</b>
+                        <b>Time Taken :</b>
+                        <span>{{timeTaken}} sec.</span>
+                    </td>
+                    <td>
+                        <i @click="showResultInfo=false" class="fas fa-times"></i>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </transition>
+    <component v-bind:is="currentModalComponent"></component>
+</div>

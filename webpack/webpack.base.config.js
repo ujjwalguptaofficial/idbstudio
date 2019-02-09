@@ -1,6 +1,6 @@
 const path = require('path');
 const SmartBannerPlugin = require('smart-banner-webpack-plugin');
-const banner = require('../license');
+const banner = require('../src/license');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
@@ -8,7 +8,7 @@ const webpack = require('webpack');
 
 module.exports = [{
     name: "jsstore",
-    entry: "./src/code/index.ts",
+    entry: "./src/index.ts",
     module: {
         rules: [{
                 test: /\.ts$/,
@@ -103,7 +103,7 @@ module.exports = [{
         new HtmlWebpackPlugin({
             cache: true,
             hash: true,
-            template: './src/code/index.html',
+            template: './src/index.html',
             minify: {
                 collapseWhitespace: true,
                 removeComments: true,
@@ -113,7 +113,7 @@ module.exports = [{
             }
         }),
         new CopyPlugin([{
-            from: './src/code/assets/',
+            from: './src/assets/',
             to: 'assets/'
         }]),
         // new webpack.optimize.CommonsChunkPlugin({
