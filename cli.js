@@ -4,11 +4,13 @@ const program = require('commander');
 const server = require("./server");
 const generate = require('./generate');
 const loader = require('loading-indicator');
+const sqlweb = require('sqlweb/dist/sqlweb.node');
 
 program.option('-s, --start', 'Start the idbstudio').
 option('-p --port [value]', 'Configure the specified port', 3000).
 option('-g --generate', 'Generate the idbstudio files').
 option('-f --folder [folderName]', 'Take the folder name', 'idbstudio').
+option('--sql [query]', 'convert sql to jsstore equivalent').
 parse(process.argv);
 
 if (program.start) {
@@ -24,4 +26,11 @@ if (program.start) {
         console.error(err);
         loader.stop(timer);
     })
+} else if (program.sql) {
+    try {
+        const result = sqlweb.parseSql(program.sql);
+        console.log(JSON.stringify(result));
+    } catch (ex) {
+        console.log(ex);
+    }
 }
