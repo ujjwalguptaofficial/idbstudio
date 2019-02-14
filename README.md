@@ -15,7 +15,24 @@ npm i idbstudio -g
 ```
 
 ## Commands
-* -s or --start : start the idbstudio
-* -p or --port : specify port number - default port is 3000
-* -g or --generate : generate idbstudio
-* -f or --folder : specify folder name - default folder is idbstudio
+
+### -s or --start : start the idbstudio
+
+e.g- idbstudio --start
+
+### -p or --port : specify port number - default port is 3000
+
+e.g - idbstudio --start --port 8000
+
+### -g or --generate : generate idbstudio
+
+e.g - idbstudio --generate 
+
+### -f or --folder : specify folder name for generate - default folder is idbstudio
+
+e.g - idbstudio --generate --folder myfolder
+
+### --sql [value] : convert the sql to jsstore query 
+ 
+ e.g - idbstudio --sql "select * from customers"
+ 
