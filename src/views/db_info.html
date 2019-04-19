@@ -9,23 +9,22 @@
     </v-layout>
     <v-layout row>
         <v-flex sm12>
-            <table>
+            <!-- <table>
                 <thead></thead>
                 <tbody>
                     <tr v-for="table in dbInfo.tables" :key="table.name">
-                        <td>
-                            <!-- <span @contextmenu.prevent="$refs.ctxMenu.open($event, {table: table.name})"
+                        <td> -->
+            <!-- <span @contextmenu.prevent="$refs.ctxMenu.open($event, {table: table.name})"
                                 v-b-toggle="table.name" class="table-name">
                                 {{table.name}}
                                 <i class="fas fa-plus"></i>
                             </span> -->
-                            <v-expansion-panel v-bind:id="table.name" class="ml-4">
-                                <v-expansion-panel-content>
-                                    <template v-slot:header>
-                                        <div>{{table.name}}</div>
-                                    </template>
-
-                                    <!-- <v-expansion-panel class="ml-4">
+            <v-expansion-panel>
+                <v-expansion-panel-content v-for="table in dbInfo.tables" :key="table">
+                    <template v-slot:header>
+                        <div>Hi</div>
+                    </template>
+                    <!-- <v-expansion-panel class="ml-4">
                                         <v-expansion-panel-content v-for="column in table.columns" class="column-name"
                                             :key="column.name">
                                             <template v-slot:header>
@@ -57,18 +56,18 @@
                                             </div>
                                         </v-expansion-panel-content>
                                     </v-expansion-panel> -->
-                                </v-expansion-panel-content>
-                            </v-expansion-panel>
-                        </td>
+                </v-expansion-panel-content>
+            </v-expansion-panel>
+            <!-- </td>
                     </tr>
                 </tbody>
                 <tfoot></tfoot>
-            </table>
+            </table> -->
         </v-flex>
-        <context-menu id="context-menu" ref="ctxMenu" @ctx-open="onCtxOpen" @ctx-cancel="onCtxOff">
+        <!-- <context-menu id="context-menu" ref="ctxMenu" @ctx-open="onCtxOpen" @ctx-cancel="onCtxOff">
             <li class="ctx-item" @click="select100">Select 100 Record</li>
             <li class="ctx-item" @click="countTotal">Count Total Record</li>
             <li class="ctx-item" @click="exportJson">Export As Json</li>
-        </context-menu>
+        </context-menu> -->
     </v-layout>
 </div>
