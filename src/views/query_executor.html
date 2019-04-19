@@ -26,13 +26,19 @@
             </v-btn>
         </span>
     </div>
-    <b-card no-body id="divEditorContainer">
+    <v-tabs color="cyan" dark slider-color="yellow" id="divEditorContainer">
+        <v-tab v-for="(item) in $data.tabCount" :key="'tab'+item">Query {{item}}</v-tab>
+        <v-tab-item v-for="(item) in $data.tabCount" :key="'tab'+item">
+            <Editor v-bind:id="'editor' + item" v-bind:style="{height:height+'px'}"></Editor>
+        </v-tab-item>
+    </v-tabs>
+    <!-- <b-card no-body id="divEditorContainer">
         <b-tabs card>
             <b-tab active v-for="(item) in $data.tabCount" :key="'tab'+item" v-bind:title="'Query '+item">
                 <Editor v-bind:id="'editor' + item" v-bind:style="{height:height+'px'}"></Editor>
             </b-tab>
         </b-tabs>
-    </b-card>
+    </b-card> -->
     <QueryResult></QueryResult>
     <transition name="fade">
         <div id="divResultInfo" v-if="showResultInfo">
