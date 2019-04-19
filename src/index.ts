@@ -1,10 +1,9 @@
 import Vue from 'vue';
-import Main from './component/main.vue';
 import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.min.css';
 import { addPolyfill } from "./ie_polyfill/index";
 import { store } from './store/store';
-
+import Main from './component/main.vue';
 // add polyfill
 addPolyfill();
 
