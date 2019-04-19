@@ -24,7 +24,6 @@ export default class DbInfo extends Vue {
 
   constructor() {
     super();
-    this.catchEvent();
   }
   mounted() {
     this.setDbInfo(true);
@@ -50,10 +49,6 @@ export default class DbInfo extends Vue {
     if (isFirstLoad === true) {
       vueEvent.$emit(EVENTS.DbInfoLoaded);
     }
-  }
-
-  catchEvent() {
-
   }
 
   select100() {

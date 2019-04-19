@@ -1,60 +1,67 @@
 <div>
-    <!-- <div >{{dbInfo.name}}</div> -->
-    <b-form-select v-model="selectedDb" class="mb-3 db-list" @change.native="onDbChange">
-        <option value="null">--Select Database--</option>
-        <option v-for="db in dbList" :key="db" :value="db">{{db}}</option>
-    </b-form-select>
-    <table>
-        <thead></thead>
-        <tbody>
-            <tr v-for="table in dbInfo.tables" :key="table.name">
-                <td>
-                    <span @contextmenu.prevent="$refs.ctxMenu.open($event, {table: table.name})" v-b-toggle="table.name"
-                        class="table-name">
-                        {{table.name}}
-                        <i class="fas fa-plus"></i>
-                    </span>
-                    <b-collapse v-bind:id="table.name" class="ml-4">
-                        <div v-for="column in table.columns" class="column-name" :key="column.name">
-                            <span v-b-toggle="column.name">{{column.name}}
-                                <i class="fas fa-plus-square"></i>
+    <v-layout row>
+        <!-- <div >{{dbInfo.name}}</div> -->
+        <v-flex sm12>
+            <v-select :items="dbList" v-model="selectedDb" label="--Select Database--" class="mb-3 db-list"
+                @change.native="onDbChange">
+            </v-select>
+        </v-flex>
+    </v-layout>
+    <v-layout row>
+        <v-flex sm12>
+            <table>
+                <thead></thead>
+                <tbody>
+                    <tr v-for="table in dbInfo.tables" :key="table.name">
+                        <td>
+                            <span @contextmenu.prevent="$refs.ctxMenu.open($event, {table: table.name})"
+                                v-b-toggle="table.name" class="table-name">
+                                {{table.name}}
+                                <i class="fas fa-plus"></i>
                             </span>
-                            <b-collapse v-bind:id="column.name" class="ml-4">
-                                <div>Primary Key :
-                                    <span class="column-schema">{{column.primaryKey}}</span>
-                                </div>
-                                <div>Auto Increment :
-                                    <span class="column-schema">{{column.autoIncrement}}</span>
-                                </div>
-                                <div>Not Null:
-                                    <span class="column-schema">{{column.notNull}}</span>
-                                </div>
-                                <div>Data Type :
-                                    <span class="column-schema">{{column.dataType}}</span>
-                                </div>
-                                <div>Default :
-                                    <span class="column-schema">{{column.default}}</span>
-                                </div>
-                                <div>Unique :
-                                    <span class="column-schema">{{column.unique}}</span>
-                                </div>
-                                <div>Multi Entry :
-                                    <span class="column-schema">{{column.multiEntry}}</span>
-                                </div>
-                                <div>Enable Search :
-                                    <span class="column-schema">{{column.enableSearch}}</span>
+                            <b-collapse v-bind:id="table.name" class="ml-4">
+                                <div v-for="column in table.columns" class="column-name" :key="column.name">
+                                    <span v-b-toggle="column.name">{{column.name}}
+                                        <i class="fas fa-plus-square"></i>
+                                    </span>
+                                    <b-collapse v-bind:id="column.name" class="ml-4">
+                                        <div>Primary Key :
+                                            <span class="column-schema">{{column.primaryKey}}</span>
+                                        </div>
+                                        <div>Auto Increment :
+                                            <span class="column-schema">{{column.autoIncrement}}</span>
+                                        </div>
+                                        <div>Not Null:
+                                            <span class="column-schema">{{column.notNull}}</span>
+                                        </div>
+                                        <div>Data Type :
+                                            <span class="column-schema">{{column.dataType}}</span>
+                                        </div>
+                                        <div>Default :
+                                            <span class="column-schema">{{column.default}}</span>
+                                        </div>
+                                        <div>Unique :
+                                            <span class="column-schema">{{column.unique}}</span>
+                                        </div>
+                                        <div>Multi Entry :
+                                            <span class="column-schema">{{column.multiEntry}}</span>
+                                        </div>
+                                        <div>Enable Search :
+                                            <span class="column-schema">{{column.enableSearch}}</span>
+                                        </div>
+                                    </b-collapse>
                                 </div>
                             </b-collapse>
-                        </div>
-                    </b-collapse>
-                </td>
-            </tr>
-        </tbody>
-        <tfoot></tfoot>
-    </table>
-    <context-menu id="context-menu" ref="ctxMenu" @ctx-open="onCtxOpen" @ctx-cancel="onCtxOff">
-        <li class="ctx-item" @click="select100">Select 100 Record</li>
-        <li class="ctx-item" @click="countTotal">Count Total Record</li>
-        <li class="ctx-item" @click="exportJson">Export As Json</li>
-    </context-menu>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot></tfoot>
+            </table>
+        </v-flex>
+        <context-menu id="context-menu" ref="ctxMenu" @ctx-open="onCtxOpen" @ctx-cancel="onCtxOff">
+            <li class="ctx-item" @click="select100">Select 100 Record</li>
+            <li class="ctx-item" @click="countTotal">Count Total Record</li>
+            <li class="ctx-item" @click="exportJson">Export As Json</li>
+        </context-menu>
+    </v-layout>
 </div>

@@ -5,11 +5,7 @@
 <script lang="ts" src="../scripts/db_info.ts">
 </script>
 <style lang="scss" scoped>
-#selectDb {
-  option {
-    text-align: center;
-  }
-}
+
 .table-name {
   font-size: 20px;
   font-family: ABeeZee;

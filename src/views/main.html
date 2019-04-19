@@ -1,15 +1,17 @@
-<div>
-    <Start v-if="!isPageLoaded"></Start>
-    <div class="container-fluid">
-        <div class="row" v-if="isPageLoaded" id="divMain">
+<v-app>
+    <v-content>
+        <Start v-if="!isPageLoaded"></Start>
+        <v-container fluid>
             <Menu></Menu>
             <div style="border-top:5px solid #777adb;width: 100%;"></div>
-            <div class="col-sm-3">
-                <DbInfo></DbInfo>
-            </div>
-            <div class="col" id="divQueryExecutorContainer">
-                <QueryExecutor></QueryExecutor>
-            </div>
-        </div>
-    </div>
-</div>
+            <v-layout row v-if="isPageLoaded" id="divMain">
+                <v-flex sm3>
+                    <DbInfo></DbInfo>
+                </v-flex>
+                <v-flex sm9 id="divQueryExecutorContainer">
+                    <QueryExecutor></QueryExecutor>
+                </v-flex>
+            </v-layout>
+        </v-container>
+    </v-content>
+</v-app>

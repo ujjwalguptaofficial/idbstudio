@@ -7,93 +7,93 @@ const CopyPlugin = require('copy-webpack-plugin');
 const webpack = require('webpack');
 
 module.exports = [{
-    name: "jsstore",
-    entry: "./src/index.ts",
+    name: "idbstudio",
+    entry: ["./src/index.ts"],
     module: {
         rules: [{
-                test: /\.ts$/,
-                exclude: /node_modules/,
-                use: {
-                    loader: 'ts-loader',
+            test: /\.ts$/,
+            exclude: /node_modules/,
+            use: {
+                loader: 'ts-loader',
+                options: {
+                    appendTsSuffixTo: [/\.vue$/],
+                }
+            }
+        },
+        {
+            test: /\.vue$/,
+            loader: 'vue-loader'
+        },
+        {
+            test: /\.scss$/,
+            use: [
+                'vue-style-loader',
+                'css-loader',
+                {
+                    loader: 'sass-loader',
+                    // global data for all components
+                    // this can be read from a scss file
+                }
+            ]
+        },
+        {
+            test: /\.sass$/,
+            use: [
+                'vue-style-loader',
+                'css-loader',
+                {
+                    loader: 'sass-loader',
                     options: {
-                        appendTsSuffixTo: [/\.vue$/],
+                        indentedSyntax: true
                     }
                 }
-            },
-            {
-                test: /\.vue$/,
-                loader: 'vue-loader'
-            },
-            {
-                test: /\.scss$/,
-                use: [
-                    'vue-style-loader',
-                    'css-loader',
-                    {
-                        loader: 'sass-loader',
-                        // global data for all components
-                        // this can be read from a scss file
-                    }
-                ]
-            },
-            {
-                test: /\.sass$/,
-                use: [
-                    'vue-style-loader',
-                    'css-loader',
-                    {
-                        loader: 'sass-loader',
-                        options: {
-                            indentedSyntax: true
-                        }
-                    }
-                ]
-            },
-            {
-                test: /\.css$/,
-                oneOf: [
-                    // this applies to <style module>
-                    {
-                        resourceQuery: /module/,
-                        use: [
-                            'vue-style-loader',
-                            {
-                                loader: 'css-loader',
-                                options: {
-                                    modules: true,
-                                    localIdentName: '[local]_[hash:base64:8]'
-                                }
+            ]
+        },
+        {
+            test: /\.css$/,
+            oneOf: [
+                // this applies to <style module>
+                {
+                    resourceQuery: /module/,
+                    use: [
+                        'vue-style-loader',
+                        {
+                            loader: 'css-loader',
+                            options: {
+                                modules: true,
+                                localIdentName: '[local]_[hash:base64:8]'
                             }
-                        ]
-                    },
-                    // this applies to <style> or <style scoped>
-                    {
-                        use: [
-                            'vue-style-loader',
-                            'css-loader'
-                        ]
-                    }
-                ]
-            },
-            {
-                test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
-                use: 'url-loader?limit=10000&mimetype=application/font-woff'
-            },
-            {
-                test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-                use: 'url-loader?limit=10000&name=fonts/[name][hash].[ext]&mimetype=application/octet-stream'
-            },
-            {
-                test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-                use: 'file-loader'
-            },
-            {
-                test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-                use: 'url-loader?limit=10000&mimetype=image/svg+xml'
-            }
+                        }
+                    ]
+                },
+                // this applies to <style> or <style scoped>
+                {
+                    use: [
+                        'vue-style-loader',
+                        'css-loader'
+                    ]
+                }
+            ]
+        },
+        {
+            test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
+            use: 'url-loader?limit=10000&mimetype=application/font-woff'
+        },
+        {
+            test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+            use: 'url-loader?limit=10000&name=fonts/[name][hash].[ext]&mimetype=application/octet-stream'
+        },
+        {
+            test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+            use: 'file-loader'
+        },
+        {
+            test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+            use: 'url-loader?limit=10000&mimetype=image/svg+xml'
+        }
         ]
     },
-    mode: 'none',
+    mode: 'development',
     resolve: {
         extensions: ['.js', '.ts', '.vue']
     },
@@ -116,6 +116,7 @@ module.exports = [{
             from: './src/assets/',
             to: 'assets/'
         }]),
+        // new webpack.HotModuleReplacementPlugin()
         // new webpack.optimize.CommonsChunkPlugin({
         //     name: 'common' // Specify the common bundle's name.
         // })

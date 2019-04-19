@@ -1,30 +1,30 @@
 <div id="divQueryExecutor">
     <div id="divButtonContainer">
-        <b-button-group>
-            <b-button variant="primary" @click="createNewTab">
+        <span>
+            <v-btn variant="primary" @click="createNewTab">
                 New Query
                 <i class="fas fa-plus-circle"></i>
-            </b-button>
-            <b-button variant="primary" @click="open">
+            </v-btn>
+            <v-btn variant="primary" @click="open">
                 Open
                 <i class="fas fa-folder-open"></i>
-            </b-button>
-            <b-button variant="primary" @click="save">
+            </v-btn>
+            <v-btn variant="primary" @click="save">
                 Save
                 <i class="fas fa-save"></i>
-            </b-button>
-        </b-button-group>
+            </v-btn>
+        </span>
         <input type="file" id="inputFileOpener" class="hide" accept='.js' @change="onFileOpened" />
-        <b-button-group class="float-right">
-            <b-button variant="success" @click="executeQry">
+        <span class="float-right">
+            <v-btn variant="success" @click="executeQry">
                 Execute
                 <i class="fas fa-play"></i>
-            </b-button>
-            <b-button variant="success" @click="getLink">
+            </v-btn>
+            <v-btn variant="success" @click="getLink">
                 Get Link
                 <i class="fas fa-link"></i>
-            </b-button>
-        </b-button-group>
+            </v-btn>
+        </span>
     </div>
     <b-card no-body id="divEditorContainer">
         <b-tabs card>

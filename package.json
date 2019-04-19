@@ -27,7 +27,7 @@
     "webpack:prod": "webpack --config  webpack/webpack.prod.config.js",
     "build": "npm run lint && npm run webpack:dev",
     "deploy": "npm run lint && npm run webpack:prod",
-    "dev": "webpack-dev-server --config webpack/webpack.dev.config.js"
+    "dev": "webpack-dev-server --config webpack/webpack.dev.config.js --hot --inline"
   },
   "devDependencies": {
     "axios": "^0.18.0",
@@ -58,9 +58,11 @@
     "vue-style-loader": "^4.1.2",
     "vue-template-compiler": "^2.6.4",
     "vue-template-es2015-compiler": "^1.8.2",
+    "vuetify": "^1.5.12",
     "webpack": "^4.29.3",
     "webpack-cli": "^3.2.3",
-    "webpack-dev-server": "^3.1.14",
+    "webpack-dev-server": "^3.3.1",
+    "webpack-hot-middleware": "^2.24.3",
     "webpack-merge": "^4.2.1"
   },
   "dependencies": {

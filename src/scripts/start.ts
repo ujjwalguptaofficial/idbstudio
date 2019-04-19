@@ -19,19 +19,18 @@ export default class Start extends Vue {
 
     dbList: string[] = [];
 
-    mounted() {
+    async mounted() {
         var demoServiceInstance = new DemoService();
-        demoServiceInstance.isDemoDbExist().then(isExist => {
-            if (isExist) {
-                setTimeout(() => {
-                    this.getDbList();
-                }, 1000);
-            } else {
-                demoServiceInstance.createDemoDataBase().then(() => {
-                    this.getDbList();
-                });
-            }
-        });
+        const isExist = await demoServiceInstance.isDemoDbExist();
+        if (isExist) {
+            setTimeout(() => {
+                this.getDbList();
+            }, 1000);
+        } else {
+            demoServiceInstance.createDemoDataBase().then(() => {
+                this.getDbList();
+            });
+        }
     }
 
     setDbNameFromQryString(dbList: string[]) {
