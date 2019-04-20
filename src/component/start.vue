@@ -21,13 +21,11 @@ $loaderBackGroundColor: #bb5156;
 
   .loader {
     color: aliceblue;
-    font-size: 20px;
+    font-size: 60px;
     position: absolute;
-    top: 45%;
-    left: 45%;
-    right: 0px;
-    bottom: 0px;
-    z-index: 10;
+    top: 40%;
+    text-align: center;
+    width: 100%;
   }
 }
 </style>

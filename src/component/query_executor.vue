@@ -7,6 +7,9 @@
   margin: 5px 0px;
 }
 
+#divButtonContainer .fas {
+  margin-left: 5px;
+}
 #divQueryExecutor {
   margin-top: 10px;
   background-color: rgb(241, 241, 241);
