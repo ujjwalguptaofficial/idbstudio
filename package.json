@@ -27,7 +27,7 @@
     "webpack:prod": "webpack --config  webpack/webpack.prod.config.js",
     "build": "npm run lint && npm run webpack:dev",
     "deploy": "npm run lint && npm run webpack:prod",
-    "dev": "webpack-dev-server --config webpack/webpack.dev.config.js --hot --inline"
+    "dev": "webpack-dev-server --config webpack/webpack.dev.config.js --hot"
   },
   "devDependencies": {
     "axios": "^0.18.0",

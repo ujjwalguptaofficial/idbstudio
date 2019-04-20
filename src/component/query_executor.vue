@@ -1,10 +1,12 @@
-<template src="../views/query_executor.html">
-
-</template>
+<template src="../views/query_executor.html"></template>
 
 <script lang="ts" src="../scripts/query_executor.ts">
 </script>
 <style lang="scss" scoped>
+#divButtonContainer .v-btn {
+  margin: 5px 0px;
+}
+
 #divQueryExecutor {
   margin-top: 10px;
   background-color: rgb(241, 241, 241);

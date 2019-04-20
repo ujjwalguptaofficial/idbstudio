@@ -6,6 +6,7 @@ import { vueEvent } from "../common_var";
 import contextMenu from "vue-context-menu";
 import { store } from "../store/store";
 import { EVENTS } from "../enums/events";
+import { STORE_MUTATION } from "../enums/store_mutation";
 
 @Component({
 
@@ -17,6 +18,12 @@ export default class DbInfo extends Vue {
   get selectedDb() {
     return store.state.activeDbName;
   }
+
+  set selectedDb(value) {
+    store.commit(STORE_MUTATION.SetActiveDb, value);
+    this.onDbChange();
+  }
+
   dbInfo: IDataBase = { tables: [] } as any;
 
   dbList: string[] = [];

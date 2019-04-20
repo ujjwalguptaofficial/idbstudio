@@ -1,12 +1,10 @@
-<template src="../views/menu.html">
-
-</template>
+<template src="../views/menu.html"></template>
 
 <script lang="ts" src="../scripts/menu.ts">
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 #divMenu {
-  background-color: #2c3e50;
+  background-color: #776767;
   width: 100%;
   line-height: 45px;
   color: white;

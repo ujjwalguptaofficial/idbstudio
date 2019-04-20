@@ -1,32 +1,32 @@
 <div id="divQueryExecutor">
     <div id="divButtonContainer">
         <span>
-            <v-btn variant="primary" @click="createNewTab">
+            <v-btn color="info" @click="createNewTab">
                 New Query
                 <i class="fas fa-plus-circle"></i>
             </v-btn>
-            <v-btn variant="primary" @click="open">
+            <v-btn color="info" @click="open">
                 Open
                 <i class="fas fa-folder-open"></i>
             </v-btn>
-            <v-btn variant="primary" @click="save">
+            <v-btn color="info" @click="save">
                 Save
                 <i class="fas fa-save"></i>
             </v-btn>
         </span>
         <input type="file" id="inputFileOpener" class="hide" accept='.js' @change="onFileOpened" />
         <span class="float-right">
-            <v-btn variant="success" @click="executeQry">
+            <v-btn color="success" @click="executeQry">
                 Execute
                 <i class="fas fa-play"></i>
             </v-btn>
-            <v-btn variant="success" @click="getLink">
+            <v-btn color="success" @click="getLink">
                 Get Link
                 <i class="fas fa-link"></i>
             </v-btn>
         </span>
     </div>
-    <v-tabs color="cyan" dark slider-color="yellow" id="divEditorContainer">
+    <v-tabs color="rgb(249, 100, 107)" dark slider-color="rgb(43, 38, 6)" id="divEditorContainer">
         <v-tab v-for="(item) in $data.tabCount" :key="'tab'+item">Query {{item}}</v-tab>
         <v-tab-item v-for="(item) in $data.tabCount" :key="'tab'+item">
             <Editor v-bind:id="'editor' + item" v-bind:style="{height:height+'px'}"></Editor>

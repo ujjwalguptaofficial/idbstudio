@@ -10,7 +10,7 @@ import { EVENTS } from "../enums/events";
 @Component
 export default class Start extends Vue {
     get selectedDb() {
-        return store.state.activeDbName
+        return store.state.activeDbName;
     }
 
     set selectedDb(value) {

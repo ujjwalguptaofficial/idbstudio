@@ -11,7 +11,7 @@
             <v-expansion-panel>
                 <v-expansion-panel-content v-for="table in dbInfo.tables" :key="table.name">
                     <template v-slot:header>
-                        <div>{{table.name}}</div>
+                        <div @contextmenu.prevent="$refs.ctxMenu.open($event, {table: table.name})">{{table.name}}</div>
                     </template>
                     <v-expansion-panel class="ml-4">
                         <v-expansion-panel-content v-for="column in table.columns" class="column-name"
