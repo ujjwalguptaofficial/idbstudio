@@ -1,6 +1,4 @@
-<template src="../views/qry_result.html">
-
-</template>
+<template src="../views/qry_result.html"></template>
 
 <script lang="ts" src="../scripts/qry_result.ts">
 </script>
@@ -9,10 +7,10 @@
   overflow-y: scroll;
   overflow-x: hidden;
   min-height: 200px;
-  width: 99%;
-  left: 5px;
+  width: 100%;
+  left: 1px;
   position: relative;
-  right: 5px;
+  // right: 5px;
   background-color: white;
 
   .table tr td,

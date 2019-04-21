@@ -21,7 +21,7 @@
   bottom: 0px;
   background: inherit;
   z-index: 100;
-  width: 97%;
+  width: 75%;
 }
 table {
   height: inherit;

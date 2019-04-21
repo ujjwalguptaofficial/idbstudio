@@ -33,7 +33,7 @@
     </v-tabs>
     <QueryResult></QueryResult>
     <transition name="fade">
-        <div id="divResultInfo" v-if="showResultInfo">
+        <div id="divResultInfo" v-if="showResultInfo" v-bind:style="{bottom:resultContainerHeight+5+'px'}">
             <table>
                 <tr>
                     <td>

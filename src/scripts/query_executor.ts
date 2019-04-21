@@ -106,6 +106,7 @@ export default class QueryExecutor extends Vue {
     }
 
     executeQry() {
+        this.showResultInfo = false;
         this.isQueryExecuting = true;
         this.isResultVisible = true;
         this.fireGetQry();
@@ -125,13 +126,13 @@ export default class QueryExecutor extends Vue {
             try {
                 const qryResult = await new MainService()
                     .executeQry(query);
-                this.showResultInfo = true;
                 this.resultCount =
                     Util.getType(qryResult.result) === DATA_TYPE.Array
                         ? qryResult.result.length
                         : 0;
                 this.timeTaken = qryResult.timeTaken.toString();
                 vueEvent.$emit(EVENTS.OnQueryResult, qryResult.result);
+                this.showResultInfo = true;
             }
             catch (err) {
                 vueEvent.$emit(EVENTS.OnQueryError, err);
@@ -153,7 +154,7 @@ export default class QueryExecutor extends Vue {
     }
 
     setEditorHeight() {
-        this.height = this.getEditorContainerHeight() - 90;
+        this.height = this.getEditorContainerHeight() - 50;
     }
 
     catchEvents() {
