@@ -27,4 +27,10 @@ export class BaseService {
         return this.connection.isDbExist(dbName);
     }
 
+    public select(tableName: string) {
+        return this.connection.select({
+            from: tableName
+        });
+    }
+
 }

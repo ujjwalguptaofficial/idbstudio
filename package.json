@@ -38,7 +38,7 @@
     "file-loader": "^3.0.1",
     "html-webpack-plugin": "^3.2.0",
     "js-beautify": "^1.8.9",
-    "jsstore": "^2.10.2",
+    "jsstore": "^2.11.0",
     "node-sass": "^4.11.0",
     "opn": "^5.4.0",
     "sass-loader": "^7.1.0",
@@ -59,6 +59,7 @@
     "vue-template-compiler": "^2.6.10",
     "vue-template-es2015-compiler": "^1.8.2",
     "vuetify": "^1.5.12",
+    "vuex": "^3.1.0",
     "webpack": "^4.29.3",
     "webpack-cli": "^3.2.3",
     "webpack-dev-server": "^3.3.1",
@@ -71,7 +72,6 @@
     "fortjs": "^1.5.1",
     "fs-extra": "^6.0.1",
     "loading-indicator": "^2.0.0",
-    "sqlweb": "^1.2.1",
-    "vuex": "^3.1.0"
+    "sqlweb": "^1.2.1"
   }
 }

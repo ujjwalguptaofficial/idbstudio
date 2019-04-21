@@ -73,11 +73,17 @@ export default class DbInfo extends Vue {
     this.setAndRunQuery(qry);
   }
 
-  exportJson() {
+  async exportJson() {
     var table = (this.menuData as any).table;
-    var qry = `exportJson({
-      from:'${table}'\n})`;
-    this.setAndRunQuery(qry);
+    var mainService = new MainService();
+    const result = await mainService.select(table);
+    const url = URL.createObjectURL(new Blob([JSON.stringify(result)], {
+      type: "text/json"
+    }));
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `${table}.json`;
+    link.click();
   }
 
   setAndRunQuery(qry: string) {
