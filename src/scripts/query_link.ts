@@ -9,6 +9,7 @@ declare var ClipboardJS;
 @Component
 export default class QueryLink extends Vue {
     link = "";
+    shouldShowlinkDialog = false;
     constructor() {
         super();
         this.catchEvents();
@@ -22,16 +23,13 @@ export default class QueryLink extends Vue {
         this.link = `${location.origin}${location.pathname}?db=${this.dbName}&query=${
             qry
             }`;
-        (this.$refs.modalGetLink as any).show();
+        this.shouldShowlinkDialog = true;
     }
 
-
-
     copy() {
-        var $ = new DomHelper();
-        ($.qry("#txtLink")! as HTMLInputElement).select();
+        ((this.$refs.txtLink as any).$el as HTMLTextAreaElement).getElementsByTagName('textarea')[0].select()
         document.execCommand("copy");
-        (this.$refs.modalGetLink as any).hide();
+        this.shouldShowlinkDialog = false;
     }
 
     onCopyError() {

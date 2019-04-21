@@ -1,4 +1,4 @@
-<div>
+<!-- <div>
     <b-modal no-enforce-focus @shown="shown" id="divLinkModal" ref="modalGetLink" title="IDBStudio">
         <p class="my-4" id="linkContent">
             <b-form-input type="text" id="txtLink" v-model="link"></b-form-input>
@@ -9,4 +9,25 @@
             </b-btn>
         </div>
     </b-modal>
+</div> -->
+
+<div class="text-xs-center">
+    <v-dialog v-model="shouldShowlinkDialog" width="500">
+        <v-card>
+            <v-card-title class="headline grey lighten-2" primary-title>
+                IDBStudio
+            </v-card-title>
+
+            <v-card-text>
+                <v-textarea ref="txtLink" outline v-model="link"></v-textarea>
+            </v-card-text>
+            <v-divider></v-divider>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="info" @click="copy">
+                    Copy
+                </v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
 </div>

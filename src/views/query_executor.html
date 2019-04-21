@@ -31,13 +31,6 @@
             <Editor v-bind:id="'editor' + item" v-bind:style="{height:height+'px'}"></Editor>
         </v-tab-item>
     </v-tabs>
-    <!-- <b-card no-body id="divEditorContainer">
-        <b-tabs card>
-            <b-tab active v-for="(item) in $data.tabCount" :key="'tab'+item" v-bind:title="'Query '+item">
-                <Editor v-bind:id="'editor' + item" v-bind:style="{height:height+'px'}"></Editor>
-            </b-tab>
-        </b-tabs>
-    </b-card> -->
     <QueryResult></QueryResult>
     <transition name="fade">
         <div id="divResultInfo" v-if="showResultInfo">
