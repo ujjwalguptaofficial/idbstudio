@@ -4,7 +4,7 @@
 </script>
 <style lang="scss" scoped>
 #divButtonContainer .v-btn {
-  margin: 5px 0px;
+  margin: 0px 0px 5px 0px;
 }
 
 #divButtonContainer .fas {
