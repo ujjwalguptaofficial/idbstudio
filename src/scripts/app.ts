@@ -23,7 +23,7 @@ ace.config.set("themePath", "assets/scripts");
         Start
     }
 })
-export default class Main extends Vue {
+export default class App extends Vue {
 
     get isPageLoaded() {
         return store.state.isPageLoaded;

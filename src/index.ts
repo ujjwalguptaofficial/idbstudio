@@ -1,9 +1,8 @@
 import Vue from 'vue';
 import Vuetify from 'vuetify';
-import 'vuetify/dist/vuetify.min.css';
 import { addPolyfill } from "./ie_polyfill/index";
 import { store } from './store/store';
-import Main from './component/main.vue';
+import App from './component/app.vue';
 // add polyfill
 addPolyfill();
 
@@ -25,5 +24,5 @@ Vue.use(Vuetify, {
 var vueApp = new Vue({
     el: '#app',
     store: store,
-    render: h => h(Main)
+    render: h => h(App)
 });
