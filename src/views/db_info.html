@@ -1,13 +1,16 @@
 <div>
     <v-layout row>
-        <v-flex sm12>
-            <v-select solo :items="dbList" v-model="selectedDb" label="--Select Database--" class="mb-3 db-list"
+        <v-flex offset-sm1 sm10>
+            <v-select :items="dbList" v-model="selectedDb" label="--Select Database--" class="mb-3 db-list"
                 @change.native="onDbChange">
             </v-select>
         </v-flex>
     </v-layout>
-    <v-layout row>
+    <v-layout row style="max-height:500px; overflow: auto;">
         <v-flex sm12>
+            <p class="align-text-center">
+                Database Schema
+            </p>
             <v-expansion-panel>
                 <v-expansion-panel-content v-for="table in dbInfo.tables" :key="table.name">
                     <template v-slot:header>

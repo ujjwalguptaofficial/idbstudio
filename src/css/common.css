@@ -4,6 +4,10 @@
     text-align: right;
 }
 
+.align-text-center {
+    text-align: center;
+}
+
 .seperator {
     padding: 0px 10px;
 }
