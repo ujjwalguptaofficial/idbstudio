@@ -34,7 +34,7 @@ export default class Editor extends Vue {
 
     mounted() {
         this.createEditor();
-        if (this.id === "editor1") {
+        if (this.id === "editor_1") {
             const query = Util.getParameterByName("query");
             if (query != null && query.length > 0) {
                 this.setQry(query);
@@ -43,17 +43,22 @@ export default class Editor extends Vue {
     }
 
     getQry() {
-        var $ = new DomHelper();
-        var el = $.getById(this.id);
-        if (!$.isHidden($.parent(el))) {
+        // var $ = new DomHelper();
+        // var el = $.getById(this.id);
+        // if (!$.isHidden($.parent(el))) {
+        //     vueEvent.$emit(EVENTS.TakeQuery, this.editor.getValue());
+        // }
+        if (this.isEditorActive) {
             vueEvent.$emit(EVENTS.TakeQuery, this.editor.getValue());
         }
     }
 
     get isEditorActive() {
-        const $ = new DomHelper();
-        const el = $.getById(this.id);
-        return !$.isHidden($.parent(el));
+        const index = Number(this.id.split("_")[1]) - 1;
+        if (this.$store.state.activeTab === index) {
+            return true;
+        }
+        return false;
     }
 
     setQry(qry) {

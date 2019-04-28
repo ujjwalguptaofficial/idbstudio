@@ -7,5 +7,8 @@ export const mutations = {
     },
     [STORE_MUTATION.SetPageLoaded]: (state: StateOption, value: boolean) => {
         state.isPageLoaded = value;
+    },
+    [STORE_MUTATION.SetActiveTab]: (state: StateOption, value: number) => {
+        state.activeTab = value;
     }
-}
+};

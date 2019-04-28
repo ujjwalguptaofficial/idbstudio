@@ -1,4 +1,5 @@
 export enum STORE_MUTATION {
     SetActiveDb = "setActiveDb",
-    SetPageLoaded = "setPageLoaded"
+    SetPageLoaded = "setPageLoaded",
+    SetActiveTab = "SetActiveTab"
 }

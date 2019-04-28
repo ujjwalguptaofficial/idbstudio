@@ -11,13 +11,16 @@ import { Util } from "../util";
 import { DATA_TYPE } from "jsstore";
 import QueryLink from "../component/query_link.vue";
 import { EVENTS } from "../enums/events";
+import { mapState } from "vuex";
+import { STORE_MUTATION } from "../enums/store_mutation";
 
 @Component({
     components: {
         QueryLink,
         Editor,
         QueryResult
-    }
+    },
+    // computed: mapState(['activeTab'])
 })
 export default class QueryExecutor extends Vue {
     currentModalComponent = "";
@@ -32,6 +35,14 @@ export default class QueryExecutor extends Vue {
     isSaveBtnClicked = false;
 
     height = 0;
+
+    get activeTab() {
+        return this.$store.state.activeTab;
+    }
+
+    set activeTab(value: number) {
+        this.$store.commit(STORE_MUTATION.SetActiveTab, value);
+    }
 
     constructor() {
         super();
