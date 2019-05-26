@@ -1,8 +1,16 @@
 import * as JsStore from 'jsstore';
-import * as workerPath from "file-loader?name=scripts/[name].[hash].js!jsstore/dist/jsstore.worker.ie.min.js";
+
+const getWorkerPath = function () {
+    if (process.env.NODE_ENV === 'development') {
+        return require("file-loader?name=scripts/[name].[hash].js!jsstore/dist/jsstore.worker.js");
+    }
+    else {
+        return require("file-loader?name=scripts/[name].[hash].js!jsstore/dist/jsstore.worker.ie.min.js");
+    }
+};
 
 export class ServiceHelper {
-    static idbCon = new JsStore.Instance(new Worker(workerPath));
+    static idbCon = new JsStore.Instance(new Worker(getWorkerPath()));
 }
 
 (window as any).con = ServiceHelper.idbCon;

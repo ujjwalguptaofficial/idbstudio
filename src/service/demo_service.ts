@@ -1,5 +1,5 @@
 import { BaseService } from './base_service';
-import { ITable, Column, COL_OPTION, DATA_TYPE, IDataBase } from 'jsstore';
+import { ITable, DATA_TYPE, IDataBase } from 'jsstore';
 import Axios from "axios";
 
 export class DemoService extends BaseService {
@@ -14,7 +14,7 @@ export class DemoService extends BaseService {
 
     createDemoDataBase() {
         return new Promise((resolve, reject) => {
-            this.connection.createDb(this.getDbStructure()).then(() => {
+            this.connection.initDb(this.getDbStructure()).then(() => {
                 this.insertDemoDbData(resolve);
             }).catch((err) => {
                 reject(err);
@@ -77,93 +77,93 @@ export class DemoService extends BaseService {
     getDbStructure() {
         const customers: ITable = {
             name: 'Customers',
-            columns: [
-                new Column('customerId').options([COL_OPTION.PrimaryKey, COL_OPTION.AutoIncrement]),
-                new Column('customerName').options([COL_OPTION.NotNull]).setDataType(DATA_TYPE.String),
-                new Column('contactName').options([COL_OPTION.NotNull]).setDataType(DATA_TYPE.String),
-                new Column('address').options([COL_OPTION.NotNull]).setDataType(DATA_TYPE.String),
-                new Column('city').options([COL_OPTION.NotNull]).setDataType(DATA_TYPE.String),
-                new Column('postalCode').setDataType(DATA_TYPE.String),
-                new Column('country').options([COL_OPTION.NotNull]).setDataType(DATA_TYPE.String)
-            ]
+            columns: {
+                customerId: { primaryKey: true, autoIncrement: true },
+                customerName: { notNull: true, dataType: DATA_TYPE.String },
+                contactName: { notNull: true, dataType: DATA_TYPE.String },
+                address: { notNull: true, dataType: 'string' },
+                city: { notNull: true, dataType: 'string' },
+                postalCode: { dataType: 'string' },
+                country: { notNull: true, dataType: 'string' }
+            }
         };
 
         const categories: ITable = {
             name: 'Categories',
-            columns: [
-                new Column('categoryId').options([COL_OPTION.PrimaryKey, COL_OPTION.AutoIncrement]),
-                new Column('categoryName').options([COL_OPTION.NotNull]).setDataType(DATA_TYPE.String),
-                new Column('description').options([COL_OPTION.NotNull]).setDataType(DATA_TYPE.String),
-            ]
+            columns: {
+                categoryId: { primaryKey: true, autoIncrement: true },
+                categoryName: { notNull: true, dataType: 'string' },
+                description: { notNull: true, dataType: 'string' }
+            }
         };
 
         const employees: ITable = {
             name: 'Employees',
-            columns: [
-                new Column('employeeId').options([COL_OPTION.PrimaryKey, COL_OPTION.AutoIncrement]),
-                new Column('lastName').options([COL_OPTION.NotNull]).setDataType(DATA_TYPE.String),
-                new Column('birthDate').options([COL_OPTION.NotNull]).setDataType(DATA_TYPE.DateTime),
-                new Column('photo').options([COL_OPTION.NotNull]).setDataType(DATA_TYPE.String),
-                new Column('notes').setDataType(DATA_TYPE.String),
-                new Column('state').options([COL_OPTION.NotNull]).setDataType(DATA_TYPE.String),
-                new Column('jobSuspendedFlag').options([COL_OPTION.NotNull]).setDataType(DATA_TYPE.Number)
-            ]
+            columns: {
+                employeeId: { primaryKey: true, autoIncrement: true },
+                lastName: { notNull: true, dataType: 'string' },
+                birthDate: { notNull: true, dataType: DATA_TYPE.DateTime },
+                photo: { notNull: true, dataType: 'string' },
+                notes: { dataType: 'string' },
+                state: { notNull: true, dataType: 'string' },
+                jobSuspendedFlag: { notNull: true, dataType: 'number' }
+            }
         };
 
         var orderDetails: ITable = {
             name: 'OrderDetails',
-            columns: [
-                new Column('orderDetailId').options([COL_OPTION.PrimaryKey, COL_OPTION.AutoIncrement]),
-                new Column('orderId').options([COL_OPTION.NotNull]).setDataType(DATA_TYPE.Number),
-                new Column('productId').options([COL_OPTION.NotNull]).setDataType(DATA_TYPE.Number),
-                new Column('quantity').options([COL_OPTION.NotNull]).setDataType(DATA_TYPE.Number)
-            ]
+            columns: {
+                orderDetailId: { primaryKey: true, autoIncrement: true },
+                orderId: { notNull: true, dataType: 'number' },
+                productId: { notNull: true, dataType: 'number' },
+                quantity: { notNull: true, dataType: 'number' },
+            }
         };
 
         var orders: ITable = {
             name: 'Orders',
-            columns: [
-                new Column('orderId').options([COL_OPTION.PrimaryKey]),
-                new Column('customerId').options([COL_OPTION.NotNull]).setDataType(DATA_TYPE.Number),
-                new Column('employeeId').options([COL_OPTION.NotNull]).setDataType(DATA_TYPE.Number),
-                new Column('orderDate').options([COL_OPTION.NotNull]).setDataType(DATA_TYPE.DateTime),
-                new Column('shipperId').options([COL_OPTION.NotNull]).setDataType(DATA_TYPE.Number)
-            ]
+            columns: {
+                orderId: { primaryKey: true },
+                customerId: { notNull: true },
+                employeeId: { notNull: true, dataType: 'number' },
+                orderDate: { notNull: true, dataType: DATA_TYPE.DateTime },
+                shipperId: { notNull: true, dataType: 'number' }
+            }
         };
 
         var products: ITable = {
             name: 'Products',
-            columns: [
-                new Column('productId').options([COL_OPTION.PrimaryKey, COL_OPTION.AutoIncrement]),
-                new Column('productName').options([COL_OPTION.NotNull]).setDataType(DATA_TYPE.String),
-                new Column('supplierId').options([COL_OPTION.NotNull]).setDataType(DATA_TYPE.Number),
-                new Column('categoryId').options([COL_OPTION.NotNull]).setDataType(DATA_TYPE.Number),
-                new Column('unit').options([COL_OPTION.NotNull]).setDataType(DATA_TYPE.String),
-                new Column('price').options([COL_OPTION.NotNull]).setDataType(DATA_TYPE.Number)
-            ]
+            columns: {
+                productId: { primaryKey: true, autoIncrement: true },
+                productName: { notNull: true, dataType: 'string' },
+                supplierId: { notNull: true, dataType: 'number' },
+                categoryId: { notNull: true, dataType: 'number' },
+                unit: { notNull: true, dataType: 'string' },
+                price: { notNull: true, dataType: 'number' },
+            }
         };
 
         var shippers: ITable = {
             name: 'Shippers',
-            columns: [
-                new Column('shipperId').options([COL_OPTION.PrimaryKey, COL_OPTION.AutoIncrement]),
-                new Column('shipperName').options([COL_OPTION.NotNull]).setDataType(DATA_TYPE.String),
-                new Column('phone').options([COL_OPTION.NotNull]).setDataType(DATA_TYPE.String),
-            ]
+            columns: {
+                shipperId: { primaryKey: true, autoIncrement: true },
+                shipperName: { notNull: true, dataType: 'string' },
+                phone: { notNull: true, dataType: 'string' }
+            }
         };
 
         var suppliers: ITable = {
             name: 'Suppliers',
-            columns: [
-                new Column('supplierId').options([COL_OPTION.PrimaryKey, COL_OPTION.AutoIncrement]),
-                new Column('supplierName').options([COL_OPTION.NotNull]).setDataType(DATA_TYPE.String),
-                new Column('contactName').options([COL_OPTION.NotNull]).setDataType(DATA_TYPE.String),
-                new Column('address').options([COL_OPTION.NotNull]).setDataType(DATA_TYPE.String),
-                new Column('city').options([COL_OPTION.NotNull]).setDataType(DATA_TYPE.String),
-                new Column('postalCode').options([COL_OPTION.NotNull]).setDataType(DATA_TYPE.String),
-                new Column('country').options([COL_OPTION.NotNull]).setDataType(DATA_TYPE.String),
-                new Column('phone').options([COL_OPTION.NotNull]).setDataType(DATA_TYPE.String)
-            ]
+            columns: {
+                supplierId: { primaryKey: true, autoIncrement: true },
+                supplierName: { notNull: true, dataType: 'string' },
+                contactName: { notNull: true, dataType: 'string' },
+                address: { notNull: true, dataType: 'string' },
+                city: { notNull: true, dataType: 'string' },
+                postalCode: { notNull: true, dataType: 'string' },
+                country: { notNull: true, dataType: 'string' },
+                phone: { notNull: true, dataType: 'string' },
+            }
         };
 
         var dataBase: IDataBase = {
