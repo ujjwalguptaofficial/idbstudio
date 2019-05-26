@@ -73,11 +73,11 @@ module.exports = {
         },
         {
             test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
-            use: 'url-loader?limit=10000&mimetype=application/font-woff'
+            use: 'file-loader?name=fonts/[name][hash].[ext]]&mimetype=application/octet-stream'
         },
         {
             test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-            use: 'url-loader?limit=10000&name=fonts/[name][hash].[ext]&mimetype=application/octet-stream'
+            use: 'file-loader?name=fonts/[name][hash].[ext]&mimetype=application/octet-stream'
         },
         {
             test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
