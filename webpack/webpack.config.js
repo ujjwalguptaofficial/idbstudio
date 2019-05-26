@@ -24,7 +24,7 @@ module.exports = {
     output: {
         path: path.join(__dirname, `../${outputFolder}`),
         publicPath: '/',
-        filename: "scripts/bundle.[contenthash].js"
+        filename: isDev ? "scripts/bundle.js" : "scripts/bundle.[contenthash].js"
     },
     mode: isDev ? 'development' : 'production',
     module: {

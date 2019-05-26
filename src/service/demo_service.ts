@@ -1,13 +1,8 @@
 import { BaseService } from './base_service';
 import { ITable, DATA_TYPE, IDataBase } from 'jsstore';
-import Axios from "axios";
 
 export class DemoService extends BaseService {
     dbName = "Demo";
-    constructor() {
-        super();
-    }
-
     isDemoDbExist() {
         return this.isDbExist(this.dbName);
     }
@@ -27,33 +22,35 @@ export class DemoService extends BaseService {
             "Orders", "Products", "Shippers", "Suppliers"];
         var filesProcessed = 0;
         var onFileProcessed = function () {
+            console.log('inserted file:', filesList[filesProcessed]);
             filesProcessed++;
-            console.log('inserted file:' + filesList[filesProcessed - 1]);
             if (filesProcessed === filesList.length) {
                 callBack();
             }
         };
         filesList.forEach((file) => {
             const url = `assets/demo_database/${file}.json?v=1`;
-            Axios.get(url).then((response) => {
+            fetch(url).then(response => {
+                return response.json();
+            }).then(response => {
                 switch (file) {
                     case filesList[4]:
-                        response.data.forEach(function (value) {
+                        response.forEach(function (value) {
                             value.orderDate = new Date();
                         });
-                        this.insert(file, response.data).then(onFileProcessed);
+                        this.insert(file, response).then(onFileProcessed).catch(onFileProcessed);
                         break;
                     case filesList[2]:
-                        response.data.forEach(function (value) {
+                        response.forEach(function (value) {
                             value.birthDate = new Date();
                         });
-                        this.insert(file, response.data).then(onFileProcessed);
+                        this.insert(file, response).then(onFileProcessed).catch(onFileProcessed);
                         break;
                     case filesList[3]:
-                        this.bulkInsert(file, response.data).then(onFileProcessed);
+                        this.bulkInsert(file, response).then(onFileProcessed).catch(onFileProcessed);
                         break;
                     default:
-                        this.insert(file, response.data).then(onFileProcessed);
+                        this.insert(file, response).then(onFileProcessed).catch(onFileProcessed);
                 }
 
             });
@@ -61,10 +58,15 @@ export class DemoService extends BaseService {
     }
 
     insert(table: string, datas: any[]) {
-        return this.connection.insert({
-            into: table,
-            values: datas
-        });
+        return new Promise((res, rej) => {
+            this.connection.insert({
+                into: table,
+                values: datas
+            }).then(res).catch((err) => {
+                console.error('unable to insert data in table', table);
+                rej();
+            });
+        })
     }
 
     bulkInsert(table: string, datas: any[]) {

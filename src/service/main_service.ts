@@ -2,9 +2,6 @@ import { BaseService } from "./base_service";
 import { IResult } from "../interfaces/result";
 import { Config } from "jsstore";
 export class MainService extends BaseService {
-    constructor() {
-        super();
-    }
 
     public executeQry(query: string): Promise<IResult> {
         if (Config.isLogEnabled === true) {
