@@ -23,7 +23,7 @@ module.exports = {
     devtool: isDev ? 'source-map' : false,
     output: {
         path: path.join(__dirname, `../${outputFolder}`),
-        publicPath: '/',
+        publicPath: isDev ? '/' : '',
         filename: isDev ? "scripts/bundle.js" : "scripts/bundle.[contenthash].js"
     },
     mode: isDev ? 'development' : 'production',
@@ -108,7 +108,7 @@ module.exports = {
             to: 'assets/'
         }]),
         new MiniCssExtractPlugin({
-            filename: 'styles/style.css',
+            filename: 'styles/style.[contenthash].css',
             // chunkFilename: '[id].css',
         }),
     ],
