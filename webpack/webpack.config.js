@@ -54,10 +54,33 @@ module.exports = {
 
         {
             test: /\.css$/,
-            use: [
-                isDev ? 'vue-style-loader' : MiniCssExtractPlugin.loader,
-                { loader: 'css-loader' },
+            oneOf: [
+                // this applies to <style module>
+                {
+                    resourceQuery: /module/,
+                    use: [
+                        'vue-style-loader',
+                        {
+                            loader: 'css-loader',
+                            options: {
+                                modules: true,
+                                localIdentName: '[local]_[hash:base64:8]'
+                            }
+                        }
+                    ]
+                },
+                // this applies to <style> or <style scoped>
+                {
+                    use: [
+                        'vue-style-loader',
+                        'css-loader'
+                    ]
+                }
             ]
+            // use: [
+            //     isDev ? 'vue-style-loader' : MiniCssExtractPlugin.loader,
+            //     { loader: 'css-loader' },
+            // ]
         },
         {
             test: /\.scss$/,
