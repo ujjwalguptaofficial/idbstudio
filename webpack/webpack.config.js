@@ -5,10 +5,12 @@ const CopyPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const TerserJSPlugin = require('terser-webpack-plugin');
+const webpack = require('webpack');
 
 const isDev = process.env.NODE_ENV === 'development';
 console.log("webpack build runing for environment", process.env.NODE_ENV);
 const outputFolder = isDev ? "build" : "dist";
+
 module.exports = {
     devServer: {
         headers: {
@@ -24,7 +26,7 @@ module.exports = {
     output: {
         path: path.join(__dirname, `../${outputFolder}`),
         publicPath: isDev ? '/' : '',
-        filename: isDev ? "scripts/bundle.js" : "scripts/bundle.[contenthash].js"
+        filename: isDev ? "scripts/[name].bundle.js" : "scripts/[name].[contenthash:8].js"
     },
     mode: isDev ? 'development' : 'production',
     module: {
@@ -112,7 +114,7 @@ module.exports = {
         extensions: ['.js', '.ts', '.vue']
     },
     plugins: [
-
+        new webpack.HashedModuleIdsPlugin(),
         new VueLoaderPlugin(),
         new HtmlWebpackPlugin({
             // cache: true,
@@ -139,6 +141,21 @@ module.exports = {
         // runtimeChunk: 'single',
         splitChunks: {
             chunks: 'all',
+            maxInitialRequests: Infinity,
+            minSize: 10000,
+            cacheGroups: {
+                vendor: {
+                    test: /[\\/]node_modules[\\/]/,
+                    name(module) {
+                        // get the name. E.g. node_modules/packageName/not/this/part.js
+                        // or node_modules/packageName
+                        const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1];
+                        console.log('package', packageName);
+                        // npm package names are URL-safe, but some servers don't like @ symbols
+                        return `npm.${packageName.replace('@', '')}`;
+                    },
+                },
+            },
         },
         minimizer: [new TerserJSPlugin(), new OptimizeCSSAssetsPlugin({
             cssProcessorPluginOptions: {
