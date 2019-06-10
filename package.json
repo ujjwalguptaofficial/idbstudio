@@ -1,6 +1,6 @@
 {
   "name": "idbstudio",
-  "version": "1.5.4",
+  "version": "1.6.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ujjwalguptaofficial/idbstudio.git"
@@ -26,7 +26,9 @@
     "webpack:dev": "cross-env NODE_ENV=development webpack --config  webpack/webpack.config.js",
     "webpack:prod": "cross-env NODE_ENV=production webpack --config  webpack/webpack.config.js",
     "build": "npm run lint && npm run webpack:dev",
-    "deploy": "npm run lint && npm run webpack:prod",
+    "remove:dist:folder": "cross-env FOLDER=dist node remove_folder.js",
+    "build:prod": "npm run remove:dist:folder && npm run lint && npm run webpack:prod",
+    "deploy": "npm run build:prod && node deployer.js",
     "dev": "cross-env NODE_ENV=development webpack-dev-server --config webpack/webpack.config.js --hot"
   },
   "devDependencies": {
