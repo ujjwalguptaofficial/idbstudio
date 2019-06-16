@@ -1,6 +1,6 @@
 {
   "name": "idbstudio",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ujjwalguptaofficial/idbstudio.git"
@@ -46,6 +46,8 @@
     "sass-loader": "^7.1.0",
     "smart-banner-webpack-plugin": "^3.0.1",
     "style-loader": "^0.23.1",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.2",
     "ts-loader": "^5.3.3",
     "tslint": "^5.12.1",
     "typescript": "^3.3.3",
@@ -61,6 +63,7 @@
     "vue-template-compiler": "^2.6.10",
     "vue-template-es2015-compiler": "^1.8.2",
     "vuetify": "^1.5.12",
+    "vuetify-loader": "^1.2.2",
     "vuex": "^3.1.0",
     "webpack": "^4.29.3",
     "webpack-cli": "^3.2.3",
@@ -71,7 +74,7 @@
   "dependencies": {
     "commander": "^2.19.0",
     "eshtml": "^0.2.2",
-    "fortjs": "^1.5.1",
+    "fortjs": "^1.5.9",
     "fs-extra": "^6.0.1",
     "loading-indicator": "^2.0.0",
     "sqlweb": "^1.3.1"

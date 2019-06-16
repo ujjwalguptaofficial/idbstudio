@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import Vuetify from 'vuetify';
+import Vuetify from 'vuetify/lib';
 import { addPolyfill } from "./ie_polyfill/index";
 import { store } from './store/store';
 import App from './component/app.vue';

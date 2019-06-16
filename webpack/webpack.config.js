@@ -6,6 +6,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const TerserJSPlugin = require('terser-webpack-plugin');
 const webpack = require('webpack');
+const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin')
 
 const isDev = process.env.NODE_ENV === 'development';
 console.log("webpack build runing for environment", process.env.NODE_ENV);
@@ -85,6 +86,20 @@ module.exports = {
             // ]
         },
         {
+            test: /\.styl$/,
+            use: [
+                {
+                    loader: "style-loader" // creates style nodes from JS strings
+                },
+                {
+                    loader: "css-loader" // translates CSS into CommonJS
+                },
+                {
+                    loader: "stylus-loader" // compiles Stylus to CSS
+                }
+            ]
+        },
+        {
             test: /\.scss$/,
             use: [
                 'vue-style-loader',
@@ -114,6 +129,7 @@ module.exports = {
         extensions: ['.js', '.ts', '.vue']
     },
     plugins: [
+        new VuetifyLoaderPlugin(),
         new webpack.HashedModuleIdsPlugin(),
         new VueLoaderPlugin(),
         new HtmlWebpackPlugin({
@@ -143,6 +159,7 @@ module.exports = {
             chunks: 'all',
             maxInitialRequests: Infinity,
             minSize: 10000,
+            maxSize: 100000,
             cacheGroups: {
                 vendor: {
                     test: /[\\/]node_modules[\\/]/,
