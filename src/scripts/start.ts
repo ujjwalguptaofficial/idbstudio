@@ -21,16 +21,21 @@ export default class Start extends Vue {
 
     async mounted() {
         var demoServiceInstance = new DemoService();
-        const isExist = await demoServiceInstance.isDemoDbExist();
-        if (isExist) {
-            setTimeout(() => {
+        try {
+            const isExist = await demoServiceInstance.isDemoDbExist();
+            if (isExist) {
+                setTimeout(() => {
+                    this.getDbList();
+                }, 1000);
+            } else {
+                await demoServiceInstance.createDemoDataBase();
                 this.getDbList();
-            }, 1000);
-        } else {
-            demoServiceInstance.createDemoDataBase().then(() => {
-                this.getDbList();
-            });
+            }
+        } catch (error) {
+            const msg = error.message || "Some error occured, please create an issue on github.";
+            vueEvent.$emit(EVENTS.OnError, msg);
         }
+
     }
 
     setDbNameFromQryString(dbList: string[]) {
