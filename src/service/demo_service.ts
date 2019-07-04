@@ -126,7 +126,7 @@ export class DemoService extends BaseService {
             name: 'Orders',
             columns: {
                 orderId: { primaryKey: true },
-                customerId: { notNull: true },
+                customerId: { notNull: true, dataType: DATA_TYPE.Number },
                 employeeId: { notNull: true, dataType: 'number' },
                 orderDate: { notNull: true, dataType: DATA_TYPE.DateTime },
                 shipperId: { notNull: true, dataType: 'number' }
