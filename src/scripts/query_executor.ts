@@ -61,8 +61,8 @@ export default class QueryExecutor extends Vue {
         this.resultContainerHeight = editorHeight - buttonHeight - 10;
         ($.qry("#divEditorContainer") as HTMLElement).style.height =
             this.getEditorContainerHeight() + "px";
-        ($.qry("#divResult") as HTMLElement).style.height =
-            this.resultContainerHeight + "px";
+        // ($.qry(".divResult") as HTMLElement).style.height =
+        //     this.resultContainerHeight + "px";
     }
 
     onFileOpened(event) {
@@ -124,7 +124,7 @@ export default class QueryExecutor extends Vue {
         const $ = new DomHelper();
         ($.qry("#divEditorContainer") as HTMLElement).style.height =
             this.getEditorContainerHeight() + "px";
-        var resultContainer = $.qry("#divResult") as HTMLElement;
+        var resultContainer = $.qry(`#divResult${this.activeTab + 1}`) as HTMLElement;
         resultContainer.style.height = this.resultContainerHeight + "px";
         resultContainer.classList.remove("hide");
         this.setEditorHeight();

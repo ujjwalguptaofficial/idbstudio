@@ -29,9 +29,9 @@
         <v-tab v-for="(item) in $data.tabCount" :key="'tab'+item">Query {{item}}</v-tab>
         <v-tab-item v-for="(item) in $data.tabCount" :key="'tab'+item">
             <Editor v-bind:id="'editor_' + item" v-bind:style="{height:height+'px'}"></Editor>
+            <QueryResult :id="'divResult'+item" :index="item"></QueryResult>
         </v-tab-item>
     </v-tabs>
-    <QueryResult></QueryResult>
     <transition name="fade">
         <div id="divResultInfo" v-if="showResultInfo" v-bind:style="{bottom:resultContainerHeight+5+'px'}">
             <table>

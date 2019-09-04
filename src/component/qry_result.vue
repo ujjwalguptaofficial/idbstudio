@@ -3,7 +3,7 @@
 <script lang="ts" src="../scripts/qry_result.ts">
 </script>
 <style lang="scss">
-#divResult {
+.divResult {
   overflow-y: scroll;
   overflow-x: hidden;
   min-height: 200px;
