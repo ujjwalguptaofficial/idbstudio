@@ -40,7 +40,7 @@ export default class QueryExecutor extends Vue {
         return this.$store.state.activeTab;
     }
 
-    set activeTab(value: number) {
+    set activeTab(value: any) {
         this.$store.commit(STORE_MUTATION.SetActiveTab, value);
     }
 
@@ -92,7 +92,7 @@ export default class QueryExecutor extends Vue {
     }
 
     createNewTab() {
-        ++this.tabCount;
+        this.activeTab = this.tabCount++;
     }
 
     save() {
