@@ -4,7 +4,7 @@
 
 IDBStudio is a cli tool for indexeddb library jsstore. It helps users to execute , debug and learn jsstore query. 
 
-Note :- IDBStudio uses jsstore v2. So jsstore v1 query wont work.
+Note :- IDBStudio supports jsstore v3. So jsstore v1 & v2 query wont work.
 
 ## Install
 
