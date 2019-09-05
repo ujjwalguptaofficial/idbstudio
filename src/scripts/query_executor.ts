@@ -1,17 +1,13 @@
 import Vue from "vue";
-import { Component, Prop } from "vue-property-decorator";
+import { Component } from "vue-property-decorator";
 import { vueEvent } from "../common_var";
 import Editor from "../component/editor.vue";
 import QueryResult from "../component/qry_result.vue";
 import { MainService } from "../service/main_service";
 import { QueryHelper } from "../helpers/query_helper";
-import { IResult } from "../interfaces/result";
 import { DomHelper } from "../helpers/dom_helper";
-import { Util } from "../util";
-import { DATA_TYPE } from "jsstore";
 import QueryLink from "../component/query_link.vue";
 import { EVENTS } from "../enums/events";
-import { mapState } from "vuex";
 import { STORE_MUTATION } from "../enums/store_mutation";
 
 @Component({
