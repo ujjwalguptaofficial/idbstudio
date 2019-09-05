@@ -51,7 +51,7 @@ export default class QueryResult extends Vue {
                     }
                     const propLength = props.length;
                     htmlString += "</tr>";
-                    var width = 100 / propLength;
+                    // var width = 100 / propLength;
                     for (var i = 0; i < rowsLength; i++) {
                         var tempHtml = "<tr>";
                         for (var j = 0; j < propLength; j++) {
@@ -59,9 +59,7 @@ export default class QueryResult extends Vue {
                                 tempHtml += "<td>" + result[i][props[j]] + "</td>";
                             } else {
                                 tempHtml +=
-                                    "<td style=width:" +
-                                    width +
-                                    "%>" +
+                                    "<td>" +
                                     JSON.stringify(result[i][props[j]]) +
                                     "</td>";
                             }

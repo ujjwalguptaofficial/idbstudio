@@ -5,7 +5,7 @@
 <style lang="scss">
 .divResult {
   overflow-y: scroll;
-  overflow-x: hidden;
+  overflow-x: auto;
   min-height: 200px;
   width: 100%;
   left: 1px;
@@ -17,6 +17,7 @@
   .table tr th {
     border: 1px inset;
     text-align: center;
+    padding: 0 5px;
   }
 }
 
