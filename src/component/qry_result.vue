@@ -19,6 +19,43 @@
     text-align: center;
   }
 }
+
+#divResultInfo {
+  height: 50px;
+  position: absolute;
+  bottom: 0px;
+  background: rgb(241, 241, 241);
+  z-index: 100;
+  width: 100%;
+
+  table {
+    height: inherit;
+    width: 100%;
+  }
+  table tr td {
+    padding-left: 20px;
+  }
+  table tr td:last-child {
+    text-align: right;
+    padding-right: 20px;
+    padding-left: 50px;
+  }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+  bottom: 0px;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+  bottom: -100px;
+}
+.card-body {
+  padding-top: 2px;
+  padding-left: 0px;
+}
 </style>
 
 

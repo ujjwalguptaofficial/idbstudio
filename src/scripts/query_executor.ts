@@ -25,11 +25,13 @@ import { STORE_MUTATION } from "../enums/store_mutation";
 export default class QueryExecutor extends Vue {
     currentModalComponent = "";
     tabCount = 0;
-    timeTaken = "";
-    resultCount: number | string = "";
-    showResultInfo = false;
     editorContainerHeight;
-    resultContainerHeight;
+    get resultContainerHeight() {
+        return this.$store.state.resultContainerHeight;
+    }
+    set resultContainerHeight(value) {
+        this.$store.commit(STORE_MUTATION.SetResultContainerHeight, value);
+    }
     isResultVisible = false;
     isQueryExecuting = false;
     isSaveBtnClicked = false;
@@ -59,10 +61,6 @@ export default class QueryExecutor extends Vue {
             (window.innerHeight - (menuHeight + buttonHeight + margin)) / 2;
         this.editorContainerHeight = editorHeight + buttonHeight;
         this.resultContainerHeight = editorHeight - buttonHeight - 10;
-        ($.qry("#divEditorContainer") as HTMLElement).style.height =
-            this.getEditorContainerHeight() + "px";
-        // ($.qry(".divResult") as HTMLElement).style.height =
-        //     this.resultContainerHeight + "px";
     }
 
     onFileOpened(event) {
@@ -117,16 +115,9 @@ export default class QueryExecutor extends Vue {
     }
 
     executeQry() {
-        this.showResultInfo = false;
         this.isQueryExecuting = true;
         this.isResultVisible = true;
         this.fireGetQry();
-        const $ = new DomHelper();
-        ($.qry("#divEditorContainer") as HTMLElement).style.height =
-            this.getEditorContainerHeight() + "px";
-        var resultContainer = $.qry(`#divResult${this.activeTab + 1}`) as HTMLElement;
-        resultContainer.style.height = this.resultContainerHeight + "px";
-        resultContainer.classList.remove("hide");
         this.setEditorHeight();
     }
 
@@ -137,13 +128,7 @@ export default class QueryExecutor extends Vue {
             try {
                 const qryResult = await new MainService()
                     .executeQry(query);
-                this.resultCount =
-                    Util.getType(qryResult.result) === DATA_TYPE.Array
-                        ? qryResult.result.length
-                        : 0;
-                this.timeTaken = qryResult.timeTaken.toString();
-                vueEvent.$emit(EVENTS.OnQueryResult, qryResult.result);
-                this.showResultInfo = true;
+                vueEvent.$emit(EVENTS.OnQueryResult, qryResult);
             }
             catch (err) {
                 vueEvent.$emit(EVENTS.OnQueryError, err);

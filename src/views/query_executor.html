@@ -25,30 +25,12 @@
             </v-btn>
         </span>
     </div>
-    <v-tabs v-model="activeTab" color="rgb(249, 100, 107)" dark slider-color="rgb(43, 38, 6)" id="divEditorContainer">
+    <v-tabs v-model="activeTab" color="rgb(249, 100, 107)" dark slider-color="rgb(43, 38, 6)" id="divEditorContainer" :style="{height:getEditorContainerHeight+'px'}">
         <v-tab v-for="(item) in $data.tabCount" :key="'tab'+item">Query {{item}}</v-tab>
         <v-tab-item v-for="(item) in $data.tabCount" :key="'tab'+item">
             <Editor v-bind:id="'editor_' + item" v-bind:style="{height:height+'px'}"></Editor>
             <QueryResult :id="'divResult'+item" :index="item"></QueryResult>
         </v-tab-item>
     </v-tabs>
-    <transition name="fade">
-        <div id="divResultInfo" v-if="showResultInfo" v-bind:style="{bottom:resultContainerHeight+5+'px'}">
-            <table>
-                <tr>
-                    <td>
-                        <b>No of Record :</b>
-                        <span>{{resultCount}}</span>
-                        <b class="seperator">|</b>
-                        <b>Time Taken :</b>
-                        <span>{{timeTaken}} sec.</span>
-                    </td>
-                    <td>
-                        <i style="cursor: pointer;" @click="showResultInfo=false" class="fas fa-times"></i>
-                    </td>
-                </tr>
-            </table>
-        </div>
-    </transition>
     <component v-bind:is="currentModalComponent"></component>
 </div>

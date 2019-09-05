@@ -5,9 +5,10 @@ import { Util } from "../util";
 import { DATA_TYPE } from "jsstore";
 import { EVENTS } from "../enums/events";
 import { mapState } from "vuex";
+import { IResult } from "../interfaces/result";
 
 @Component({
-    computed: mapState(['activeTab']),
+    computed: mapState(['activeTab', 'resultContainerHeight']),
     props: {
         index: Number
     }
@@ -16,6 +17,9 @@ export default class QueryResult extends Vue {
     resultInnerHtml = "";
     errorMessage = "";
     index;
+    timeTaken = "";
+    resultCount: number | string = "";
+    showResultInfo = false;
 
     mounted() {
         this.catchEvents();
@@ -25,11 +29,17 @@ export default class QueryResult extends Vue {
         return this.index === this.$store.state.activeTab + 1;
     }
 
-    printResult(result) {
+    printResult(qryResult:IResult) {
         if (this.shouldProcess()) {
-
+            this.showResultInfo = true;
+            var resultType = Util.getType(qryResult.result);
+            this.resultCount =
+                resultType === DATA_TYPE.Array
+                    ? qryResult.result.length
+                    : 0;
+            this.timeTaken = qryResult.timeTaken.toString();
             this.errorMessage = "";
-            var resultType = Util.getType(result);
+            let result = qryResult.result;
             switch (resultType) {
                 case DATA_TYPE.Array:
                     var rowsLength = result.length,

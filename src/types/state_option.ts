@@ -1,5 +1,6 @@
 export type StateOption = {
     activeDbName: string,
     isPageLoaded: boolean,
-    activeTab: number
+    activeTab: number,
+    resultContainerHeight: number
 };

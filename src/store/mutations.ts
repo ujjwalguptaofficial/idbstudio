@@ -10,5 +10,8 @@ export const mutations = {
     },
     [STORE_MUTATION.SetActiveTab]: (state: StateOption, value: number) => {
         state.activeTab = value;
+    },
+    [STORE_MUTATION.SetResultContainerHeight]: (state: StateOption, value: number) => {
+        state.resultContainerHeight = value;
     }
 };

@@ -1,4 +1,24 @@
-<div class="divResult hide">
-    <table v-show="errorMessage.length==0" v-html="resultInnerHtml" class="table"></table>
-    <span v-show="errorMessage.length>0" style="color:red;">{{errorMessage}}</span>
+<div>
+    <transition name="fade">
+        <div id="divResultInfo" v-if="showResultInfo" :style="{bottom:resultContainerHeight+'px'}">
+            <table>
+                <tr>
+                    <td>
+                        <b>No of Record :</b>
+                        <span>{{resultCount}}</span>
+                        <b class="seperator">|</b>
+                        <b>Time Taken :</b>
+                        <span>{{timeTaken}} sec.</span>
+                    </td>
+                    <td>
+                        <i style="cursor: pointer;" @click="showResultInfo=false" class="fas fa-times"></i>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </transition>
+    <div class="divResult" :style="{height:resultContainerHeight+'px'}">
+        <table v-show="errorMessage.length==0" v-html="resultInnerHtml" class="table"></table>
+        <span v-show="errorMessage.length>0" style="color:red;">{{errorMessage}}</span>
+    </div>
 </div>
