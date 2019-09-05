@@ -38,7 +38,7 @@ export default class App extends Vue {
     setLogFromUrl() {
         var log = Util.getParameterByName("log");
         if (!Util.isNull(log)) {
-            Config.isLogEnabled = log === "1" ? true : false;
+            Config.isLogEnabled = true;
         }
     }
 

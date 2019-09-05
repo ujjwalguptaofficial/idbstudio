@@ -2,7 +2,7 @@ import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import { vueEvent } from "../common_var";
 import { Util } from "../util";
-import { DATA_TYPE } from "jsstore";
+import { DATA_TYPE, Config } from "jsstore";
 import { EVENTS } from "../enums/events";
 import { mapState } from "vuex";
 import { IResult } from "../interfaces/result";
@@ -29,16 +29,16 @@ export default class QueryResult extends Vue {
         return this.index === this.$store.state.activeTab + 1;
     }
 
-    printResult(qryResult:IResult) {
+    printResult(qryResult: IResult) {
         if (this.shouldProcess()) {
-            this.showResultInfo = true;
+            this.errorMessage = "";
             var resultType = Util.getType(qryResult.result);
             this.resultCount =
                 resultType === DATA_TYPE.Array
                     ? qryResult.result.length
                     : 0;
             this.timeTaken = qryResult.timeTaken.toString();
-            this.errorMessage = "";
+            this.showResultInfo = true;
             let result = qryResult.result;
             switch (resultType) {
                 case DATA_TYPE.Array:
@@ -49,17 +49,18 @@ export default class QueryResult extends Vue {
                         props.push(prop);
                         htmlString += "<th>" + prop + "</th>";
                     }
+                    const propLength = props.length;
                     htmlString += "</tr>";
-                    var Width = 100 / props.length;
+                    var width = 100 / propLength;
                     for (var i = 0; i < rowsLength; i++) {
                         var tempHtml = "<tr>";
-                        for (var j = 0; j < props.length; j++) {
+                        for (var j = 0; j < propLength; j++) {
                             if (result[0] && result[0][0]) {
                                 tempHtml += "<td>" + result[i][props[j]] + "</td>";
                             } else {
                                 tempHtml +=
                                     "<td style=width:" +
-                                    Width +
+                                    width +
                                     "%>" +
                                     JSON.stringify(result[i][props[j]]) +
                                     "</td>";
@@ -79,6 +80,9 @@ export default class QueryResult extends Vue {
                     break;
                 default:
                     this.resultInnerHtml = JSON.stringify(result);
+            }
+            if (Config.isLogEnabled) {
+                console.table(result);
             }
         }
     }
