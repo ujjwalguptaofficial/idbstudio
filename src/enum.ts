@@ -14,7 +14,6 @@ export enum API {
     Clear = "clear",
     DropDb = "dropDb",
     Count = "count",
-    BulkInsert = "bulkInsert",
     ExportJson = "exportJson",
     ChangeLogStatus = "changeLogStatus",
     Transaction = "transaction",

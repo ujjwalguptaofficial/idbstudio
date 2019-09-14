@@ -47,7 +47,7 @@ export class DemoService extends BaseService {
                         this.insert(file, response).then(onFileProcessed).catch(onFileProcessed);
                         break;
                     case filesList[3]:
-                        this.bulkInsert(file, response).then(onFileProcessed).catch(onFileProcessed);
+                        this.insertWithSkipDataCheck(file, response).then(onFileProcessed).catch(onFileProcessed);
                         break;
                     default:
                         this.insert(file, response).then(onFileProcessed).catch(onFileProcessed);
@@ -69,9 +69,10 @@ export class DemoService extends BaseService {
         })
     }
 
-    bulkInsert(table: string, datas: any[]) {
-        return this.connection.bulkInsert({
+    insertWithSkipDataCheck(table: string, datas: any[]) {
+        return this.connection.insert({
             into: table,
+            skipDataCheck: true,
             values: datas
         });
     }

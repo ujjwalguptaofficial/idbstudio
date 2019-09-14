@@ -36,7 +36,6 @@ export class QueryHelper {
             API.Clear,
             API.Count,
             API.DropDb,
-            API.BulkInsert,
             API.ExportJson,
             API.Transaction,
             API.RunSql
