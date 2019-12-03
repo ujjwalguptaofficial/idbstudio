@@ -38,7 +38,8 @@ export class QueryHelper {
             API.DropDb,
             API.ExportJson,
             API.Transaction,
-            API.RunSql
+            API.RunSql,
+            API.Union
         ]
     }
 

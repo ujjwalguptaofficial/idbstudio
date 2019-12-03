@@ -17,5 +17,6 @@ export enum API {
     ExportJson = "exportJson",
     ChangeLogStatus = "changeLogStatus",
     Transaction = "transaction",
-    RunSql = "runSql"
+    RunSql = "runSql",
+    Union = "union"
 }
