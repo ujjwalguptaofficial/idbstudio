@@ -10,7 +10,7 @@ const getWorkerPath = function () {
 };
 
 export class ServiceHelper {
-    static idbCon = new JsStore.Instance(new Worker(getWorkerPath()));
+    static idbCon = new JsStore.Connection(new Worker(getWorkerPath()));
 }
 
 (window as any).con = ServiceHelper.idbCon;
