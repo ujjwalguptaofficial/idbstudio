@@ -24,6 +24,10 @@ export default class Start extends Vue {
         try {
             const isExist = await demoServiceInstance.isDemoDbExist();
             if (isExist) {
+                if (Util.getParameterByName("drop") === "true") {
+                    await demoServiceInstance.dropDb();
+                    await demoServiceInstance.createDemoDataBase();
+                }
                 setTimeout(() => {
                     this.getDbList();
                 }, 1000);
