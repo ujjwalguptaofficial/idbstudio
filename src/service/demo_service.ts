@@ -87,7 +87,10 @@ export class DemoService extends BaseService {
                 address: { notNull: true, dataType: 'string' },
                 city: { notNull: true, dataType: 'string' },
                 postalCode: { dataType: 'string' },
-                country: { notNull: true, dataType: 'string' }
+                country: { notNull: true, dataType: 'string' },
+                countryCity: {
+                    keyPath: ["country", "city"]
+                }
             }
         };
 
