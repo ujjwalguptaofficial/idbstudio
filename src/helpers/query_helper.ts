@@ -39,7 +39,8 @@ export class QueryHelper {
             API.ExportJson,
             API.Transaction,
             API.RunSql,
-            API.Union
+            API.Union,
+            API.Intersect
         ]
     }
 

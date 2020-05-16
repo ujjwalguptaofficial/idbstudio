@@ -18,5 +18,6 @@ export enum API {
     ChangeLogStatus = "changeLogStatus",
     Transaction = "transaction",
     RunSql = "runSql",
-    Union = "union"
+    Union = "union",
+    Intersect = "intersect"
 }
