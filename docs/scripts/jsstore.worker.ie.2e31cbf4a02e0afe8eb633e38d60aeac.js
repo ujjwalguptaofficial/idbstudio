@@ -1,5 +1,5 @@
 /*!
- * @license :jsstore - V3.10.1 - 01/07/2020
+ * @license :jsstore - V3.10.3 - 27/07/2020
  * https://github.com/ujjwalguptaofficial/JsStore
  * Copyright (c) 2020 @Ujjwal Gupta; Licensed MIT
  */
@@ -5603,11 +5603,11 @@ function (module, __webpack_exports__, __webpack_require__) {
     };
 
     Helper.prototype.compareDefaultInDesc_ = function (a, b) {
-      return b.toString().localeCompare(a);
+      return new String(b).localeCompare(a);
     };
 
     Helper.prototype.compareDefaultinAsc_ = function (a, b) {
-      return a.toString().localeCompare(b);
+      return new String(a).localeCompare(b);
     };
 
     Helper.prototype.compareNumberInDesc_ = function (a, b) {
@@ -8464,8 +8464,8 @@ function (module, __webpack_exports__, __webpack_require__) {
       /* isArray */
       ])(_this.query.where)) {
         _this.isArrayQry = true;
-        _this.shouldEvaluateLimitAtEnd = true;
-        _this.shouldEvaluateSkipAtEnd = true;
+
+        _this.setLimitAndSkipEvaluationAtEnd_();
       } else {
         _this.skipRecord = query.skip;
         _this.limitRecord = query.limit;
@@ -8478,27 +8478,23 @@ function (module, __webpack_exports__, __webpack_require__) {
           _this.query.order.idbSorting = false;
         }
 
-        if (query.limit) {
-          _this.shouldEvaluateLimitAtEnd = true;
-        }
-
-        if (query.skip) {
-          _this.shouldEvaluateSkipAtEnd = true;
-        }
-      }
-
-      if (query.groupBy) {
-        if (query.limit) {
-          _this.shouldEvaluateLimitAtEnd = true;
-        }
-
-        if (query.skip) {
-          _this.shouldEvaluateSkipAtEnd = true;
-        }
+        _this.setLimitAndSkipEvaluationAtEnd_();
+      } else if (query.groupBy) {
+        _this.setLimitAndSkipEvaluationAtEnd_();
       }
 
       return _this;
     }
+
+    Instance.prototype.setLimitAndSkipEvaluationAtEnd_ = function () {
+      if (this.query.limit) {
+        this.shouldEvaluateLimitAtEnd = true;
+      }
+
+      if (this.query.skip) {
+        this.shouldEvaluateSkipAtEnd = true;
+      }
+    };
 
     Instance.prototype.execute = function () {
       var queryHelper = new query_helper["a"
