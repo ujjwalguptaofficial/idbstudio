@@ -32,7 +32,6 @@ export class QueryHelper {
             API.Insert,
             API.Remove,
             API.Update,
-            API.IsDbExist,
             API.Clear,
             API.Count,
             API.DropDb,

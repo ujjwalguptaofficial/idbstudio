@@ -1,4 +1,4 @@
-import * as JsStore from 'jsstore';
+import { Connection } from 'jsstore';
 
 const getWorkerPath = function () {
     if (process.env.NODE_ENV === 'development') {
@@ -10,7 +10,7 @@ const getWorkerPath = function () {
 };
 
 export class ServiceHelper {
-    static idbCon = new JsStore.Connection(new Worker(getWorkerPath()));
+    static idbCon = new Connection(new Worker(getWorkerPath()));
 }
 
 (window as any).con = ServiceHelper.idbCon;

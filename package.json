@@ -29,7 +29,7 @@
     "remove:dist:folder": "cross-env FOLDER=dist node remove_folder.js",
     "build:prod": "npm run remove:dist:folder && npm run lint && npm run webpack:prod",
     "deploy": "npm run build:prod && node deployer.js",
-    "dev": "cross-env NODE_ENV=development webpack-dev-server --config webpack/webpack.config.js --hot"
+    "dev": "cross-env NODE_ENV=development webpack-dev-server --config webpack/webpack.config.js --hot --port 9876"
   },
   "devDependencies": {
     "@types/node": "^12.0.10",

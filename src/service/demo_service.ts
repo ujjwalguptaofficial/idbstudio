@@ -3,19 +3,22 @@ import { ITable, DATA_TYPE, IDataBase } from 'jsstore';
 
 export class DemoService extends BaseService {
     dbName = "Demo";
-    isDemoDbExist() {
-        return this.isDbExist(this.dbName);
-    }
 
-    async  dropDb() {
+
+    async dropDb() {
         await this.connection.openDb(this.dbName);
         return this.connection.dropDb();
     }
 
     createDemoDataBase() {
         return new Promise((resolve, reject) => {
-            this.connection.initDb(this.getDbStructure()).then(() => {
-                this.insertDemoDbData(resolve);
+            this.connection.initDb(this.getDbStructure()).then((isCreated) => {
+                if (isCreated) {
+                    this.insertDemoDbData(resolve);
+                }
+                else {
+                    resolve()
+                }
             }).catch((err) => {
                 reject(err);
             });

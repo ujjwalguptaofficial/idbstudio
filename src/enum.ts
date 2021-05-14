@@ -1,8 +1,5 @@
 export enum API {
     CreateDb = "createDb",
-    IsDbExist = "isDbExist",
-    GetDbVersion = "getDbVersion",
-    GetDbList = "getDbList",
     Get = "get",
     Set = "set",
     Select = "select",

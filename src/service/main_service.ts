@@ -1,13 +1,15 @@
 import { BaseService } from "./base_service";
 import { IResult } from "../interfaces/result";
-import { Config } from "jsstore";
+
 export class MainService extends BaseService {
 
     public executeQry(query: string): Promise<IResult> {
-        if (Config.isLogEnabled === true) {
+        const con = this.connection;
+        const isLogEnabled = con.logger.status
+        if (isLogEnabled) {
             console.log("qry from service - " + query);
         }
-        const con = this.connection;
+
         return new Promise((resolve, reject) => {
             var startTime = performance.now();
             this.evaluateQry_(query).then(qryResult => {
@@ -16,7 +18,7 @@ export class MainService extends BaseService {
                     result: qryResult
                 };
                 resolve(idbResult);
-                if (Config.isLogEnabled === true) {
+                if (isLogEnabled === true) {
                     console.log("result from service evaluated");
                 }
             }).catch(err => {

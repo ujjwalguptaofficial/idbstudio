@@ -7,9 +7,10 @@ import Start from "../component/start.vue";
 import { vueEvent } from "../common_var";
 import "../css/common.css";
 import { Util } from "../util";
-import { Config } from "jsstore";
 import { EVENTS } from "../enums/events";
 import { store } from "../store/store";
+import { ServiceHelper } from "../service/service_helper";
+import { mapState } from "vuex";
 
 declare var ace;
 ace.config.set("workerPath", "assets/scripts");
@@ -21,6 +22,9 @@ ace.config.set("themePath", "assets/scripts");
         DbInfo,
         QueryExecutor,
         Start
+    },
+    computed:{
+        ...mapState(['activeDbName'])
     }
 })
 export default class App extends Vue {
@@ -38,7 +42,7 @@ export default class App extends Vue {
     setLogFromUrl() {
         var log = Util.getParameterByName("log");
         if (!Util.isNull(log)) {
-            Config.isLogEnabled = true;
+            ServiceHelper.idbCon.logStatus = true;
         }
     }
 

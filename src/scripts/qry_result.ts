@@ -2,7 +2,7 @@ import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import { vueEvent } from "../common_var";
 import { Util } from "../util";
-import { DATA_TYPE, Config } from "jsstore";
+import { DATA_TYPE } from "jsstore";
 import { EVENTS } from "../enums/events";
 import { mapState } from "vuex";
 import { IResult } from "../interfaces/result";
@@ -25,12 +25,12 @@ export default class QueryResult extends Vue {
         this.catchEvents();
     }
 
-    shouldProcess() {
+    get shouldProcess() {
         return this.index === this.$store.state.activeTab + 1;
     }
 
     printResult(qryResult: IResult) {
-        if (this.shouldProcess()) {
+        if (this.shouldProcess) {
             this.errorMessage = "";
             var resultType = Util.getType(qryResult.result);
             this.resultCount =
@@ -79,9 +79,9 @@ export default class QueryResult extends Vue {
                 default:
                     this.resultInnerHtml = JSON.stringify(result);
             }
-            if (Config.isLogEnabled) {
-                console.table(result);
-            }
+            // if (this.isLogEnabled) {
+            //     console.table(result);
+            // }
         }
     }
 

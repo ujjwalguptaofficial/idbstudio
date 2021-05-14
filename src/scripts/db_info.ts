@@ -16,17 +16,22 @@ import { STORE_MUTATION } from "../enums/store_mutation";
 })
 export default class DbInfo extends Vue {
   get selectedDb() {
-    return store.state.activeDbName;
+    return this.$store.state.activeDbName;
   }
 
   set selectedDb(value) {
-    store.commit(STORE_MUTATION.SetActiveDb, value);
+    this.$store.commit(STORE_MUTATION.SetActiveDb, value);
     this.onDbChange();
   }
 
   dbInfo: IDataBase = { tables: [] } as any;
 
-  dbList: string[] = [];
+  dbInfoList: any[] = [];
+
+  get dbList() {
+    return this.dbInfoList.map(q => q.name);
+  }
+
   menuData = {};
 
   constructor() {
@@ -44,14 +49,16 @@ export default class DbInfo extends Vue {
     this.menuData = {};
   }
 
-  setDbInfo(isFirstLoad: Boolean) {
+  async setDbInfo(isFirstLoad: Boolean) {
     var mainService = new MainService();
-    mainService.openDb(this.selectedDb);
-    mainService.getDbSchema(this.selectedDb).then(result => {
-      this.dbInfo = result;
-    });
+    const db = this.dbInfoList.find(q => q.name === this.selectedDb);
+    let version = 1;
+    if (db) {
+      version = db.version;
+    }
+    this.dbInfo = await mainService.openDb(this.selectedDb, version);
     mainService.getDbList().then(list => {
-      this.dbList = list;
+      this.dbInfoList = list;
     });
     if (isFirstLoad === true) {
       vueEvent.$emit(EVENTS.DbInfoLoaded);

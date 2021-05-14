@@ -1,10 +1,10 @@
 <v-app>
     <v-content>
-        <Start v-if="!isPageLoaded"></Start>
+        <Start v-if="!isPageLoaded || !activeDbName"></Start>
         <v-container fluid>
             <Menu></Menu>
             <div class="secondary" style="border-top:5px solid #777adb;width: 100%;"></div>
-            <v-layout row v-if="isPageLoaded" id="divMain">
+            <v-layout row v-if="activeDbName" id="divMain">
                 <v-flex sm3>
                     <DbInfo></DbInfo>
                 </v-flex>
