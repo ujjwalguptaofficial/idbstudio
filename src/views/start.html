@@ -3,14 +3,24 @@
     <div v-if="!isPageLoaded" class="loader">
         Loading <i class="fas fa-spin fa-spinner margin-left-10px"></i>
     </div>
-    <v-layout row class="margin-top-100px" v-else-if="dbList.length>0">
-        <v-flex xs12 sm5 md4 style="margin:0 auto;display:inherit;">
-            <div>
-                <v-select v-model="selectedDb" :items="dbList" label="--Select Database--" solo></v-select>
-            </div>
-            <v-btn color="info" @click="connectDb" style="margin-left:50px;padding: 0 30px;">Connect</v-btn>
-        </v-flex>
-    </v-layout>
+    <template v-else-if="dbNames.length>0 && !shouldShowInputDb">
+        <v-layout row class="margin-top-100px">
+            <v-flex xs12 sm5 md4 style="margin:0 auto;display:inherit;">
+                <div>
+                    <v-select v-model="selectedDb" :items="dbNames" label="--Select Database--" solo></v-select>
+                </div>
+                <v-btn color="info" @click="toggleInputDb" style="margin-left:50px;padding: 0 30px;">
+                    Input your db
+                </v-btn>
+            </v-flex>
+        </v-layout>
+        <div style=" display: flex;  justify-content: center;">
+            <v-alert v-show="true" type="info">
+                If your database is not in the list, use input db button.
+            </v-alert>
+        </div>
+    </template>
+    <InputDb @selectDb="onSelectDb" class="margin-top-100px" v-else-if="shouldShowInputDb" />
     <p style="color:white;bottom:50px;position: absolute;text-align: center;width: 100%;">
         <span>
             Created with <i class="fas fa-heart" style="color:red"></i> by <a style="color:darkblue;"

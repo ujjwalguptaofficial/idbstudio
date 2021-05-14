@@ -4,5 +4,6 @@ export const states: StateOption = {
     activeDbName: null as any,
     isPageLoaded: false,
     activeTab: 0,
-    resultContainerHeight: 0
+    resultContainerHeight: 0,
+    dbList: []
 }

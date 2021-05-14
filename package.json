@@ -75,6 +75,7 @@
   "dependencies": {
     "commander": "^2.19.0",
     "eshtml": "^0.2.2",
+    "flexboot": "^1.0.3",
     "fortjs": "^1.7.2",
     "fs-extra": "^6.0.1",
     "loading-indicator": "^2.0.0",

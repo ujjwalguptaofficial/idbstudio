@@ -4,17 +4,26 @@ import { MainService } from "../service/main_service";
 import { IDataBase } from "jsstore";
 import { vueEvent } from "../common_var";
 import contextMenu from "vue-context-menu";
-import { store } from "../store/store";
 import { EVENTS } from "../enums/events";
 import { STORE_MUTATION } from "../enums/store_mutation";
+import { mapState, mapGetters } from "vuex";
 
 @Component({
 
   components: {
     contextMenu
+  },
+  computed: {
+    ...mapState({
+      dbList: (state: any) => state.dbList
+    }),
+    ...mapGetters({
+      dbNames: 'dbNames'
+    })
   }
 })
 export default class DbInfo extends Vue {
+  dbList;
   get selectedDb() {
     return this.$store.state.activeDbName;
   }
@@ -25,12 +34,6 @@ export default class DbInfo extends Vue {
   }
 
   dbInfo: IDataBase = { tables: [] } as any;
-
-  dbInfoList: any[] = [];
-
-  get dbList() {
-    return this.dbInfoList.map(q => q.name);
-  }
 
   menuData = {};
 
@@ -51,19 +54,12 @@ export default class DbInfo extends Vue {
 
   async setDbInfo(isFirstLoad: Boolean) {
     var mainService = new MainService();
-    const db = this.dbInfoList.find(q => q.name === this.selectedDb);
+    const db = this.dbList.find(q => q.name === this.selectedDb);
     let version = 1;
     if (db) {
       version = db.version;
     }
     this.dbInfo = await mainService.openDb(this.selectedDb, version);
-    try {
-      this.dbInfoList = await mainService.getDbList();
-    } catch (error) {
-      this.dbInfoList = [{
-        name: "Demo"
-      }];
-    }
     if (isFirstLoad === true) {
       vueEvent.$emit(EVENTS.DbInfoLoaded);
     }

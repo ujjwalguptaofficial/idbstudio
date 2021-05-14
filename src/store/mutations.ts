@@ -13,5 +13,11 @@ export const mutations = {
     },
     [STORE_MUTATION.SetResultContainerHeight]: (state: StateOption, value: number) => {
         state.resultContainerHeight = value;
+    },
+    SET_DB_LIST(state, value) {
+        state.dbList = value;
+    },
+    ADD_DB(state, value) {
+        state.dbList.push(value)
     }
 };

@@ -1,7 +1,7 @@
 <div>
     <v-layout row>
         <v-flex offset-sm1 sm10>
-            <v-select :items="dbList" v-model="selectedDb" label="--Select Database--" class="mb-3 db-list"
+            <v-select :items="dbNames" v-model="selectedDb" label="--Select Database--" class="mb-3 db-list"
                 @change.native="onDbChange">
             </v-select>
         </v-flex>
