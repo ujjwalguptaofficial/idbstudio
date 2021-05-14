@@ -64,16 +64,18 @@ export default class Start extends Vue {
         this.$store.commit(STORE_MUTATION.SetPageLoaded, true);
     }
 
-    getDbList() {
+    async getDbList() {
         var demoServiceInstance = new DemoService();
-        return demoServiceInstance.getDbList().then(list => {
+        try {
+            const list = await demoServiceInstance.getDbList()
             const dbNames = list.map(q => q.name);
             this.dbList = dbNames;
-        }).catch(err => {
+        } catch (error) {
             this.isDbListFailed = true;
-        }).finally(() => {
+        }
+        finally {
             this.setDbNameFromQryString(this.dbList);
-        })
+        }
     }
 
     connectDb() {

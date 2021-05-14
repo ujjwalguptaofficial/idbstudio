@@ -57,9 +57,13 @@ export default class DbInfo extends Vue {
       version = db.version;
     }
     this.dbInfo = await mainService.openDb(this.selectedDb, version);
-    mainService.getDbList().then(list => {
-      this.dbInfoList = list;
-    });
+    try {
+      this.dbInfoList = await mainService.getDbList();
+    } catch (error) {
+      this.dbInfoList = [{
+        name: "Demo"
+      }];
+    }
     if (isFirstLoad === true) {
       vueEvent.$emit(EVENTS.DbInfoLoaded);
     }
