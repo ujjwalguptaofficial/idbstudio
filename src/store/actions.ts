@@ -4,8 +4,8 @@ export const actions = {
     async getDbList({ commit }) {
         var demoServiceInstance = new DemoService();
         let list = [{
-            name: "Demo",
-            version: 1
+            name: demoServiceInstance.dbName,
+            version: demoServiceInstance.version
         }];
         try {
             list = await demoServiceInstance.getDbList();

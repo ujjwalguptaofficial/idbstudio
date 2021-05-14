@@ -9,7 +9,8 @@
                 <div>
                     <v-select v-model="selectedDb" :items="dbNames" label="--Select Database--" solo></v-select>
                 </div>
-                <v-btn color="info" @click="toggleInputDb" style="margin-left:50px;padding: 0 30px;">
+                <div class="ml-20px mr-20px row content-v-center" style="color: #fff;height: 50px;">or</div>
+                <v-btn color="info" @click="toggleInputDb" style="padding: 0 30px;">
                     Input your db
                 </v-btn>
             </v-flex>

@@ -3,7 +3,7 @@ import { ITable, DATA_TYPE, IDataBase } from 'jsstore';
 
 export class DemoService extends BaseService {
     dbName = "Demo";
-
+    version = 1;
 
     async dropDb() {
         await this.connection.openDb(this.dbName);
@@ -192,7 +192,8 @@ export class DemoService extends BaseService {
                 products,
                 shippers,
                 suppliers
-            ]
+            ],
+            version: this.version
         };
         return dataBase;
     }
