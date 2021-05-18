@@ -3,7 +3,7 @@ import { ITable, DATA_TYPE, IDataBase } from 'jsstore';
 
 export class DemoService extends BaseService {
     dbName = "Demo";
-    version = 1;
+    version = 2;
 
     async dropDb() {
         await this.connection.openDb(this.dbName);
@@ -44,7 +44,7 @@ export class DemoService extends BaseService {
                 switch (file) {
                     case filesList[4]:
                         response.forEach(function (value) {
-                            value.orderDate = new Date();
+                            value.orderDate = new Date(value.orderDate);
                         });
                         this.insert(file, response).then(onFileProcessed).catch(onFileProcessed);
                         break;

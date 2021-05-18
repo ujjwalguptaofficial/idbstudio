@@ -5,7 +5,7 @@ export class MainService extends BaseService {
 
     public executeQry(query: string): Promise<IResult> {
         const con = this.connection;
-        const isLogEnabled = con.logger.status
+        const isLogEnabled = con['logger'].status
         if (isLogEnabled) {
             console.log("qry from service - " + query);
         }
