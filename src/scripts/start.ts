@@ -72,7 +72,7 @@ export default class Start extends Vue {
     }
 
     async getDbList() {
-        this.$store.dispatch("getDbList");
+        await this.$store.dispatch("getDbList");
         this.setDbNameFromQryString(this.dbNames);
     }
     toggleInputDb() {
