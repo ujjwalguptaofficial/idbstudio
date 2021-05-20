@@ -1,6 +1,6 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[6],{MSwd:function(e,t,n){e.exports=n.p+"scripts/jsstore.worker.ie.640f6049bd4e308d7c6b8d72885bc158.js"},S6P5:function(e,t,n){e.exports=n("uXZf")},uXZf:function(e,t){
+(window.webpackJsonp=window.webpackJsonp||[]).push([[6],{MSwd:function(e,t,n){e.exports=n.p+"scripts/jsstore.worker.ie.6a2e370f8448fd3ace2c0b446ddbd6db.js"},S6P5:function(e,t,n){e.exports=n("uXZf")},uXZf:function(e,t){
 /*!
- * @license :jsstore - V4.0.2 - 17/05/2021
+ * @license :jsstore - V4.0.5 - 20/05/2021
  * https://github.com/ujjwalguptaofficial/JsStore
  * Copyright (c) 2021 @Ujjwal Gupta; Licensed MIT
  */
