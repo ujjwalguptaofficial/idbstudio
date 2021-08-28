@@ -55,7 +55,7 @@ export default class Editor extends Vue {
 
     get isEditorActive() {
         const index = Number(this.id.split("_")[1]) - 1;
-        if (this.$store.state.activeTab === index) {
+        if (this.$store.get('activeTab') === index) {
             return true;
         }
         return false;

@@ -65,7 +65,6 @@
     "vue-template-es2015-compiler": "^1.8.2",
     "vuetify": "^1.5.18",
     "vuetify-loader": "^1.2.2",
-    "vuex": "^3.1.0",
     "webpack": "^4.29.3",
     "webpack-cli": "^3.2.3",
     "webpack-dev-server": "^3.3.1",
@@ -78,6 +77,8 @@
     "flexboot": "^1.0.3",
     "fortjs": "^1.7.2",
     "fs-extra": "^6.0.1",
+    "godam": "^0.7.1",
+    "godam-vue": "^1.0.4",
     "loading-indicator": "^2.0.0",
     "sqlweb": "^1.4.1"
   }

@@ -1,15 +1,16 @@
-import Vuex from "vuex";
-import { states } from "./states";
-import { mutations } from "./mutations";
+import { RootState } from "./states";
+import { RootMutation } from "./mutations";
 import Vue from "vue";
-import { actions } from "./actions";
-import { StateOption } from "../types/state_option";
-import { getter } from "./getter";
-Vue.use(Vuex);
+import { RootTask } from "./task";
+import { RootExpression } from "./expression";
+import { Godam } from "godam";
+import Plugin from "godam-vue";
 
-export const store = new Vuex.Store<StateOption>({
-    state: states,
-    mutations: mutations,
-    actions: actions,
-    getters: getter
+export const store = new Godam<RootState, RootMutation, RootExpression, RootTask>({
+    state: RootState,
+    mutations: RootMutation,
+    tasks: RootTask,
+    expressions: RootExpression
 });
+
+Vue.use(Plugin, store);

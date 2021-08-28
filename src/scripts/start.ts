@@ -5,8 +5,8 @@ import { vueEvent } from "../common_var";
 import { Util } from "../util";
 import { STORE_MUTATION } from "../enums/store_mutation";
 import { EVENTS } from "../enums/events";
-import { mapState, mapGetters } from "vuex";
 import InputDb from "../component/input_db.vue";
+import { mapState, mapExpression } from "godam-vue";
 
 @Component({
     components: {
@@ -14,7 +14,7 @@ import InputDb from "../component/input_db.vue";
     },
     computed: {
         ...mapState(['isPageLoaded']),
-        ...mapGetters({
+        ...mapExpression({
             dbNames: 'dbNames'
         })
     }
@@ -24,11 +24,11 @@ export default class Start extends Vue {
     shouldShowInputDb = false;
     dbNames;
     get selectedDb() {
-        return this.$store.state.activeDbName;
+        return this.$store.get('activeDbName');
     }
 
     set selectedDb(value) {
-        this.$store.commit(STORE_MUTATION.SetActiveDb, value);
+        this.$store.set(STORE_MUTATION.SetActiveDb, value);
     }
 
 
@@ -68,11 +68,11 @@ export default class Start extends Vue {
                 this.selectedDb = dbName as string;
             }
         }
-        this.$store.commit(STORE_MUTATION.SetPageLoaded, true);
+        this.$store.set(STORE_MUTATION.SetPageLoaded, true);
     }
 
     async getDbList() {
-        await this.$store.dispatch("getDbList");
+        await this.$store.do("getDbList");
         this.setDbNameFromQryString(this.dbNames);
     }
     toggleInputDb() {
@@ -80,7 +80,7 @@ export default class Start extends Vue {
     }
 
     onSelectDb(value) {
-        this.$store.commit("ADD_DB", value);
+        this.$store.set("ADD_DB", value);
         this.selectedDb = value.name;
     }
 }

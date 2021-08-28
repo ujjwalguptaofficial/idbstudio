@@ -3,7 +3,7 @@ import { Component, Prop } from "vue-property-decorator";
 import { vueEvent } from "../common_var";
 import { DomHelper } from "../helpers/dom_helper";
 import { EVENTS } from "../enums/events";
-import { store } from "../store/store";
+import { mapState } from "godam-vue";
 declare var ClipboardJS;
 
 @Component
@@ -16,7 +16,7 @@ export default class QueryLink extends Vue {
     }
 
     get dbName() {
-        return store.state.activeDbName;
+        return this.$store.get('activeDbName');
     }
 
     showModal(qry: string) {

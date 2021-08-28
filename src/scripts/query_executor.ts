@@ -23,10 +23,10 @@ export default class QueryExecutor extends Vue {
     tabCount = 0;
     editorContainerHeight;
     get resultContainerHeight() {
-        return this.$store.state.resultContainerHeight;
+        return this.$store.get('resultContainerHeight');
     }
     set resultContainerHeight(value) {
-        this.$store.commit(STORE_MUTATION.SetResultContainerHeight, value);
+        this.$store.set(STORE_MUTATION.SetResultContainerHeight, value);
     }
     isResultVisible = false;
     isQueryExecuting = false;
@@ -35,11 +35,11 @@ export default class QueryExecutor extends Vue {
     height = 0;
 
     get activeTab() {
-        return this.$store.state.activeTab;
+        return this.$store.get('activeTab');
     }
 
     set activeTab(value: any) {
-        this.$store.commit(STORE_MUTATION.SetActiveTab, value);
+        this.$store.set(STORE_MUTATION.SetActiveTab, value);
     }
 
     constructor() {

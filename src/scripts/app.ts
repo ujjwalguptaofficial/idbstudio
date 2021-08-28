@@ -10,7 +10,7 @@ import { Util } from "../util";
 import { EVENTS } from "../enums/events";
 import { store } from "../store/store";
 import { ServiceHelper } from "../service/service_helper";
-import { mapState } from "vuex";
+import { mapState } from "godam-vue";
 
 declare var ace;
 ace.config.set("workerPath", "assets/scripts");
@@ -23,14 +23,14 @@ ace.config.set("themePath", "assets/scripts");
         QueryExecutor,
         Start
     },
-    computed:{
+    computed: {
         ...mapState(['activeDbName'])
     }
 })
 export default class App extends Vue {
 
     get isPageLoaded() {
-        return store.state.isPageLoaded;
+        return store.get('isPageLoaded');
     }
 
     constructor() {

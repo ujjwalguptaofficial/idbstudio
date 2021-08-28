@@ -24,6 +24,5 @@ Vue.use(Vuetify, {
 // Initiate vue app
 var vueApp = new Vue({
     el: '#app',
-    store: store,
     render: h => h(App)
 });

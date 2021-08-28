@@ -1,7 +1,9 @@
 import { DemoService } from "../service/demo_service";
+import { Task } from "godam";
+import { RootState } from "./states";
 
-export const actions = {
-    async getDbList({ commit }) {
+export class RootTask extends Task<RootState> {
+    async getDbList() {
         var demoServiceInstance = new DemoService();
         let list = [{
             name: demoServiceInstance.dbName,
@@ -12,6 +14,6 @@ export const actions = {
         } catch (error) {
 
         }
-        commit("SET_DB_LIST", list);
+        this.set("SET_DB_LIST", list);
     }
 }

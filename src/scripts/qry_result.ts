@@ -4,8 +4,8 @@ import { vueEvent } from "../common_var";
 import { Util } from "../util";
 import { DATA_TYPE } from "jsstore";
 import { EVENTS } from "../enums/events";
-import { mapState } from "vuex";
 import { IResult } from "../interfaces/result";
+import { mapState } from "godam-vue";
 
 @Component({
     computed: mapState(['activeTab', 'resultContainerHeight']),
@@ -26,7 +26,7 @@ export default class QueryResult extends Vue {
     }
 
     get shouldProcess() {
-        return this.index === this.$store.state.activeTab + 1;
+        return this.index === this.$store.get('activeTab') + 1;
     }
 
     printResult(qryResult: IResult) {

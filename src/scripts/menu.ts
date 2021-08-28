@@ -7,7 +7,7 @@ import { EVENTS } from "../enums/events";
 @Component
 export default class Menu extends Vue {
   get dbName() {
-    return store.state.activeDbName;
+    return store.get('activeDbName');
   }
 
   createNewQry() {

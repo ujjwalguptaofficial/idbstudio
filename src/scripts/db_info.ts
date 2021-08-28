@@ -6,7 +6,7 @@ import { vueEvent } from "../common_var";
 import contextMenu from "vue-context-menu";
 import { EVENTS } from "../enums/events";
 import { STORE_MUTATION } from "../enums/store_mutation";
-import { mapState, mapGetters } from "vuex";
+import { mapState, mapExpression } from "godam-vue";
 
 @Component({
 
@@ -15,9 +15,9 @@ import { mapState, mapGetters } from "vuex";
   },
   computed: {
     ...mapState({
-      dbList: (state: any) => state.dbList
+      dbList: 'dbList'
     }),
-    ...mapGetters({
+    ...mapExpression({
       dbNames: 'dbNames'
     })
   }
@@ -25,11 +25,11 @@ import { mapState, mapGetters } from "vuex";
 export default class DbInfo extends Vue {
   dbList;
   get selectedDb() {
-    return this.$store.state.activeDbName;
+    return this.$store.get('activeDbName');
   }
 
   set selectedDb(value) {
-    this.$store.commit(STORE_MUTATION.SetActiveDb, value);
+    this.$store.set(STORE_MUTATION.SetActiveDb, value);
     this.onDbChange();
   }
 

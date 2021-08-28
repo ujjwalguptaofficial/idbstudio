@@ -1,9 +1,8 @@
-import { StateOption } from "../types/state_option";
 
-export const states: StateOption = {
-    activeDbName: null as any,
-    isPageLoaded: false,
-    activeTab: 0,
-    resultContainerHeight: 0,
-    dbList: []
+export class RootState {
+    activeDbName: string = null as any;
+    isPageLoaded = false;
+    activeTab = 0;
+    resultContainerHeight = 0;
+    dbList: string[] = [];
 }
