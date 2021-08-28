@@ -1,6 +1,6 @@
 {
   "name": "idbstudio",
-  "version": "1.9.2",
+  "version": "1.10.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ujjwalguptaofficial/idbstudio.git"
@@ -37,9 +37,11 @@
     "cross-env": "^5.2.0",
     "css-loader": "^2.1.0",
     "file-loader": "^3.0.1",
+    "godam": "^0.7.1",
+    "godam-vue": "^1.0.4",
     "html-webpack-plugin": "^3.2.0",
     "js-beautify": "^1.10.0",
-    "jsstore": "^4.0.5",
+    "jsstore": "^4.3.7",
     "mini-css-extract-plugin": "^0.6.0",
     "node-sass": "^4.12.0",
     "opn": "^5.4.0",
@@ -77,8 +79,6 @@
     "flexboot": "^1.0.3",
     "fortjs": "^1.7.2",
     "fs-extra": "^6.0.1",
-    "godam": "^0.7.1",
-    "godam-vue": "^1.0.4",
     "loading-indicator": "^2.0.0",
     "sqlweb": "^1.4.1"
   }
