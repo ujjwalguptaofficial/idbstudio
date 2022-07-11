@@ -1,7 +1,7 @@
 /*!
- * @license :jsstore - V4.3.7 - 02/08/2021
+ * @license :jsstore - V4.3.9 - 09/07/2022
  * https://github.com/ujjwalguptaofficial/JsStore
- * Copyright (c) 2021 @Ujjwal Gupta; Licensed MIT
+ * Copyright (c) 2022 @Ujjwal Gupta; Licensed MIT
  */
 var JsStoreWorker =
 /******/
@@ -1062,9 +1062,7 @@ function (modules) {
         return true;
       } else {
         switch (typeof value) {
-          case 'string':
-            return value.length === 0;
-
+          // case 'string': return value.length === 0;
           case 'number':
             return isNaN(value);
         }
@@ -3874,8 +3872,9 @@ function (modules) {
       value = op ? value[op] : value;
       var cursorRequest;
       var cursor;
+      var isWhereKeysLengthOne = getLength(this.query.where) === 1;
       return promise(function (res, rej) {
-        if (getLength(_this.query.where) === 1 && _this.objectStore.count) {
+        if (isWhereKeysLengthOne && _this.objectStore.count) {
           cursorRequest = _this.objectStore.index(column).count(_this.util.keyRange(value, op));
 
           cursorRequest.onsuccess = function () {
@@ -3938,11 +3937,12 @@ function (modules) {
 
       var cursor;
       var columnStore = this.objectStore.index(column);
+      var isWhereKeysLengthOne = getLength(this.query.where) === 1;
 
       var runInLogic = function (value) {
         var keyRange = _this.util.keyRange(value);
 
-        if (_this.objectStore.count) {
+        if (isWhereKeysLengthOne && _this.objectStore.count) {
           return promise(function (res, rej) {
             var cursorRequest = columnStore.count(keyRange);
 

@@ -8,9 +8,9 @@ import Plugin from "godam-vue";
 
 export const store = new Godam<RootState, RootMutation, RootExpression, RootTask>({
     state: RootState,
-    mutations: RootMutation,
-    tasks: RootTask,
-    expressions: RootExpression
+    mutation: RootMutation,
+    task: RootTask,
+    expression: RootExpression
 });
 
 Vue.use(Plugin, store);
