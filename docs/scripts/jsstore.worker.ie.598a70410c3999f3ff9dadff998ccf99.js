@@ -1,5 +1,5 @@
 /*!
- * @license :jsstore - V4.3.9 - 09/07/2022
+ * @license :jsstore - V4.3.10 - 24/07/2022
  * https://github.com/ujjwalguptaofficial/JsStore
  * Copyright (c) 2022 @Ujjwal Gupta; Licensed MIT
  */
@@ -1700,15 +1700,16 @@ function (modules) {
       var _this = this;
 
       var cursorRequest;
+      var orderQuery = this.query.order;
 
-      if (this.query.order && this.query.order.idbSorting !== false && this.query.order.by) {
-        if (this.objectStore.indexNames.contains(this.query.order.by)) {
-          var orderType = this.query.order.type && this.query.order.type.toLowerCase() === 'desc' ? 'prev' : 'next';
+      if (orderQuery && orderQuery.idbSorting !== false && orderQuery.by) {
+        if (this.objectStore.indexNames.contains(orderQuery.by)) {
+          var orderType = orderQuery.type && orderQuery.type.toLowerCase() === 'desc' ? 'prev' : 'next';
           this.sorted = true;
-          cursorRequest = this.objectStore.index(this.query.order.by).openCursor(null, orderType);
+          cursorRequest = this.objectStore.index(orderQuery.by).openCursor(null, orderType);
         } else {
           return promiseReject(new log_helper_LogHelper(ERROR_TYPE.ColumnNotExist, {
-            column: this.query.order.by,
+            column: orderQuery.by,
             isOrder: true
           }));
         }
@@ -3336,7 +3337,7 @@ function (modules) {
 
         if (query.order) {
           if (isArray(query.order) || query.order.case || isObject(query.order.by)) {
-            _this.query.order.idbSorting = false;
+            query.order.idbSorting = false;
           }
 
           _this.setLimitAndSkipEvaluationAtEnd_();
