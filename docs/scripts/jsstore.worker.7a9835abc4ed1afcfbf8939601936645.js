@@ -1,5 +1,5 @@
 /*!
- * @license :jsstore - V4.4.6 - 11/10/2022
+ * @license :jsstore - V4.4.7 - 11/10/2022
  * https://github.com/ujjwalguptaofficial/JsStore
  * Copyright (c) 2022 @Ujjwal Gupta; Licensed MIT
  */
@@ -2924,23 +2924,18 @@ var Select = /** @class */ (function (_super) {
         // this.onQueryFinished();
     };
     Select.prototype.orQuerySuccess_ = function () {
+        var query = this.query;
         if (this.results.length > 0) {
             this.orInfo.results = __spreadArray(__spreadArray([], this.orInfo.results, true), this.results, true);
         }
-        var query = this.query;
-        if (query.skip) {
-            query.skip = this.skipRecord = null;
-        }
-        if (!query.limit || (query.limit > this.orInfo.results.length)) {
-            this.results = [];
-            var key = getObjectFirstKey(this.orInfo.orQuery);
-            if (key != null) {
-                var where = {};
-                where[key] = this.orInfo.orQuery[key];
-                delete this.orInfo.orQuery[key];
-                query.where = where;
-                return this.goToWhereLogic().then(this.onWhereEvaluated.bind(this));
-            }
+        this.results = [];
+        var key = getObjectFirstKey(this.orInfo.orQuery);
+        if (key != null) {
+            var where = {};
+            where[key] = this.orInfo.orQuery[key];
+            delete this.orInfo.orQuery[key];
+            query.where = where;
+            return this.goToWhereLogic().then(this.onWhereEvaluated.bind(this));
         }
         return this.orQueryFinish_();
     };
@@ -2951,6 +2946,7 @@ var Select = /** @class */ (function (_super) {
             orQuery: where.or,
             results: []
         };
+        this.setLimitAndSkipEvaluationAtEnd_();
         // free or memory
         delete where.or;
     };
