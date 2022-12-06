@@ -1,5 +1,5 @@
 /*!
- * @license :jsstore - V4.4.7 - 11/10/2022
+ * @license :jsstore - V4.4.8 - 06/12/2022
  * https://github.com/ujjwalguptaofficial/JsStore
  * Copyright (c) 2022 @Ujjwal Gupta; Licensed MIT
  */
@@ -2333,6 +2333,7 @@ var __assign = (undefined && undefined.__assign) || function () {
 
 
 
+
 var executeJoinQuery = function () {
     return new Join(this).execute();
 };
@@ -2518,28 +2519,33 @@ var Join = /** @class */ (function () {
                     columnDefaultValue[col.name] = null;
                 });
             }
+            if (table2Index === 1) {
+                callBack = function (valueFromSecondTable, valueFromFirstTable) {
+                    if (valueFromFirstTable[table1Index][column1] === valueFromSecondTable[column2]) {
+                        valueMatchedFromSecondTable.push(valueFromSecondTable);
+                    }
+                };
+            }
+            else {
+                callBack = function (valueFromSecondTable, valueFromFirstTable) {
+                    var value = valueFromFirstTable[table1Index];
+                    if (value != null && value[column1] === valueFromSecondTable[column2]) {
+                        valueMatchedFromSecondTable.push(valueFromSecondTable);
+                    }
+                };
+            }
+            var whereCheker = new WhereChecker(joinQuery.where, joinQuery.where != null);
             _this.results.forEach(function (valueFromFirstTable) {
                 valueMatchedFromSecondTable = [];
-                if (table2Index === 1) {
-                    callBack = function (valueFromSecondTable) {
-                        if (valueFromFirstTable[table1Index][column1] === valueFromSecondTable[column2]) {
-                            valueMatchedFromSecondTable.push(valueFromSecondTable);
-                        }
-                    };
-                }
-                else {
-                    callBack = function (valueFromSecondTable) {
-                        var value = valueFromFirstTable[table1Index];
-                        if (value != null && value[column1] === valueFromSecondTable[column2]) {
-                            valueMatchedFromSecondTable.push(valueFromSecondTable);
-                        }
-                    };
-                }
-                secondtableData.forEach(callBack);
+                secondtableData.forEach(function (val) {
+                    callBack(val, valueFromFirstTable);
+                });
                 if (valueMatchedFromSecondTable.length === 0) {
                     valueMatchedFromSecondTable = [columnDefaultValue];
                 }
                 valueMatchedFromSecondTable.forEach(function (value) {
+                    if (!whereCheker.check(value))
+                        return;
                     output[index] = __assign({}, valueFromFirstTable);
                     output[index++][table2Index] = value;
                 });
