@@ -1,5 +1,5 @@
 /*!
- * @license :jsstore - V4.4.8 - 06/12/2022
+ * @license :jsstore - V4.4.9 - 07/12/2022
  * https://github.com/ujjwalguptaofficial/JsStore
  * Copyright (c) 2022 @Ujjwal Gupta; Licensed MIT
  */
@@ -2413,7 +2413,6 @@ var Join = /** @class */ (function () {
         });
     };
     Join.prototype.onJoinQueryFinished_ = function () {
-        var _this = this;
         if (this.results.length === 0)
             return;
         var selectApi = this.select;
@@ -2421,22 +2420,10 @@ var Join = /** @class */ (function () {
             var results_1 = [];
             var tables = getKeys(this.results[0]);
             var tablesLength_1 = tables.length;
-            var mapWithAlias_1 = function (query, value) {
-                if (query.as != null) {
-                    for (var key in query.as) {
-                        if (value[query.as[key]] === undefined) {
-                            value[query.as[key]] = value[key];
-                            delete value[key];
-                        }
-                    }
-                }
-                return value;
-            };
             this.results.forEach(function (result) {
                 var data = result["0"]; // first table data
                 for (var i = 1; i < tablesLength_1; i++) {
-                    var query = _this.joinQueryStack_[i - 1];
-                    data = __assign(__assign({}, data), mapWithAlias_1(query, result[i]));
+                    data = __assign(__assign({}, data), result[i]);
                 }
                 results_1.push(data);
             });
@@ -2493,13 +2480,24 @@ var Join = /** @class */ (function () {
         var column2 = jointblInfo.table2.column;
         var table1Index = this.tablesFetched.indexOf(jointblInfo.table1.table);
         var table2Index = this.currentQueryStackIndex_ + 1;
+        var asQuery = joinQuery.as;
+        var mapWithAlias = asQuery ? function (value) {
+            for (var key in asQuery) {
+                var asValue = asQuery[key];
+                if (value[asValue] === undefined) {
+                    value[asValue] = value[key];
+                    delete value[key];
+                }
+            }
+            return value;
+        } : function (val) { return val; };
         var performInnerJoin = function () {
             var index = 0;
             _this.results.forEach(function (valueFromFirstTable) {
                 secondtableData.forEach(function (valueFromSecondTable) {
                     if (valueFromFirstTable[table1Index][column1] === valueFromSecondTable[column2]) {
                         output[index] = __assign({}, valueFromFirstTable);
-                        output[index++][table2Index] = valueFromSecondTable;
+                        output[index++][table2Index] = mapWithAlias(__assign({}, valueFromSecondTable));
                     }
                 });
             });
@@ -2509,14 +2507,15 @@ var Join = /** @class */ (function () {
             var valueMatchedFromSecondTable;
             var callBack;
             var columnDefaultValue = {};
+            var nullValue = null;
             if (joinQuery.store) {
                 getKeys(joinQuery.store).forEach(function (columnName) {
-                    columnDefaultValue[columnName] = null;
+                    columnDefaultValue[columnName] = nullValue;
                 });
             }
             else {
                 _this.getTable(jointblInfo.table2.table).columns.forEach(function (col) {
-                    columnDefaultValue[col.name] = null;
+                    columnDefaultValue[col.name] = nullValue;
                 });
             }
             if (table2Index === 1) {
@@ -2534,9 +2533,11 @@ var Join = /** @class */ (function () {
                     }
                 };
             }
-            var whereCheker = new WhereChecker(joinQuery.where, joinQuery.where != null);
+            var whereQry = Object.assign(joinQuery.where || {}, joinQuery['whereJoin'] || {});
+            var whereCheker = new WhereChecker(whereQry, getLength(whereQry) > 0);
             _this.results.forEach(function (valueFromFirstTable) {
                 valueMatchedFromSecondTable = [];
+                // perform left join
                 secondtableData.forEach(function (val) {
                     callBack(val, valueFromFirstTable);
                 });
@@ -2544,6 +2545,7 @@ var Join = /** @class */ (function () {
                     valueMatchedFromSecondTable = [columnDefaultValue];
                 }
                 valueMatchedFromSecondTable.forEach(function (value) {
+                    value = mapWithAlias(value);
                     if (!whereCheker.check(value))
                         return;
                     output[index] = __assign({}, valueFromFirstTable);
@@ -2608,6 +2610,25 @@ var Join = /** @class */ (function () {
             }
             return true;
         });
+        var whereQry = qry.where;
+        if (whereQry) {
+            var whereJoin = {};
+            var _loop_1 = function (key) {
+                // const whereQueryVal = whereQry[key];
+                var columnFound = tableSchemaOf2ndTable.columns.find(function (q) { return q.name === key; });
+                if (!columnFound) {
+                    whereJoin[key] = whereQry[key];
+                    delete whereQry[key];
+                }
+            };
+            for (var key in whereQry) {
+                _loop_1(key);
+            }
+            qry['whereJoin'] = whereJoin;
+            if (getLength(whereQry) === 0) {
+                qry.where = null;
+            }
+        }
         return err;
     };
     return Join;
