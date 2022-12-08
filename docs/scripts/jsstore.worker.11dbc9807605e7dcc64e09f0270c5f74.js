@@ -1,5 +1,5 @@
 /*!
- * @license :jsstore - V4.4.9 - 07/12/2022
+ * @license :jsstore - V4.5.0 - 08/12/2022
  * https://github.com/ujjwalguptaofficial/JsStore
  * Copyright (c) 2022 @Ujjwal Gupta; Licensed MIT
  */
@@ -160,6 +160,7 @@ var QUERY_OPTION;
     QUERY_OPTION["Avg"] = "avg";
     QUERY_OPTION["Count"] = "count";
     QUERY_OPTION["Sum"] = "sum";
+    QUERY_OPTION["List"] = "list";
     QUERY_OPTION["Or"] = "or";
     QUERY_OPTION["Skip"] = "skip";
     QUERY_OPTION["Limit"] = "limit";
@@ -1859,6 +1860,14 @@ var executeAggregateGroupBy = function () {
             value += datas[index][columnToAggregate] ? 1 : 0;
             return value;
         };
+        var getList = function () {
+            value = lookUpObj.get(objKey);
+            // get old value
+            value = value ? value["list(" + columnToAggregate + ")"] : [];
+            // push value
+            value.push(datas[index][columnToAggregate]);
+            return value;
+        };
         var getMax = function () {
             value = lookUpObj.get(objKey);
             // get old value
@@ -1917,6 +1926,9 @@ var executeAggregateGroupBy = function () {
                     break;
                 case QUERY_OPTION.Avg:
                     aggregateCalculator = getAvg;
+                    break;
+                case QUERY_OPTION.List:
+                    aggregateCalculator = getList;
                     break;
             }
             switch (aggregateValType) {
