@@ -1,7 +1,7 @@
 /*!
- * @license :jsstore - V4.5.0 - 08/12/2022
+ * @license :jsstore - V4.5.5 - 23/06/2023
  * https://github.com/ujjwalguptaofficial/JsStore
- * Copyright (c) 2022 @Ujjwal Gupta; Licensed MIT
+ * Copyright (c) 2023 @Ujjwal Gupta; Licensed MIT
  */
 var JsStoreWorker;
 /******/ (() => { // webpackBootstrap
@@ -2100,29 +2100,50 @@ var WhereChecker = /** @class */ (function () {
         delete value[last];
     };
     WhereChecker.prototype.check = function (rowValue) {
+        var _this = this;
         var status = true;
         if (!this.checkFlag)
             return status;
-        for (var columnName in this.where) {
+        var where = this.where;
+        var _loop_1 = function (columnName) {
             if (!status) {
-                return status;
+                return { value: status };
             }
-            var whereColumnValue = this.where[columnName];
+            var whereColumnValue = where[columnName];
             var columnValue = rowValue[columnName];
+            var isArrayColumnValue = Array.isArray(columnValue);
+            var executeCompare = function (executor) {
+                if (isArrayColumnValue) {
+                    columnValue.every(function (q) {
+                        status = executor(q);
+                        return !status;
+                    });
+                }
+                else {
+                    status = executor(columnValue);
+                }
+                return;
+            };
             if (getDataType(whereColumnValue) === "object") {
-                for (var key in whereColumnValue) {
+                var _loop_2 = function (key) {
                     if (!status) {
-                        return status;
+                        return { value: status };
                     }
                     switch (key) {
                         case QUERY_OPTION.In:
-                            status = this.checkIn(columnName, columnValue);
+                            executeCompare(function (compareValue) {
+                                return _this.checkIn(whereColumnValue[QUERY_OPTION.In], compareValue);
+                            });
                             break;
                         case QUERY_OPTION.Like:
-                            status = this.checkLike_(columnName, columnValue);
+                            executeCompare(function (compareValue) {
+                                return _this.checkLike_(columnName, compareValue);
+                            });
                             break;
                         case QUERY_OPTION.Regex:
-                            status = this.checkRegex(columnName, columnValue);
+                            executeCompare(function (compareValue) {
+                                return _this.checkRegex(columnName, compareValue);
+                            });
                             break;
                         case QUERY_OPTION.Between:
                         case QUERY_OPTION.GreaterThan:
@@ -2130,21 +2151,35 @@ var WhereChecker = /** @class */ (function () {
                         case QUERY_OPTION.GreaterThanEqualTo:
                         case QUERY_OPTION.LessThanEqualTo:
                         case QUERY_OPTION.NotEqualTo:
-                            status = this.checkComparisionOp_(columnName, columnValue, key);
+                            executeCompare(function (compareValue) {
+                                return _this.checkComparisionOp_(columnName, compareValue, key);
+                            });
                             break;
                         default:
                             status = false;
                     }
+                };
+                for (var key in whereColumnValue) {
+                    var state_2 = _loop_2(key);
+                    if (typeof state_2 === "object")
+                        return state_2;
                 }
             }
             else {
-                status = compare(whereColumnValue, columnValue);
+                executeCompare(function (storedValue) {
+                    return compare(whereColumnValue, storedValue);
+                });
             }
+        };
+        for (var columnName in where) {
+            var state_1 = _loop_1(columnName);
+            if (typeof state_1 === "object")
+                return state_1.value;
         }
         return status;
     };
-    WhereChecker.prototype.checkIn = function (column, value) {
-        return this.where[column][QUERY_OPTION.In].find(function (q) { return compare(q, value); }) != null;
+    WhereChecker.prototype.checkIn = function (whereColumnValue, value) {
+        return whereColumnValue.find(function (q) { return compare(q, value); }) != null;
     };
     WhereChecker.prototype.checkLike_ = function (column, value) {
         return getRegexFromLikeExpression(this.where[column][QUERY_OPTION.Like]).test(value);
@@ -2533,7 +2568,7 @@ var Join = /** @class */ (function () {
             if (table2Index === 1) {
                 callBack = function (valueFromSecondTable, valueFromFirstTable) {
                     if (valueFromFirstTable[table1Index][column1] === valueFromSecondTable[column2]) {
-                        valueMatchedFromSecondTable.push(valueFromSecondTable);
+                        valueMatchedFromSecondTable.push(__assign({}, valueFromSecondTable));
                     }
                 };
             }
@@ -2541,12 +2576,12 @@ var Join = /** @class */ (function () {
                 callBack = function (valueFromSecondTable, valueFromFirstTable) {
                     var value = valueFromFirstTable[table1Index];
                     if (value != null && value[column1] === valueFromSecondTable[column2]) {
-                        valueMatchedFromSecondTable.push(valueFromSecondTable);
+                        valueMatchedFromSecondTable.push(__assign({}, valueFromSecondTable));
                     }
                 };
             }
             var whereQry = Object.assign(joinQuery.where || {}, joinQuery['whereJoin'] || {});
-            var whereCheker = new WhereChecker(whereQry, getLength(whereQry) > 0);
+            var whereCheker = new WhereChecker(whereQry, (getLength(whereQry) > 0));
             _this.results.forEach(function (valueFromFirstTable) {
                 valueMatchedFromSecondTable = [];
                 // perform left join
@@ -4095,9 +4130,7 @@ var Clear = /** @class */ (function (_super) {
                         for (var columnName in currentTable.autoIncColumnValue) {
                             currentTable.autoIncColumnValue[columnName] = 0;
                         }
-                        MetaHelper.set(MetaHelper.dbSchema, _this.util.db, _this.util).then(function () {
-                            res();
-                        }).catch(rej);
+                        MetaHelper.set(MetaHelper.dbSchema, _this.util.db, _this.util).then(res).catch(rej);
                     };
                     clearRequest.onerror = rej;
                 });
@@ -4634,13 +4667,17 @@ var QueryManager = /** @class */ (function () {
         return promise(function (res, rej) {
             _this.util.initDb(dbMeta).then(function (dbInfo) {
                 if (dbInfo.isCreated) {
-                    MetaHelper.get(MetaHelper.dbSchema, _this.util).then(function (value) {
-                        if (value) {
-                            value.tables.forEach(function (table, index) {
-                                var targetTable = dbMeta.tables[index];
+                    MetaHelper.get(MetaHelper.dbSchema, _this.util).then(function (dbFromCache) {
+                        if (dbFromCache) {
+                            dbFromCache.tables.forEach(function (tableFromCache, index) {
+                                var targetTable = dbMeta.tables.find(function (q) { return q.name === tableFromCache.name; });
                                 if (targetTable) {
-                                    targetTable.autoIncColumnValue =
-                                        table.autoIncColumnValue;
+                                    for (var key in tableFromCache.autoIncColumnValue) {
+                                        var savedAutoIncrementValue = tableFromCache.autoIncColumnValue[key];
+                                        if (savedAutoIncrementValue) {
+                                            targetTable.autoIncColumnValue[key] = savedAutoIncrementValue;
+                                        }
+                                    }
                                 }
                             });
                         }
