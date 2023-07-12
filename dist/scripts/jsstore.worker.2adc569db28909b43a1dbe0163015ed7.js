@@ -1,5 +1,5 @@
 /*!
- * @license :jsstore - V4.5.5 - 23/06/2023
+ * @license :jsstore - V4.5.7 - 12/07/2023
  * https://github.com/ujjwalguptaofficial/JsStore
  * Copyright (c) 2023 @Ujjwal Gupta; Licensed MIT
  */
@@ -2403,7 +2403,6 @@ var Join = /** @class */ (function () {
         return this.select.table(name);
     };
     Join.prototype.executeSelect = function (query) {
-        // this.select.util.emptyTx();
         return new Select(query, this.select.util).
             execute();
     };
@@ -2440,6 +2439,30 @@ var Join = /** @class */ (function () {
         }
         if (!this.select.isTxQuery && tablesToFetch.length > 0) {
             this.select.util.createTransaction(tablesToFetch);
+        }
+        var whereQuery = query.where;
+        // remove column which not exist in first table
+        if (whereQuery && !query.store) {
+            var whereQryAfterJoin = {};
+            var table = this.getTable(tableName);
+            var _loop_1 = function (column) {
+                var columnInTable = table.columns.find(function (q) { return q.name === column; });
+                if (!columnInTable) {
+                    whereQryAfterJoin[column] = whereQuery[column];
+                }
+            };
+            for (var column in whereQuery) {
+                _loop_1(column);
+            }
+            for (var column in whereQryAfterJoin) {
+                delete whereQuery[column];
+            }
+            if (Object.keys(whereQuery).length === 0) {
+                delete query.where;
+            }
+            // query['whereAfterJoin'] = whereQryAfterJoin;
+            var joinQuery = this.joinQueryStack_[0];
+            Object.assign(joinQuery['whereJoin'], whereQryAfterJoin);
         }
         return this.executeSelect({
             from: tableName,
@@ -2580,7 +2603,7 @@ var Join = /** @class */ (function () {
                     }
                 };
             }
-            var whereQry = Object.assign(joinQuery.where || {}, joinQuery['whereJoin'] || {});
+            var whereQry = Object.assign({}, joinQuery['whereJoin']);
             var whereCheker = new WhereChecker(whereQry, (getLength(whereQry) > 0));
             _this.results.forEach(function (valueFromFirstTable) {
                 valueMatchedFromSecondTable = [];
@@ -2658,9 +2681,9 @@ var Join = /** @class */ (function () {
             return true;
         });
         var whereQry = qry.where;
+        var whereJoin = {};
         if (whereQry) {
-            var whereJoin = {};
-            var _loop_1 = function (key) {
+            var _loop_2 = function (key) {
                 // const whereQueryVal = whereQry[key];
                 var columnFound = tableSchemaOf2ndTable.columns.find(function (q) { return q.name === key; });
                 if (!columnFound) {
@@ -2669,13 +2692,13 @@ var Join = /** @class */ (function () {
                 }
             };
             for (var key in whereQry) {
-                _loop_1(key);
+                _loop_2(key);
             }
-            qry['whereJoin'] = whereJoin;
             if (getLength(whereQry) === 0) {
                 qry.where = null;
             }
         }
+        qry['whereJoin'] = whereJoin;
         return err;
     };
     return Join;
