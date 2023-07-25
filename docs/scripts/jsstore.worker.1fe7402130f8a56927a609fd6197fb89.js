@@ -1,5 +1,5 @@
 /*!
- * @license :jsstore - V4.5.7 - 12/07/2023
+ * @license :jsstore - V4.5.9 - 24/07/2023
  * https://github.com/ujjwalguptaofficial/JsStore
  * Copyright (c) 2023 @Ujjwal Gupta; Licensed MIT
  */
@@ -2446,9 +2446,29 @@ var Join = /** @class */ (function () {
             var whereQryAfterJoin = {};
             var table = this.getTable(tableName);
             var _loop_1 = function (column) {
-                var columnInTable = table.columns.find(function (q) { return q.name === column; });
-                if (!columnInTable) {
-                    whereQryAfterJoin[column] = whereQuery[column];
+                switch (column) {
+                    case "or":
+                        var filteredOr = {};
+                        var whereQryOr = whereQuery[column];
+                        var _loop_2 = function (orColumn) {
+                            var columnInTable_1 = table.columns.find(function (q) { return q.name === orColumn; });
+                            if (!columnInTable_1) {
+                                filteredOr[orColumn] = whereQryOr[orColumn];
+                            }
+                        };
+                        for (var orColumn in whereQryOr) {
+                            _loop_2(orColumn);
+                        }
+                        whereQryAfterJoin['or'] = filteredOr;
+                        for (var orColumn in filteredOr) {
+                            delete whereQryOr[orColumn];
+                        }
+                        break;
+                    default:
+                        var columnInTable = table.columns.find(function (q) { return q.name === column; });
+                        if (!columnInTable) {
+                            whereQryAfterJoin[column] = whereQuery[column];
+                        }
                 }
             };
             for (var column in whereQuery) {
@@ -2460,7 +2480,6 @@ var Join = /** @class */ (function () {
             if (Object.keys(whereQuery).length === 0) {
                 delete query.where;
             }
-            // query['whereAfterJoin'] = whereQryAfterJoin;
             var joinQuery = this.joinQueryStack_[0];
             Object.assign(joinQuery['whereJoin'], whereQryAfterJoin);
         }
@@ -2561,21 +2580,19 @@ var Join = /** @class */ (function () {
             }
             return value;
         } : function (val) { return val; };
+        var index = 0;
+        var valueMatchedFromSecondTable;
+        var whereQry = Object.assign({}, joinQuery['whereJoin']);
+        var whereCheker = new WhereChecker(whereQry, (getLength(whereQry) > 0));
+        var joinerComparer;
         var performInnerJoin = function () {
-            var index = 0;
-            _this.results.forEach(function (valueFromFirstTable) {
-                secondtableData.forEach(function (valueFromSecondTable) {
-                    if (valueFromFirstTable[table1Index][column1] === valueFromSecondTable[column2]) {
-                        output[index] = __assign({}, valueFromFirstTable);
-                        output[index++][table2Index] = mapWithAlias(__assign({}, valueFromSecondTable));
-                    }
-                });
-            });
+            joinerComparer = function (valueFromSecondTable, valueFromFirstTable) {
+                return valueFromFirstTable[table1Index][column1] === valueFromSecondTable[column2];
+            };
+            defaultValueSetter = function () { };
         };
+        var defaultValueSetter;
         var performleftJoin = function () {
-            var index = 0;
-            var valueMatchedFromSecondTable;
-            var callBack;
             var columnDefaultValue = {};
             var nullValue = null;
             if (joinQuery.store) {
@@ -2589,39 +2606,21 @@ var Join = /** @class */ (function () {
                 });
             }
             if (table2Index === 1) {
-                callBack = function (valueFromSecondTable, valueFromFirstTable) {
-                    if (valueFromFirstTable[table1Index][column1] === valueFromSecondTable[column2]) {
-                        valueMatchedFromSecondTable.push(__assign({}, valueFromSecondTable));
-                    }
+                joinerComparer = function (valueFromSecondTable, valueFromFirstTable) {
+                    return valueFromFirstTable[table1Index][column1] === valueFromSecondTable[column2];
                 };
             }
             else {
-                callBack = function (valueFromSecondTable, valueFromFirstTable) {
+                joinerComparer = function (valueFromSecondTable, valueFromFirstTable) {
                     var value = valueFromFirstTable[table1Index];
-                    if (value != null && value[column1] === valueFromSecondTable[column2]) {
-                        valueMatchedFromSecondTable.push(__assign({}, valueFromSecondTable));
-                    }
+                    return value != null && value[column1] === valueFromSecondTable[column2];
                 };
             }
-            var whereQry = Object.assign({}, joinQuery['whereJoin']);
-            var whereCheker = new WhereChecker(whereQry, (getLength(whereQry) > 0));
-            _this.results.forEach(function (valueFromFirstTable) {
-                valueMatchedFromSecondTable = [];
-                // perform left join
-                secondtableData.forEach(function (val) {
-                    callBack(val, valueFromFirstTable);
-                });
+            defaultValueSetter = function () {
                 if (valueMatchedFromSecondTable.length === 0) {
                     valueMatchedFromSecondTable = [columnDefaultValue];
                 }
-                valueMatchedFromSecondTable.forEach(function (value) {
-                    value = mapWithAlias(value);
-                    if (!whereCheker.check(value))
-                        return;
-                    output[index] = __assign({}, valueFromFirstTable);
-                    output[index++][table2Index] = value;
-                });
-            });
+            };
         };
         switch (joinType) {
             case "left":
@@ -2630,6 +2629,23 @@ var Join = /** @class */ (function () {
             default:
                 performInnerJoin();
         }
+        this.results.forEach(function (valueFromFirstTable) {
+            valueMatchedFromSecondTable = [];
+            // perform left join
+            secondtableData.forEach(function (valueFromSecondTable) {
+                if (joinerComparer(valueFromSecondTable, valueFromFirstTable)) {
+                    valueMatchedFromSecondTable.push(__assign({}, valueFromSecondTable));
+                }
+            });
+            defaultValueSetter();
+            valueMatchedFromSecondTable.forEach(function (value) {
+                value = mapWithAlias(value);
+                if (!whereCheker.check(value))
+                    return;
+                output[index] = __assign({}, valueFromFirstTable);
+                output[index++][table2Index] = value;
+            });
+        });
         this.results = output;
     };
     Join.prototype.getJoinTableInfo_ = function (joinOn) {
@@ -2683,16 +2699,21 @@ var Join = /** @class */ (function () {
         var whereQry = qry.where;
         var whereJoin = {};
         if (whereQry) {
-            var _loop_2 = function (key) {
-                // const whereQueryVal = whereQry[key];
-                var columnFound = tableSchemaOf2ndTable.columns.find(function (q) { return q.name === key; });
-                if (!columnFound) {
-                    whereJoin[key] = whereQry[key];
-                    delete whereQry[key];
+            var _loop_3 = function (columnName) {
+                switch (columnName) {
+                    case "or":
+                    case "in":
+                        break;
+                    default:
+                        var columnFound = tableSchemaOf2ndTable.columns.find(function (q) { return q.name === columnName; });
+                        if (!columnFound) {
+                            whereJoin[columnName] = whereQry[columnName];
+                            delete whereQry[columnName];
+                        }
                 }
             };
-            for (var key in whereQry) {
-                _loop_2(key);
+            for (var columnName in whereQry) {
+                _loop_3(columnName);
             }
             if (getLength(whereQry) === 0) {
                 qry.where = null;
@@ -2950,11 +2971,8 @@ var Select = /** @class */ (function (_super) {
                 if (output.length > 0) {
                     _this.results = __spreadArray(__spreadArray([], output, true), _this.results, true);
                     _this.removeDuplicates();
-                    output = _this.results;
                 }
-                else {
-                    output = _this.results;
-                }
+                output = _this.results;
             }
             isFirstWhere = false;
             if (whereQuery.length > 0) {
@@ -2965,12 +2983,27 @@ var Select = /** @class */ (function (_super) {
                 _this.results = output;
             }
         };
+        var executeWhere = function (whereQuery) {
+            var select = new Select({
+                from: _this.query.from,
+                where: whereQuery
+            }, _this.util);
+            return select.execute().then(function (results) {
+                _this.results = results;
+                onSuccess();
+            });
+        };
         var processFirstQry = function () {
             var whereQueryToProcess = whereQuery.shift();
-            if (whereQueryToProcess[QUERY_OPTION.Or]) {
+            var whereQueryOr = whereQueryToProcess[QUERY_OPTION.Or];
+            if (whereQueryOr) {
+                if (Array.isArray(whereQueryOr)) {
+                    operation = QUERY_OPTION.Or;
+                    return executeWhere(whereQueryOr);
+                }
                 if (getLength(whereQueryToProcess) === 1) {
                     operation = QUERY_OPTION.Or;
-                    whereQueryToProcess = whereQueryToProcess[QUERY_OPTION.Or];
+                    whereQueryToProcess = whereQueryOr;
                 }
                 else {
                     operation = QUERY_OPTION.And;
@@ -2978,6 +3011,9 @@ var Select = /** @class */ (function (_super) {
             }
             else {
                 operation = QUERY_OPTION.And;
+                if (isArray(whereQueryToProcess)) {
+                    return executeWhere(whereQueryToProcess);
+                }
             }
             _this.query.where = whereQueryToProcess;
             return _this.processWhere_().then(onSuccess);
