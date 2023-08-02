@@ -1,5 +1,5 @@
 /*!
- * @license :jsstore - V4.5.9 - 24/07/2023
+ * @license :jsstore - V4.6.0 - 02/08/2023
  * https://github.com/ujjwalguptaofficial/JsStore
  * Copyright (c) 2023 @Ujjwal Gupta; Licensed MIT
  */
@@ -2443,41 +2443,66 @@ var Join = /** @class */ (function () {
         var whereQuery = query.where;
         // remove column which not exist in first table
         if (whereQuery && !query.store) {
-            var whereQryAfterJoin = {};
-            var table = this.getTable(tableName);
-            var _loop_1 = function (column) {
-                switch (column) {
-                    case "or":
-                        var filteredOr = {};
-                        var whereQryOr = whereQuery[column];
-                        var _loop_2 = function (orColumn) {
-                            var columnInTable_1 = table.columns.find(function (q) { return q.name === orColumn; });
-                            if (!columnInTable_1) {
-                                filteredOr[orColumn] = whereQryOr[orColumn];
-                            }
-                        };
-                        for (var orColumn in whereQryOr) {
-                            _loop_2(orColumn);
+            var table_1 = this.getTable(tableName);
+            var removeJoinColumn_1 = function (whereQryParam) {
+                var whereQryAfterJoin;
+                if (Array.isArray(whereQryParam)) {
+                    whereQryAfterJoin = [];
+                    whereQryParam = whereQryParam.filter(function (qry) {
+                        var result = removeJoinColumn_1(qry);
+                        if (Object.keys(result.whereQryAfterJoin).length > 0) {
+                            whereQryAfterJoin.push(result.whereQryAfterJoin);
                         }
-                        whereQryAfterJoin['or'] = filteredOr;
-                        for (var orColumn in filteredOr) {
-                            delete whereQryOr[orColumn];
-                        }
-                        break;
-                    default:
-                        var columnInTable = table.columns.find(function (q) { return q.name === column; });
-                        if (!columnInTable) {
-                            whereQryAfterJoin[column] = whereQuery[column];
-                        }
+                        return !result.isWhereEmpty;
+                    });
                 }
+                else {
+                    whereQryAfterJoin = {};
+                    var _loop_1 = function (column) {
+                        switch (column) {
+                            case "or":
+                                var filteredOr = {};
+                                var whereQryOr = whereQryParam[column];
+                                var _loop_2 = function (orColumn) {
+                                    var columnInTable_1 = table_1.columns.find(function (q) { return q.name === orColumn; });
+                                    if (!columnInTable_1) {
+                                        filteredOr[orColumn] = whereQryOr[orColumn];
+                                    }
+                                };
+                                for (var orColumn in whereQryOr) {
+                                    _loop_2(orColumn);
+                                }
+                                if (getLength(filteredOr) > 0) {
+                                    whereQryAfterJoin['or'] = filteredOr;
+                                    for (var orColumn in filteredOr) {
+                                        delete whereQryOr[orColumn];
+                                    }
+                                }
+                                break;
+                            default:
+                                var columnInTable = table_1.columns.find(function (q) { return q.name === column; });
+                                if (!columnInTable) {
+                                    whereQryAfterJoin[column] = whereQuery[column];
+                                }
+                        }
+                    };
+                    for (var column in whereQryParam) {
+                        _loop_1(column);
+                    }
+                    for (var column in whereQryAfterJoin) {
+                        delete whereQryParam[column];
+                    }
+                }
+                return {
+                    isWhereEmpty: getLength(whereQryParam) === 0,
+                    whereQryAfterJoin: whereQryAfterJoin,
+                    whereQueryModified: whereQryParam
+                };
             };
-            for (var column in whereQuery) {
-                _loop_1(column);
-            }
-            for (var column in whereQryAfterJoin) {
-                delete whereQuery[column];
-            }
-            if (Object.keys(whereQuery).length === 0) {
+            var result = removeJoinColumn_1(whereQuery);
+            var whereQryAfterJoin = result.whereQryAfterJoin;
+            query.where = result.whereQueryModified;
+            if (result.isWhereEmpty) {
                 delete query.where;
             }
             var joinQuery = this.joinQueryStack_[0];
