@@ -1,5 +1,5 @@
 /*!
- * @license :jsstore - V4.6.0 - 02/08/2023
+ * @license :jsstore - V4.6.1 - 11/08/2023
  * https://github.com/ujjwalguptaofficial/JsStore
  * Copyright (c) 2023 @Ujjwal Gupta; Licensed MIT
  */
@@ -2076,6 +2076,16 @@ var compare = function (value, compareValue, symbol) {
         case QUERY_OPTION.NotEqualTo:
             return value !== compareValue;
         default:
+            if (type1 === 'array') {
+                if (value.length !== compareValue.length)
+                    return false;
+                var status_1;
+                value.every(function (item, index) {
+                    status_1 = item === compareValue[index];
+                    return status_1;
+                });
+                return status_1;
+            }
             return value === compareValue;
     }
 };
@@ -2111,9 +2121,10 @@ var WhereChecker = /** @class */ (function () {
             }
             var whereColumnValue = where[columnName];
             var columnValue = rowValue[columnName];
-            var isArrayColumnValue = Array.isArray(columnValue);
+            var isArrayColumnValue = isArray(columnValue);
+            var isArrayWhereColumnValue = isArray(whereColumnValue);
             var executeCompare = function (executor) {
-                if (isArrayColumnValue) {
+                if (isArrayColumnValue && !isArrayWhereColumnValue) {
                     columnValue.every(function (q) {
                         status = executor(q);
                         return !status;
@@ -3059,7 +3070,23 @@ var Select = /** @class */ (function (_super) {
     Select.prototype.processWhere_ = function () {
         var _this = this;
         this.shouldAddValue = function (cursor) {
-            return _this.whereChecker.check(cursor.value);
+            var cursorValue = cursor.value;
+            var that = _this;
+            var proxy = new Proxy(cursorValue, {
+                get: function (target, p, receiver) {
+                    var val = cursorValue[p];
+                    if (!val) {
+                        var column = that.getColumnInfo(p);
+                        if (column && column.keyPath) {
+                            return column.keyPath.map(function (col) {
+                                return cursorValue[col];
+                            });
+                        }
+                    }
+                    return val;
+                },
+            });
+            return _this.whereChecker.check(proxy);
         };
         if (this.query.where.or) {
             this.processOrLogic_();
