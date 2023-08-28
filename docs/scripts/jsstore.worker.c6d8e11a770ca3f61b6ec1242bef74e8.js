@@ -1,5 +1,5 @@
 /*!
- * @license :jsstore - V4.6.1 - 11/08/2023
+ * @license :jsstore - V4.6.2 - 28/08/2023
  * https://github.com/ujjwalguptaofficial/JsStore
  * Copyright (c) 2023 @Ujjwal Gupta; Licensed MIT
  */
@@ -2510,10 +2510,10 @@ var Join = /** @class */ (function () {
                     whereQueryModified: whereQryParam
                 };
             };
-            var result = removeJoinColumn_1(whereQuery);
-            var whereQryAfterJoin = result.whereQryAfterJoin;
-            query.where = result.whereQueryModified;
-            if (result.isWhereEmpty) {
+            var removeJoinColumnResult = removeJoinColumn_1(whereQuery);
+            var whereQryAfterJoin = removeJoinColumnResult.whereQryAfterJoin;
+            query.where = removeJoinColumnResult.whereQueryModified;
+            if (removeJoinColumnResult.isWhereEmpty) {
                 delete query.where;
             }
             var joinQuery = this.joinQueryStack_[0];
@@ -3018,6 +3018,7 @@ var Select = /** @class */ (function (_super) {
             else {
                 _this.results = output;
             }
+            return promiseResolve();
         };
         var executeWhere = function (whereQuery) {
             var select = new Select({
@@ -3026,14 +3027,14 @@ var Select = /** @class */ (function (_super) {
             }, _this.util);
             return select.execute().then(function (results) {
                 _this.results = results;
-                onSuccess();
+                return onSuccess();
             });
         };
         var processFirstQry = function () {
             var whereQueryToProcess = whereQuery.shift();
             var whereQueryOr = whereQueryToProcess[QUERY_OPTION.Or];
             if (whereQueryOr) {
-                if (Array.isArray(whereQueryOr)) {
+                if (isArray(whereQueryOr)) {
                     operation = QUERY_OPTION.Or;
                     return executeWhere(whereQueryOr);
                 }
