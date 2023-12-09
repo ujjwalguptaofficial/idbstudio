@@ -1,5 +1,5 @@
 /*!
- * @license :jsstore - V4.6.2 - 28/08/2023
+ * @license :jsstore - V4.7.1 - 09/12/2023
  * https://github.com/ujjwalguptaofficial/JsStore
  * Copyright (c) 2023 @Ujjwal Gupta; Licensed MIT
  */
@@ -45,7 +45,7 @@ __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "QueryManager": () => (/* reexport */ QueryManager)
+  QueryManager: () => (/* reexport */ QueryManager)
 });
 
 ;// CONCATENATED MODULE: ./src/common/utils/promise_resolve.ts
@@ -114,8 +114,10 @@ var DATA_TYPE;
 var API;
 (function (API) {
     API["InitDb"] = "init_db";
-    API["Get"] = "get";
-    API["Set"] = "set";
+    API["MapGet"] = "map_get";
+    API["MapSet"] = "map_set";
+    API["MapHas"] = "map_has";
+    API["MapDelete"] = "map_delete";
     API["Select"] = "select";
     API["Insert"] = "insert";
     API["Update"] = "update";
@@ -236,11 +238,14 @@ var MetaHelper = /** @class */ (function () {
     MetaHelper.autoIncrementKey = function (tableName, columnName) {
         return "JsStore_".concat(tableName, "_").concat(columnName, "_Value");
     };
-    MetaHelper.set = function (key, value, util) {
+    MetaHelper.getStore = function (util) {
         if (!util.tx) {
             util.createTransaction([MetaHelper.tableName]);
         }
-        var store = util.objectStore(MetaHelper.tableName);
+        return util.objectStore(MetaHelper.tableName);
+    };
+    MetaHelper.set = function (key, value, util) {
+        var store = MetaHelper.getStore(util);
         return promise(function (res, rej) {
             var req = store.put({
                 key: key,
@@ -253,10 +258,7 @@ var MetaHelper = /** @class */ (function () {
         });
     };
     MetaHelper.get = function (key, util) {
-        if (!util.tx) {
-            util.createTransaction([MetaHelper.tableName]);
-        }
-        var store = util.objectStore(MetaHelper.tableName);
+        var store = MetaHelper.getStore(util);
         return promise(function (res, rej) {
             var req = store.get(util.keyRange(key));
             req.onsuccess = function () {
@@ -267,13 +269,23 @@ var MetaHelper = /** @class */ (function () {
         });
     };
     MetaHelper.remove = function (key, util) {
-        if (!util.tx) {
-            util.createTransaction([MetaHelper.tableName]);
-        }
-        var store = util.objectStore(MetaHelper.tableName);
+        var store = MetaHelper.getStore(util);
         return promise(function (res, rej) {
             var req = store.delete(util.keyRange(key));
-            req.onsuccess = res;
+            req.onsuccess = function () {
+                res();
+            };
+            req.onerror = rej;
+        });
+    };
+    MetaHelper.has = function (key, util) {
+        var store = MetaHelper.getStore(util);
+        return promise(function (res, rej) {
+            var req = store.count(util.keyRange(key));
+            req.onsuccess = function () {
+                var result = req.result;
+                res(result > 0);
+            };
             req.onerror = rej;
         });
     };
@@ -1150,7 +1162,7 @@ var Insert = /** @class */ (function (_super) {
                 };
             });
         })).then(function () {
-            MetaHelper.set(MetaHelper.dbSchema, db, _this.util);
+            return MetaHelper.set(MetaHelper.dbSchema, db, _this.util);
         });
     };
     return Insert;
@@ -2733,29 +2745,49 @@ var Join = /** @class */ (function () {
             return true;
         });
         var whereQry = qry.where;
-        var whereJoin = {};
         if (whereQry) {
-            var _loop_3 = function (columnName) {
-                switch (columnName) {
-                    case "or":
-                    case "in":
-                        break;
-                    default:
-                        var columnFound = tableSchemaOf2ndTable.columns.find(function (q) { return q.name === columnName; });
-                        if (!columnFound) {
-                            whereJoin[columnName] = whereQry[columnName];
-                            delete whereQry[columnName];
-                        }
+            var removeNonExistingColumnFromCurrentTable_1 = function (qry, whereJoinParam) {
+                var _loop_3 = function (columnName) {
+                    switch (columnName) {
+                        case "or":
+                        case "in":
+                            break;
+                        default:
+                            var columnFound = tableSchemaOf2ndTable.columns.find(function (q) { return q.name === columnName; });
+                            if (!columnFound) {
+                                whereJoinParam[columnName] = qry[columnName];
+                                delete qry[columnName];
+                            }
+                    }
+                };
+                for (var columnName in qry) {
+                    _loop_3(columnName);
                 }
             };
-            for (var columnName in whereQry) {
-                _loop_3(columnName);
+            var whereJoin_1;
+            if (Array.isArray(whereQry)) {
+                whereJoin_1 = [];
+                whereQry = whereQry.filter(function (item) {
+                    var whereForExtraColumn = {};
+                    removeNonExistingColumnFromCurrentTable_1(item, whereForExtraColumn);
+                    if (getLength(whereForExtraColumn) !== 0) {
+                        whereJoin_1.push(whereForExtraColumn);
+                    }
+                    return getLength(item) !== 0;
+                });
+            }
+            else {
+                whereJoin_1 = {};
+                removeNonExistingColumnFromCurrentTable_1(whereQry, whereJoin_1);
             }
             if (getLength(whereQry) === 0) {
                 qry.where = null;
             }
+            qry['whereJoin'] = whereJoin_1;
         }
-        qry['whereJoin'] = whereJoin;
+        else {
+            qry['whereJoin'] = {};
+        }
         return err;
     };
     return Join;
@@ -4479,6 +4511,9 @@ var Transaction = /** @class */ (function (_super) {
 
 ;// CONCATENATED MODULE: ./src/worker/utils/db_schema.ts
 var userDbSchema = function (db) {
+    if (db == null) {
+        throw new Error("userDbSchema db is null");
+    }
     var database = {
         name: db.name,
         version: db.version,
@@ -4627,13 +4662,21 @@ var QueryManager = /** @class */ (function () {
             case API.Transaction:
                 callAPI(Transaction, cb);
                 break;
-            case API.Get:
+            case API.MapGet:
                 cb();
                 queryResult = MetaHelper.get(query, idbutil);
                 break;
-            case API.Set:
+            case API.MapSet:
                 cb();
                 queryResult = MetaHelper.set(query.key, query.value, idbutil);
+                break;
+            case API.MapHas:
+                cb();
+                queryResult = MetaHelper.has(query, idbutil);
+                break;
+            case API.MapDelete:
+                cb();
+                queryResult = MetaHelper.remove(query, idbutil);
                 break;
             case API.ImportScripts:
                 cb();
@@ -4775,39 +4818,40 @@ var QueryManager = /** @class */ (function () {
             return promiseReject(new LogHelper(ERROR_TYPE.IndexedDbNotSupported));
         }
         var dbMeta = dataBase ? new DbMeta(dataBase) : this.db;
+        if (dbMeta == null) {
+            throw new Error("dbMeta is null");
+        }
         this.util = new IDBUtil();
-        return promise(function (res, rej) {
-            _this.util.initDb(dbMeta).then(function (dbInfo) {
+        return this.util.initDb(dbMeta).then(function (dbInfo) {
+            return MetaHelper.get(MetaHelper.dbSchema, _this.util).then(function (dbFromCache) {
                 if (dbInfo.isCreated) {
-                    MetaHelper.get(MetaHelper.dbSchema, _this.util).then(function (dbFromCache) {
-                        if (dbFromCache) {
-                            dbFromCache.tables.forEach(function (tableFromCache, index) {
-                                var targetTable = dbMeta.tables.find(function (q) { return q.name === tableFromCache.name; });
-                                if (targetTable) {
-                                    for (var key in tableFromCache.autoIncColumnValue) {
-                                        var savedAutoIncrementValue = tableFromCache.autoIncColumnValue[key];
-                                        if (savedAutoIncrementValue) {
-                                            targetTable.autoIncColumnValue[key] = savedAutoIncrementValue;
-                                        }
+                    if (dbFromCache) {
+                        dbFromCache.tables.forEach(function (tableFromCache) {
+                            var targetTable = dbMeta.tables.find(function (q) { return q.name === tableFromCache.name; });
+                            if (targetTable) {
+                                for (var key in tableFromCache.autoIncColumnValue) {
+                                    var savedAutoIncrementValue = tableFromCache.autoIncColumnValue[key];
+                                    if (savedAutoIncrementValue) {
+                                        targetTable.autoIncColumnValue[key] = savedAutoIncrementValue;
                                     }
                                 }
-                            });
-                        }
-                        _this.util.db = dbMeta;
-                        dbInfo.database = userDbSchema(_this.db);
-                        MetaHelper.set(MetaHelper.dbSchema, dbMeta, _this.util).then(function () {
-                            res(dbInfo);
+                            }
                         });
+                    }
+                    _this.util.db = dbMeta;
+                    dbInfo.database = userDbSchema(_this.db);
+                    return MetaHelper.set(MetaHelper.dbSchema, dbMeta, _this.util).then(function () {
+                        return dbInfo;
                     });
                 }
                 else {
-                    MetaHelper.get(MetaHelper.dbSchema, _this.util).then(function (value) {
+                    return MetaHelper.get(MetaHelper.dbSchema, _this.util).then(function (value) {
                         _this.util.db = value;
                         dbInfo.database = userDbSchema(_this.db);
-                        res(dbInfo);
+                        return dbInfo;
                     });
                 }
-            }).catch(rej);
+            });
         });
     };
     return QueryManager;
