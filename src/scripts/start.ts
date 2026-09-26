@@ -52,7 +52,7 @@ export default class Start extends Vue {
                 return this.getDbList();
             }
         } catch (error) {
-            const msg = error.message || "Some error occured, please create an issue on github.";
+            const msg = error.message || "Some error occurred, please create an issue on github.";
             vueEvent.$emit(EVENTS.OnError, msg);
         }
 

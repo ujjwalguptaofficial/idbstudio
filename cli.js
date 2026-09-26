@@ -22,7 +22,7 @@ if (program.start) {
         console.log('Files generated');
         loader.stop(timer, false);
     }).catch((err) => {
-        console.log('error occured while generating');
+        console.log('error occurred while generating');
         console.error(err);
         loader.stop(timer);
     })
